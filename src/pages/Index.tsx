@@ -70,11 +70,13 @@ const Home = () => {
 
   if (selectedVideo) {
     return (
-      <EnhancedVideoPlayer
-        videoUrl={selectedVideo.videoUrl}
-        title={selectedVideo.title}
-        onClose={closeVideoPlayer}
-      />
+      <div className="fixed inset-0 z-50 bg-black">
+        <EnhancedVideoPlayer
+          videoUrl={selectedVideo.videoUrl}
+          title={selectedVideo.title}
+          onClose={closeVideoPlayer}
+        />
+      </div>
     );
   }
 

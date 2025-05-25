@@ -19,6 +19,7 @@ import About from "./pages/About";
 import Help from "./pages/Help";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import CreatorStudio from "./pages/CreatorStudio";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/help" element={<Help />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/creator-studio/*" element={<CreatorStudio />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
