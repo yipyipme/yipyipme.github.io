@@ -5,82 +5,74 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 8%;
+    --foreground: 48 100% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 12%;
+    --card-foreground: 48 100% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 48 100% 96%;
 
-    --primary: 270 91% 65%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 44 100% 59%;
+    --primary-foreground: 0 0% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 48 100% 90%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 48 20% 65%;
 
-    --accent: 328 86% 70%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 28 100% 65%;
+    --accent-foreground: 0 0% 8%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 270 91% 65%;
+    --border: 0 0% 20%;
+    --input: 0 0% 18%;
+    --ring: 44 100% 59%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 270 91% 65%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 270 91% 65%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 48 20% 80%;
+    --sidebar-primary: 44 100% 59%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 48 20% 80%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 44 100% 59%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 270 91% 65%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 328 86% 70%;
-    --accent-foreground: 210 40% 98%;
-
+    --background: 0 0% 8%;
+    --foreground: 48 100% 96%;
+    --card: 0 0% 12%;
+    --card-foreground: 48 100% 96%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 48 100% 96%;
+    --primary: 44 100% 59%;
+    --primary-foreground: 0 0% 8%;
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 48 100% 90%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 48 20% 65%;
+    --accent: 28 100% 65%;
+    --accent-foreground: 0 0% 8%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 270 91% 65%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 270 91% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 270 91% 65%;
+    --border: 0 0% 20%;
+    --input: 0 0% 18%;
+    --ring: 44 100% 59%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 48 20% 80%;
+    --sidebar-primary: 44 100% 59%;
+    --sidebar-primary-foreground: 0 0% 8%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 48 20% 80%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 44 100% 59%;
   }
 }
 
@@ -90,13 +82,115 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }
 
-/* Gradient text utilities */
+/* High-tech gradient utilities */
 @layer utilities {
   .gradient-text {
-    @apply bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-[#FDBD34] via-[#FF8A3D] to-[#FF6B47] bg-clip-text text-transparent;
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, #FDBD34 0%, #FF8A3D 50%, #FF6B47 100%);
+  }
+  
+  .glass-effect {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(253, 189, 52, 0.3);
+  }
+  
+  .card-hover {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(253, 189, 52, 0.2);
+  }
+  
+  .btn-modern {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .btn-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-modern:hover::before {
+    left: 100%;
+  }
+  
+  .btn-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(253, 189, 52, 0.3);
+  }
+  
+  .btn-modern:active {
+    transform: translateY(0);
+  }
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(253, 189, 52, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(253, 189, 52, 0.6); }
+}
+
+@keyframes slide-in-blur {
+  0% {
+    transform: translateX(-100px);
+    filter: blur(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-slide-in-blur {
+  animation: slide-in-blur 0.6s ease-out;
+}
+
+/* Netflix-style card grid */
+.netflix-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .netflix-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   }
 }

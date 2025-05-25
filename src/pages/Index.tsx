@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
 import EnhancedVideoPlayer from '@/components/EnhancedVideoPlayer';
-import { Play, TrendingUp, Users, Calendar, BookOpen } from 'lucide-react';
+import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const featuredVideos = [
@@ -47,14 +47,14 @@ const featuredVideos = [
 ];
 
 const quickLinks = [
-  { name: 'Sermons', icon: '🎙️', count: '12.5K' },
-  { name: 'Worship', icon: '🎵', count: '8.2K' },
-  { name: 'Bible Study', icon: '📖', count: '6.1K' },
-  { name: 'Podcasts', icon: '🎧', count: '4.8K' },
-  { name: 'Movies', icon: '🎬', count: '2.3K' },
-  { name: 'Kids', icon: '👨‍👩‍👧‍👦', count: '3.1K' },
-  { name: 'Devotionals', icon: '🙏', count: '5.7K' },
-  { name: 'Testimonies', icon: '✨', count: '1.9K' },
+  { name: 'Sermons', icon: '🎙️', count: '12.5K', gradient: 'from-blue-500 to-purple-600' },
+  { name: 'Worship', icon: '🎵', count: '8.2K', gradient: 'from-purple-500 to-pink-500' },
+  { name: 'Bible Study', icon: '📖', count: '6.1K', gradient: 'from-green-500 to-blue-500' },
+  { name: 'Podcasts', icon: '🎧', count: '4.8K', gradient: 'from-yellow-500 to-orange-500' },
+  { name: 'Movies', icon: '🎬', count: '2.3K', gradient: 'from-red-500 to-pink-500' },
+  { name: 'Kids', icon: '👨‍👩‍👧‍👦', count: '3.1K', gradient: 'from-cyan-500 to-blue-500' },
+  { name: 'Devotionals', icon: '🙏', count: '5.7K', gradient: 'from-indigo-500 to-purple-500' },
+  { name: 'Testimonies', icon: '✨', count: '1.9K', gradient: 'from-pink-500 to-rose-500' },
 ];
 
 const Home = () => {
@@ -80,43 +80,79 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 py-8 space-y-16">
         {/* Hero Carousel */}
-        <section className="mb-12">
+        <section>
           <HeroCarousel />
         </section>
 
         {/* Quick Links */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">Explore by Category</h2>
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+        <section>
+          <h2 className="text-3xl font-bold text-white mb-8 gradient-text">Explore by Category</h2>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
             {quickLinks.map((link) => (
               <div
                 key={link.name}
-                className="flex flex-col items-center p-4 bg-white rounded-lg border border-gray-200 hover:border-purple-300 hover:shadow-md transition-all cursor-pointer group"
+                className="group cursor-pointer"
               >
-                <div className="text-2xl mb-2">{link.icon}</div>
-                <span className="text-sm font-medium text-gray-900 group-hover:gradient-text transition-colors text-center">
-                  {link.name}
-                </span>
-                <span className="text-xs text-gray-500 mt-1">{link.count}</span>
+                <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10`}>
+                  <div className="text-3xl mb-3 animate-float">{link.icon}</div>
+                  <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
+                    {link.name}
+                  </span>
+                  <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Trending Section */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-6 w-6 text-purple-500" />
-              <h2 className="text-2xl font-semibold text-gray-900">Trending Now</h2>
+        {/* Live Services Banner */}
+        <section>
+          <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="relative flex items-center justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
+                  <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
+                </div>
+                <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
+                <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
+                <Button className="bg-black text-[#FDBD34] hover:bg-gray-900 btn-modern px-8 py-4 text-lg font-semibold">
+                  <Play className="mr-3 h-6 w-6" fill="currentColor" />
+                  Join Live Service
+                </Button>
+              </div>
+              <div className="hidden md:flex items-center gap-8 text-black">
+                <div className="text-center space-y-2">
+                  <Users className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">2.3K</div>
+                  <div className="text-sm font-medium">Watching</div>
+                </div>
+                <div className="text-center space-y-2">
+                  <Calendar className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">9:00</div>
+                  <div className="text-sm font-medium">AM EST</div>
+                </div>
+              </div>
             </div>
-            <Button variant="outline" className="text-purple-600 border-purple-300 hover:bg-purple-50">
+          </div>
+        </section>
+
+        {/* Trending Section */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
+              <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+              <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
+            </div>
+            <Button variant="outline" className="border-[#FDBD34] text-[#FDBD34] hover:bg-[#FDBD34] hover:text-black btn-modern">
               View All
             </Button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="netflix-grid">
             {featuredVideos.map((video, index) => (
               <VideoCard 
                 key={index} 
@@ -127,46 +163,15 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Live Services Banner */}
-        <section className="mb-12">
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl p-8 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium">LIVE NOW</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-2">Sunday Morning Service</h3>
-                <p className="text-purple-100 mb-4">Join 2.3K viewers watching live</p>
-                <Button className="bg-white text-purple-600 hover:bg-gray-100">
-                  <Play className="mr-2 h-4 w-4" />
-                  Join Live Service
-                </Button>
-              </div>
-              <div className="hidden md:flex items-center gap-6 text-purple-100">
-                <div className="text-center">
-                  <Users className="h-8 w-8 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">2.3K</div>
-                  <div className="text-sm">Watching</div>
-                </div>
-                <div className="text-center">
-                  <Calendar className="h-8 w-8 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-white">9:00</div>
-                  <div className="text-sm">AM EST</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* For You Section */}
         <section>
-          <div className="flex items-center gap-2 mb-6">
-            <BookOpen className="h-6 w-6 text-purple-500" />
-            <h2 className="text-2xl font-semibold text-gray-900">Recommended for You</h2>
+          <div className="flex items-center gap-3 mb-8">
+            <Crown className="h-8 w-8 text-[#FDBD34]" />
+            <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
+            <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredVideos.slice(0, 3).map((video, index) => (
+          <div className="netflix-grid">
+            {featuredVideos.slice(0, 6).map((video, index) => (
               <VideoCard 
                 key={index} 
                 {...video} 
