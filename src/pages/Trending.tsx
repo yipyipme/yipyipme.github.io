@@ -1,7 +1,7 @@
 
 import Layout from '@/components/Layout';
 import VideoCard from '@/components/VideoCard';
-import { TrendingUp, Fire, Zap, Crown } from 'lucide-react';
+import { TrendingUp, Flame, Zap, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const trendingVideos = [
@@ -29,7 +29,7 @@ const Trending = () => {
       <div className="container mx-auto px-6 py-8">
         <div className="flex items-center gap-4 mb-8">
           <div className="bg-gradient-to-r from-red-500 to-yellow-500 p-3 rounded-2xl">
-            <Fire className="h-8 w-8 text-white" />
+            <Flame className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-4xl font-bold gradient-text">Trending Now</h1>
           <Zap className="h-8 w-8 text-yellow-400 animate-pulse" />
