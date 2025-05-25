@@ -13,7 +13,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Left section - Logo and menu */}
@@ -31,7 +31,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
               <img 
                 src="/lovable-uploads/c9f84e57-73c2-40a4-8e19-dee9964ad2da.png" 
                 alt="YipYip" 
-                className="h-8 w-auto"
+                className="h-12 w-auto drop-shadow-md"
               />
             </Link>
           </div>
@@ -45,28 +45,28 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 placeholder="Search for sermons, worship, bible studies..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 w-full bg-gray-50 border-gray-200 focus:bg-white"
+                className="pl-10 pr-4 w-full bg-gray-50 border-gray-200 focus:bg-white focus:border-purple-400 focus:ring-purple-400"
               />
             </div>
           </div>
 
           {/* Right section - Action buttons */}
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
+            <Button variant="ghost" size="icon" className="hidden sm:flex text-gray-600 hover:text-purple-600 hover:bg-purple-50">
               <Bell className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
+            <Button variant="ghost" size="icon" className="hidden sm:flex text-gray-600 hover:text-purple-600 hover:bg-purple-50">
               <MessageSquare className="h-5 w-5" />
             </Button>
             <Button 
               variant="outline" 
               size="sm" 
-              className="hidden sm:flex bg-orange-500 text-white border-orange-500 hover:bg-orange-600"
+              className="hidden sm:flex bg-gradient-to-r from-purple-500 to-pink-500 text-white border-none hover:from-purple-600 hover:to-pink-600"
             >
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="text-gray-600 hover:text-purple-600 hover:bg-purple-50">
               <User className="h-5 w-5" />
             </Button>
           </div>

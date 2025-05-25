@@ -8,11 +8,12 @@ interface VideoCardProps {
   duration: string;
   views: string;
   timeAgo: string;
+  onClick?: () => void;
 }
 
-const VideoCard = ({ title, creator, thumbnail, duration, views, timeAgo }: VideoCardProps) => {
+const VideoCard = ({ title, creator, thumbnail, duration, views, timeAgo, onClick }: VideoCardProps) => {
   return (
-    <div className="group cursor-pointer">
+    <div className="group cursor-pointer" onClick={onClick}>
       <div className="relative rounded-lg overflow-hidden bg-gray-200 aspect-video">
         <img 
           src={thumbnail} 
@@ -27,7 +28,7 @@ const VideoCard = ({ title, creator, thumbnail, duration, views, timeAgo }: Vide
         </div>
       </div>
       <div className="mt-3">
-        <h3 className="font-medium text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="font-medium text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors">
           {title}
         </h3>
         <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
