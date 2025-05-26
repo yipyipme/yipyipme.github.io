@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -6,45 +5,7 @@ import VideoCard from '@/components/VideoCard';
 import EnhancedVideoPlayer from '@/components/EnhancedVideoPlayer';
 import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-
-const featuredVideos = [
-  {
-    title: "Sunday Service: Walking by Faith",
-    creator: "Pastor Mike Johnson",
-    thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-    duration: "45:20",
-    views: "125K",
-    timeAgo: "2 days ago",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-  },
-  {
-    title: "Worship Night: Amazing Grace",
-    creator: "Hillsong Worship",
-    thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-    duration: "1:23:15",
-    views: "89K",
-    timeAgo: "1 week ago",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-  },
-  {
-    title: "Bible Study: Romans Chapter 8",
-    creator: "Dr. Sarah Williams",
-    thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-    duration: "52:30",
-    views: "67K",
-    timeAgo: "3 days ago",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-  },
-  {
-    title: "Youth Service: Finding Purpose",
-    creator: "Pastor David Lee",
-    thumbnail: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-    duration: "38:45",
-    views: "43K",
-    timeAgo: "5 days ago",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
-  }
-];
+import { platformStore } from '@/lib/store';
 
 const quickLinks = [
   { name: 'Sermons', icon: '🎙️', count: '12.5K', gradient: 'from-blue-500 to-purple-600' },
@@ -59,6 +20,7 @@ const quickLinks = [
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
+  const featuredVideos = platformStore.getPublishedVideos();
 
   const handleVideoClick = (video: any) => {
     setSelectedVideo(video);
@@ -155,7 +117,7 @@ const Home = () => {
             </Button>
           </div>
           <div className="netflix-grid">
-            {featuredVideos.map((video, index) => (
+            {featuredVideos.slice(0, 4).map((video, index) => (
               <VideoCard 
                 key={index} 
                 {...video} 

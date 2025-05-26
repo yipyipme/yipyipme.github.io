@@ -20,6 +20,9 @@ import Help from "./pages/Help";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import CreatorStudio from "./pages/CreatorStudio";
+import Videos from "./pages/creator-studio/Videos";
+import LiveStreams from "./pages/creator-studio/LiveStreams";
+import Analytics from "./pages/creator-studio/Analytics";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,7 +49,10 @@ const App = () => (
           <Route path="/help" element={<Help />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
-          <Route path="/creator-studio/*" element={<CreatorStudio />} />
+          <Route path="/creator-studio" element={<CreatorStudio />} />
+          <Route path="/creator-studio/content/videos" element={<Videos />} />
+          <Route path="/creator-studio/content/live" element={<LiveStreams />} />
+          <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
