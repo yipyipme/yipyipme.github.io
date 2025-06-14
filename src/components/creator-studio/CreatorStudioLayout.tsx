@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -29,7 +28,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex w-full">
+    <div className="min-h-screen w-screen bg-gray-950 flex overflow-x-hidden">
       {/* Sidebar */}
       <aside className={cn(
         "fixed left-0 top-0 z-50 h-full bg-gray-900/95 backdrop-blur-xl border-r border-gray-800 transform transition-transform duration-300 ease-out shadow-2xl",
@@ -42,10 +41,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
             onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
             onShowUpload={() => setShowUploadModal(true)}
           />
-
           <SidebarNavigation isSidebarOpen={isSidebarOpen} />
-
-          {/* Footer */}
           <div className="p-4 border-t border-gray-800">
             <Link 
               to="/" 
@@ -59,10 +55,10 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-h-screen w-full">
+      <main className="flex-1 flex flex-col min-h-screen w-screen ml-0 md:ml-72">
         {/* Top Header */}
-        <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800 px-4 py-4 w-full">
-          <div className="flex items-center justify-between w-full">
+        <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800 px-4 py-4 w-screen">
+          <div className="flex items-center justify-between w-full max-w-full">
             <div className="flex items-center gap-4">
               <Button
                 variant="ghost"
@@ -93,7 +89,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
         </header>
 
         {/* Content Area */}
-        <div className="flex-1 p-4 w-full">
+        <div className="flex-1 p-4 w-screen max-w-none overflow-x-auto">
           {children}
         </div>
       </main>
