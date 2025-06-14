@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
+
+import { useState } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
 import VideoWatchPage from '@/components/VideoWatchPage';
 import DoveIcon from '@/components/brand/DoveIcon';
 import BrandedButton from '@/components/brand/BrandedButton';
-import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X, Maximize, Minimize } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star } from 'lucide-react';
 import { platformStore } from '@/lib/store';
 
 const quickLinks = [
@@ -44,15 +44,15 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-full">
+      <div className="w-screen overflow-x-hidden">
         {/* Hero Carousel - Full width */}
-        <section className="w-full">
+        <section className="w-screen overflow-x-hidden">
           <HeroCarousel />
         </section>
 
         {/* Quick Links */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="w-full max-w-none mx-auto">
+          <div className="w-full">
             <div className="flex items-center gap-4 mb-8">
               <DoveIcon size="lg" animate className="text-[#FDBD34]" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
@@ -82,7 +82,7 @@ const Home = () => {
 
         {/* Live Services Banner */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="w-full max-w-none mx-auto">
+          <div className="w-full">
             <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-black/20" />
               <div className="relative flex items-center justify-between">
@@ -118,7 +118,7 @@ const Home = () => {
 
         {/* Trending Section */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="w-full max-w-none mx-auto">
+          <div className="w-full">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
@@ -131,7 +131,7 @@ const Home = () => {
               </BrandedButton>
             </div>
             <div className="netflix-grid">
-              {featuredVideos.slice(0, 4).map((video, index) => (
+              {featuredVideos.slice(0, 4).map((video) => (
                 <VideoCard 
                   key={video.id} 
                   title={video.title}
@@ -149,14 +149,14 @@ const Home = () => {
 
         {/* For You Section */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="w-full max-w-none mx-auto">
+          <div className="w-full">
             <div className="flex items-center gap-3 mb-8">
               <Crown className="h-8 w-8 text-[#FDBD34]" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
               <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
             </div>
             <div className="netflix-grid">
-              {featuredVideos.slice(0, 6).map((video, index) => (
+              {featuredVideos.slice(0, 6).map((video) => (
                 <VideoCard 
                   key={video.id} 
                   title={video.title}
@@ -173,7 +173,7 @@ const Home = () => {
         </section>
 
         {/* Brand Statement Section */}
-        <section className="text-center py-16 px-4 md:px-6">
+        <section className="text-center py-16 px-4 md:px-6 w-screen">
           <div className="max-w-4xl mx-auto space-y-6">
             <DoveIcon size="xl" animate className="mx-auto" />
             <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">

@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import Header from './Header';
 import DoveIcon from '@/components/brand/DoveIcon';
@@ -8,16 +9,13 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full overflow-x-hidden">
+    <div className="min-h-screen w-screen bg-gray-50 dark:bg-gray-950 overflow-x-hidden">
       <Header onMenuToggle={() => {}} />
-      <main className="w-full">
-        {children}
-      </main>
-      
+      <main className="w-screen min-h-[calc(100vh-80px)]">{children}</main>
       {/* Footer */}
-      <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-full">
+      <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-screen">
         <div className="w-full px-4 md:px-6 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-none mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 w-full">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <img 
@@ -34,7 +32,6 @@ const Layout = ({ children }: LayoutProps) => {
                 <span className="text-sm font-semibold">Spreading the Gospel through digital media</span>
               </div>
             </div>
-            
             <div className="space-y-4">
               <h3 className="text-gray-900 dark:text-white font-semibold flex items-center gap-2">
                 <DoveIcon size="sm" />
@@ -47,7 +44,6 @@ const Layout = ({ children }: LayoutProps) => {
                 <Link to="/kids" className="block text-gray-600 dark:text-gray-400 hover:text-[#FDBD34] transition-colors">Kids Content</Link>
               </div>
             </div>
-            
             <div className="space-y-4">
               <h3 className="text-gray-900 dark:text-white font-semibold flex items-center gap-2">
                 <DoveIcon size="sm" />
@@ -60,7 +56,6 @@ const Layout = ({ children }: LayoutProps) => {
                 <Link to="/watch-later" className="block text-gray-600 dark:text-gray-400 hover:text-[#FDBD34] transition-colors">Watch Later</Link>
               </div>
             </div>
-            
             <div className="space-y-4">
               <h3 className="text-gray-900 dark:text-white font-semibold flex items-center gap-2">
                 <DoveIcon size="sm" />
@@ -74,8 +69,7 @@ const Layout = ({ children }: LayoutProps) => {
               </div>
             </div>
           </div>
-          
-          <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center max-w-none mx-auto">
+          <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center w-full">
             <div className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-2">
               <span>© 2024 YipYip. All rights reserved. Spreading the Gospel through digital media.</span>
             </div>
