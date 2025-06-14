@@ -33,12 +33,16 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
               <Menu className="h-6 w-6" />
             </Button>
             
-            <YipYipLogo 
-              size="md"
-              variant="gradient"
-              className="text-white hover:text-[#FDBD34] transition-colors cursor-pointer"
+            <div 
+              className="cursor-pointer"
               onClick={() => window.location.href = '/'}
-            />
+            >
+              <YipYipLogo 
+                size="md"
+                variant="gradient"
+                className="text-white hover:text-[#FDBD34] transition-colors"
+              />
+            </div>
           </div>
 
           {/* Center - Search (hidden on creator studio) */}
