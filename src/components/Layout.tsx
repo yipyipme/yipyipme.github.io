@@ -20,9 +20,10 @@ const Layout = ({ children }: LayoutProps) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <img 
-                src="/lovable-uploads/c9f84e57-73c2-40a4-8e19-dee9964ad2da.png" 
+                src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
                 alt="YipYip" 
                 className="h-8 w-auto"
+                style={{ width: 'auto', height: '32px', minWidth: '80px' }}
               />
               <p className="text-gray-400 text-sm">
                 Your premier destination for Christian content, worship, and spiritual growth.

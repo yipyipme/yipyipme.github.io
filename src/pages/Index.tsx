@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -8,14 +9,14 @@ import { Button } from '@/components/ui/button';
 import { platformStore } from '@/lib/store';
 
 const quickLinks = [
-  { name: 'Sermons', icon: '🎙️', count: '12.5K', gradient: 'from-blue-500 to-purple-600' },
-  { name: 'Worship', icon: '🎵', count: '8.2K', gradient: 'from-purple-500 to-pink-500' },
-  { name: 'Bible Study', icon: '📖', count: '6.1K', gradient: 'from-green-500 to-blue-500' },
-  { name: 'Podcasts', icon: '🎧', count: '4.8K', gradient: 'from-yellow-500 to-orange-500' },
-  { name: 'Movies', icon: '🎬', count: '2.3K', gradient: 'from-red-500 to-pink-500' },
-  { name: 'Kids', icon: '👨‍👩‍👧‍👦', count: '3.1K', gradient: 'from-cyan-500 to-blue-500' },
-  { name: 'Devotionals', icon: '🙏', count: '5.7K', gradient: 'from-indigo-500 to-purple-500' },
-  { name: 'Testimonies', icon: '✨', count: '1.9K', gradient: 'from-pink-500 to-rose-500' },
+  { name: 'Sermons', icon: '🎙️', count: '12.5K', gradient: 'from-blue-500 to-purple-600', href: '/explore?category=sermons' },
+  { name: 'Worship', icon: '🎵', count: '8.2K', gradient: 'from-purple-500 to-pink-500', href: '/explore?category=worship' },
+  { name: 'Bible Study', icon: '📖', count: '6.1K', gradient: 'from-green-500 to-blue-500', href: '/explore?category=bible-study' },
+  { name: 'Podcasts', icon: '🎧', count: '4.8K', gradient: 'from-yellow-500 to-orange-500', href: '/explore?category=podcasts' },
+  { name: 'Movies', icon: '🎬', count: '2.3K', gradient: 'from-red-500 to-pink-500', href: '/explore?category=movies' },
+  { name: 'Kids', icon: '👨‍👩‍👧‍👦', count: '3.1K', gradient: 'from-cyan-500 to-blue-500', href: '/kids' },
+  { name: 'Devotionals', icon: '🙏', count: '5.7K', gradient: 'from-indigo-500 to-purple-500', href: '/explore?category=devotionals' },
+  { name: 'Testimonies', icon: '✨', count: '1.9K', gradient: 'from-pink-500 to-rose-500', href: '/explore?category=testimonies' },
 ];
 
 const Home = () => {
@@ -58,6 +59,7 @@ const Home = () => {
               <div
                 key={link.name}
                 className="group cursor-pointer"
+                onClick={() => window.location.href = link.href}
               >
                 <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10`}>
                   <div className="text-3xl mb-3 animate-float">{link.icon}</div>
@@ -119,7 +121,7 @@ const Home = () => {
           <div className="netflix-grid">
             {featuredVideos.slice(0, 4).map((video, index) => (
               <VideoCard 
-                key={index} 
+                key={video.id} 
                 {...video} 
                 onClick={() => handleVideoClick(video)}
               />
@@ -137,7 +139,7 @@ const Home = () => {
           <div className="netflix-grid">
             {featuredVideos.slice(0, 6).map((video, index) => (
               <VideoCard 
-                key={index} 
+                key={video.id} 
                 {...video} 
                 onClick={() => handleVideoClick(video)}
               />

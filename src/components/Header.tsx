@@ -34,10 +34,10 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
             <div className="flex items-center gap-6">
               <Link to="/" className="flex items-center gap-3 group">
                 <img 
-                  src="/lovable-uploads/c9f84e57-73c2-40a4-8e19-dee9964ad2da.png" 
+                  src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
                   alt="YipYip" 
-                  className="h-10 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
-                  style={{ width: 'auto', height: '40px', minWidth: '120px' }}
+                  className="h-8 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
+                  style={{ width: 'auto', height: '32px', minWidth: '80px' }}
                 />
               </Link>
             </div>
