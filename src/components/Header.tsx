@@ -39,7 +39,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
               <img 
                 src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
                 alt="YipYip" 
-                className="h-10 w-auto hover:opacity-80 transition-opacity"
+                className="h-20 w-auto hover:opacity-80 transition-opacity"
               />
             </div>
           </div>
