@@ -49,7 +49,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative h-[80vh] w-screen overflow-hidden shadow-2xl -mx-4 md:-mx-6">
+    <div className="relative h-[80vh] w-screen overflow-hidden shadow-2xl" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
