@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import CreatorStudioLayout from '@/components/creator-studio/CreatorStudioLayout';
@@ -22,7 +23,7 @@ const CreatorStudio = () => {
 
   return (
     <CreatorStudioLayout>
-      <div className="space-y-8 w-full h-full">
+      <div className="w-full h-full space-y-8">
         {/* Welcome Section */}
         <div className="text-center w-full">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -45,27 +46,27 @@ const CreatorStudio = () => {
         )}
 
         {/* Dashboard Row: Metrics & QuickActions */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 w-full">
-          {/* Metrics: 4/5 */}
-          <div className="lg:col-span-4 h-full min-w-0">
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-8 w-full">
+          {/* Metrics: 4/5 on XL screens, full width on smaller */}
+          <div className="xl:col-span-4 w-full">
             <DashboardMetrics />
           </div>
-          {/* Quick Actions: 1/5 */}
-          <div className="lg:col-span-1 h-full min-w-0">
+          {/* Quick Actions: 1/5 on XL screens, full width on smaller */}
+          <div className="xl:col-span-1 w-full">
             <QuickActions onUploadClick={handleUploadClick} />
           </div>
         </div>
 
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2 min-w-0">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6 min-w-0">
+          <div className="xl:col-span-2 space-y-6 w-full">
             <PerformanceChart />
             <RecentActivity />
           </div>
 
           {/* Sidebar (empty to balance grid if needed) */}
-          <div className="hidden lg:block" />
+          <div className="hidden xl:block" />
         </div>
       </div>
 
