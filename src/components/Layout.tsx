@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full overflow-x-hidden">
       <Header onMenuToggle={() => {}} />
       <main className="w-full">
         {children}
