@@ -45,9 +45,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-full px-0 py-8 space-y-16">
+      <div className="w-full m-0 p-0 space-y-16">
         {/* Hero Carousel */}
-        <section className="w-full">
+        <section className="w-full m-0 p-0">
           <HeroCarousel />
         </section>
 

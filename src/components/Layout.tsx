@@ -9,14 +9,14 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full m-0 p-0">
       <Header onMenuToggle={() => {}} />
-      <main className="pt-4 w-full">
+      <main className="w-full m-0 p-0">
         {children}
       </main>
       
       {/* Footer */}
-      <footer className="mt-16 bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-full">
+      <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-full m-0">
         <div className="w-full px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
