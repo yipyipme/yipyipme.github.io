@@ -81,6 +81,15 @@ const UserMenu = () => {
             Creator Studio
           </DropdownMenuItem>
         )}
+        {profile.role === 'user' && (
+          <DropdownMenuItem 
+            onClick={() => window.location.href = '/apply-creator'}
+            className="text-gray-300 hover:text-white hover:bg-gray-800"
+          >
+            <Star className="mr-2 h-4 w-4" />
+            Apply to Become Creator
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem 
           onClick={() => window.location.href = '/settings'}
           className="text-gray-300 hover:text-white hover:bg-gray-800"
