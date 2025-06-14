@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -21,20 +22,29 @@ const quickLinks = [
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
   const [isFullscreenVideo, setIsFullscreenVideo] = useState(false);
+  const [isTheaterMode, setIsTheaterMode] = useState(false);
   const featuredVideos = platformStore.getPublishedVideos();
 
   const handleVideoClick = (video: any) => {
     setSelectedVideo(video);
     setIsFullscreenVideo(false);
+    setIsTheaterMode(false);
   };
 
   const closeVideoPlayer = () => {
     setSelectedVideo(null);
     setIsFullscreenVideo(false);
+    setIsTheaterMode(false);
   };
 
   const toggleVideoFullscreen = () => {
     setIsFullscreenVideo(!isFullscreenVideo);
+    setIsTheaterMode(false);
+  };
+
+  const toggleTheaterMode = () => {
+    setIsTheaterMode(!isTheaterMode);
+    setIsFullscreenVideo(false);
   };
 
   // Add keyboard shortcut to close video with Escape key
@@ -159,39 +169,39 @@ const Home = () => {
         </section>
       </div>
 
-      {/* Video Modal Overlay - YouTube/Bilibili style */}
+      {/* YouTube-accurate Video Modal System */}
       {selectedVideo && (
         <>
           {isFullscreenVideo ? (
-            // True fullscreen mode
-            <div className="fixed inset-0 z-50 bg-black">
-              <div className="absolute top-4 right-4 z-60 flex gap-2">
+            // True fullscreen mode - full viewport
+            <div className="fixed inset-0 z-[9999] bg-black">
+              <div className="absolute top-4 right-4 z-[10000] flex gap-2">
                 <Button
                   onClick={toggleVideoFullscreen}
                   variant="ghost"
                   size="icon"
-                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-10 w-10"
                 >
-                  <Minimize className="h-6 w-6" />
+                  <Minimize className="h-5 w-5" />
                 </Button>
                 <Button
                   onClick={closeVideoPlayer}
                   variant="ghost"
                   size="icon"
-                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-10 w-10"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5" />
                 </Button>
               </div>
               
               <div 
-                className="absolute inset-0 z-40"
+                className="absolute inset-0 z-[9998]"
                 onClick={closeVideoPlayer}
               />
               
-              <div className="relative z-50 h-full flex items-center justify-center p-4">
+              <div className="relative z-[9999] h-full flex items-center justify-center">
                 <div 
-                  className="w-full max-w-6xl"
+                  className="w-full h-full"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <EnhancedVideoPlayer
@@ -201,52 +211,122 @@ const Home = () => {
                   />
                 </div>
               </div>
-              
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm z-60">
-                Press Esc or click outside to close
-              </div>
             </div>
-          ) : (
-            // YouTube/Bilibili style modal window
-            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          ) : isTheaterMode ? (
+            // Theater mode - expanded width within page
+            <div className="fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md">
               <div 
                 className="absolute inset-0"
                 onClick={closeVideoPlayer}
               />
               
-              <div 
-                className="relative bg-black rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Modal header with controls */}
-                <div className="absolute top-3 right-3 z-60 flex gap-2">
-                  <Button
-                    onClick={toggleVideoFullscreen}
-                    variant="ghost"
-                    size="icon"
-                    className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                  >
-                    <Maximize className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    onClick={closeVideoPlayer}
-                    variant="ghost"
-                    size="icon"
-                    className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+              <div className="relative z-[9999] flex items-center justify-center min-h-screen p-4">
+                <div 
+                  className="w-full max-w-7xl bg-black rounded-xl shadow-2xl overflow-hidden"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* Theater mode header */}
+                  <div className="absolute top-3 right-3 z-[10000] flex gap-2">
+                    <Button
+                      onClick={toggleTheaterMode}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                    >
+                      <Minimize className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={toggleVideoFullscreen}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                    >
+                      <Maximize className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={closeVideoPlayer}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <EnhancedVideoPlayer
+                    videoUrl={selectedVideo.videoUrl}
+                    title={selectedVideo.title}
+                    onClose={closeVideoPlayer}
+                  />
                 </div>
-                
-                <EnhancedVideoPlayer
-                  videoUrl={selectedVideo.videoUrl}
-                  title={selectedVideo.title}
-                  onClose={closeVideoPlayer}
-                />
+              </div>
+            </div>
+          ) : (
+            // YouTube-style modal - exact dimensions and positioning
+            <div className="fixed inset-0 z-[9998] bg-black/75 backdrop-blur-sm">
+              <div 
+                className="absolute inset-0"
+                onClick={closeVideoPlayer}
+              />
+              
+              {/* YouTube-accurate modal positioning */}
+              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999]">
+                <div 
+                  className="bg-black rounded-xl shadow-2xl overflow-hidden animate-scale-in"
+                  style={{
+                    width: 'min(854px, 90vw)',
+                    height: 'min(480px, 50.625vw)', // 16:9 aspect ratio
+                    maxWidth: '90vw',
+                    maxHeight: '90vh'
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {/* YouTube-style modal header */}
+                  <div className="absolute top-3 right-3 z-[10000] flex gap-2">
+                    <Button
+                      onClick={toggleTheaterMode}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                      title="Theater mode"
+                    >
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H5V8h14v8z"/>
+                      </svg>
+                    </Button>
+                    <Button
+                      onClick={toggleVideoFullscreen}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                      title="Fullscreen"
+                    >
+                      <Maximize className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      onClick={closeVideoPlayer}
+                      variant="ghost"
+                      size="icon"
+                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
+                      title="Close"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <EnhancedVideoPlayer
+                    videoUrl={selectedVideo.videoUrl}
+                    title={selectedVideo.title}
+                    onClose={closeVideoPlayer}
+                  />
+                </div>
               </div>
               
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm">
-                Press Esc or click outside to close • Click maximize for fullscreen
+              {/* YouTube-style help text */}
+              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white/70 text-sm text-center z-[9999]">
+                <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2">
+                  Press Esc to close • Click theater for expanded view • Click fullscreen for full screen
+                </div>
               </div>
             </div>
           )}
