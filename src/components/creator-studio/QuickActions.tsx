@@ -6,9 +6,7 @@ import {
   Radio, 
   Users, 
   MessageSquare,
-  Calendar,
   BarChart3,
-  Settings,
   BookOpen
 } from 'lucide-react';
 
@@ -58,28 +56,27 @@ const QuickActions = ({ onUploadClick }: QuickActionsProps) => {
   ];
 
   return (
-    <Card className="bg-gray-900/50 border-gray-800">
+    <Card className="bg-gray-900/50 border-gray-800 h-full">
       <CardHeader>
         <CardTitle className="text-white">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        {/* Responsive grid with wrap and min size for each button */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {actions.map((action, index) => (
             <Button
               key={index}
               variant={action.title === 'Upload Video' ? 'default' : 'outline'}
               onClick={action.onClick}
-              className={`h-20 flex flex-col gap-2 btn-modern ${
+              className={`flex flex-col items-center justify-center h-20 btn-modern text-xs px-2 py-2 ${
                 action.title === 'Upload Video' 
                   ? action.color 
                   : `border-gray-700 ${action.color}`
               }`}
             >
-              <action.icon className="h-5 w-5" />
-              <div className="text-center">
-                <div className="text-xs font-medium">{action.title}</div>
-                <div className="text-[10px] opacity-75">{action.description}</div>
-              </div>
+              <action.icon className="h-5 w-5 mb-1" />
+              <span className="font-medium text-center leading-tight">{action.title}</span>
+              <span className="text-[10px] opacity-75 text-center leading-tight">{action.description}</span>
             </Button>
           ))}
         </div>
@@ -89,3 +86,4 @@ const QuickActions = ({ onUploadClick }: QuickActionsProps) => {
 };
 
 export default QuickActions;
+

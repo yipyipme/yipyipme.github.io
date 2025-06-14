@@ -23,7 +23,7 @@ const CreatorStudio = () => {
 
   return (
     <CreatorStudioLayout>
-      <div className="space-y-6 w-full">
+      <div className="space-y-8 w-full">
         {/* Welcome Section */}
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -45,19 +45,28 @@ const CreatorStudio = () => {
           </div>
         )}
 
+        {/* Dashboard Row: Metrics & QuickActions */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+          {/* Metrics: 4/5 */}
+          <div className="lg:col-span-4 h-full">
+            <DashboardMetrics />
+          </div>
+          {/* Quick Actions: 1/5 */}
+          <div className="lg:col-span-1 h-full">
+            <QuickActions onUploadClick={handleUploadClick} />
+          </div>
+        </div>
+
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            <DashboardMetrics />
             <PerformanceChart />
             <RecentActivity />
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            <QuickActions onUploadClick={handleUploadClick} />
-          </div>
+          {/* Sidebar (empty to balance grid if needed) */}
+          <div className="hidden lg:block" />
         </div>
       </div>
 
@@ -73,3 +82,4 @@ const CreatorStudio = () => {
 };
 
 export default CreatorStudio;
+
