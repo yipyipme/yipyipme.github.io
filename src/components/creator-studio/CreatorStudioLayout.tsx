@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -30,7 +31,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex">
+    <div className="min-h-screen bg-gray-950 flex w-full">
       {/* Sidebar */}
       <aside className={cn(
         "fixed left-0 top-0 z-50 h-full bg-gray-900/95 backdrop-blur-xl border-r border-gray-800 transform transition-transform duration-300 ease-out shadow-2xl",
@@ -58,7 +59,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
 
       {/* Main Content */}
       <main className={cn(
-        "flex-1 flex flex-col min-h-screen",
+        "flex-1 flex flex-col min-h-screen w-full",
         isSidebarOpen ? "ml-0 md:ml-72" : "ml-0 md:ml-16"
       )}>
         {/* Top Header */}
@@ -94,8 +95,8 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
         </header>
 
         {/* Main Responsive Container */}
-        <div className="flex-1 flex flex-col">
-          <div className="w-full max-w-7xl mx-auto px-4 py-4 flex-1">
+        <div className="flex-1 flex flex-col w-full"> {/* Remove max-w-7xl, mx-auto, etc */}
+          <div className="w-full px-6 py-8 flex-1">{/* px-6 for comfortable edge padding, fill all width */}
             {children}
           </div>
         </div>
