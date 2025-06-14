@@ -22,6 +22,8 @@ import Privacy from "./pages/Privacy";
 import CreatorStudio from "./pages/CreatorStudio";
 import Videos from "./pages/creator-studio/Videos";
 import LiveStreams from "./pages/creator-studio/LiveStreams";
+import Playlists from "./pages/creator-studio/Playlists";
+import Drafts from "./pages/creator-studio/Drafts";
 import Analytics from "./pages/creator-studio/Analytics";
 import NotFound from "./pages/NotFound";
 
@@ -52,6 +54,8 @@ const App = () => (
           <Route path="/creator-studio" element={<CreatorStudio />} />
           <Route path="/creator-studio/content/videos" element={<Videos />} />
           <Route path="/creator-studio/content/live" element={<LiveStreams />} />
+          <Route path="/creator-studio/content/playlists" element={<Playlists />} />
+          <Route path="/creator-studio/content/drafts" element={<Drafts />} />
           <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

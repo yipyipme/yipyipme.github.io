@@ -27,6 +27,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import VideoUpload from './VideoUpload';
 
 interface CreatorStudioLayoutProps {
   children: React.ReactNode;
@@ -82,6 +83,7 @@ const navigationItems = [
 const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [expandedItems, setExpandedItems] = useState<string[]>(['Content']);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const location = useLocation();
 
   const toggleExpanded = (itemName: string) => {
@@ -90,6 +92,10 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
         ? prev.filter(name => name !== itemName)
         : [...prev, itemName]
     );
+  };
+
+  const handleUploadSuccess = () => {
+    window.location.reload();
   };
 
   return (
@@ -105,7 +111,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
             <div className="flex items-center gap-3">
               <img 
-                src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
+                src="/lovable-uploads/c9f84e57-73c2-40a4-8e19-dee9964ad2da.png" 
                 alt="YipYip" 
                 className="h-8 w-auto neon-glow"
               />
@@ -127,7 +133,10 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
           {isSidebarOpen && (
             <div className="p-4 border-b border-gray-800">
               <div className="grid grid-cols-2 gap-2">
-                <Button className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80 btn-modern">
+                <Button 
+                  onClick={() => setShowUploadModal(true)}
+                  className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80 btn-modern"
+                >
                   <Upload className="h-4 w-4 mr-2" />
                   Upload
                 </Button>
@@ -255,8 +264,63 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
           {children}
         </div>
       </main>
+
+      {/* Upload Modal */}
+      {showUploadModal && (
+        <VideoUpload
+          onClose={() => setShowUploadModal(false)}
+          onSuccess={handleUploadSuccess}
+        />
+      )}
     </div>
   );
 };
+
+const navigationItems = [
+  { name: 'Overview', href: '/creator-studio', icon: Home, badge: null },
+  { 
+    name: 'Content', 
+    icon: Video, 
+    badge: null,
+    children: [
+      { name: 'Videos', href: '/creator-studio/content/videos', icon: Video },
+      { name: 'Live Streams', href: '/creator-studio/content/live', icon: Radio },
+      { name: 'Playlists', href: '/creator-studio/content/playlists', icon: PlaySquare },
+      { name: 'Drafts', href: '/creator-studio/content/drafts', icon: Calendar },
+    ]
+  },
+  { 
+    name: 'Analytics', 
+    icon: BarChart3, 
+    badge: null,
+    children: [
+      { name: 'Performance', href: '/creator-studio/analytics/performance', icon: BarChart3 },
+      { name: 'Audience', href: '/creator-studio/analytics/audience', icon: Users },
+      { name: 'Revenue', href: '/creator-studio/analytics/revenue', icon: DollarSign },
+    ]
+  },
+  { 
+    name: 'Community', 
+    icon: Users, 
+    badge: '12',
+    children: [
+      { name: 'Comments', href: '/creator-studio/community/comments', icon: MessageSquare },
+      { name: 'Posts', href: '/creator-studio/community/posts', icon: BookOpen },
+      { name: 'Prayer Requests', href: '/creator-studio/community/prayers', icon: Heart },
+    ]
+  },
+  { 
+    name: 'Monetization', 
+    icon: DollarSign, 
+    badge: null,
+    children: [
+      { name: 'Memberships', href: '/creator-studio/monetization/memberships', icon: UserCheck },
+      { name: 'Virtual Gifts', href: '/creator-studio/monetization/gifts', icon: Coins },
+      { name: 'Donations', href: '/creator-studio/monetization/donations', icon: Heart },
+      { name: 'Ad Settings', href: '/creator-studio/monetization/ads', icon: CreditCard },
+    ]
+  },
+  { name: 'Settings', href: '/creator-studio/settings', icon: Settings, badge: null },
+];
 
 export default CreatorStudioLayout;

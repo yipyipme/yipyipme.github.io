@@ -1,5 +1,7 @@
 
+import { useState } from 'react';
 import CreatorStudioLayout from '@/components/creator-studio/CreatorStudioLayout';
+import VideoUpload from '@/components/creator-studio/VideoUpload';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
@@ -17,6 +19,8 @@ import {
 } from 'lucide-react';
 
 const CreatorStudio = () => {
+  const [showUploadModal, setShowUploadModal] = useState(false);
+
   const metrics = [
     { title: 'Total Views', value: '125.4K', change: '+12.5%', icon: Eye, color: 'text-blue-400' },
     { title: 'Watch Time', value: '2,340 hrs', change: '+8.2%', icon: Clock, color: 'text-green-400' },
@@ -33,6 +37,11 @@ const CreatorStudio = () => {
     { type: 'donation', title: 'Donation received', time: '8 hours ago', views: '$50 donation' },
   ];
 
+  const handleUploadSuccess = () => {
+    // Refresh the page or update state to show new video
+    window.location.reload();
+  };
+
   return (
     <CreatorStudioLayout>
       <div className="space-y-8">
@@ -43,7 +52,10 @@ const CreatorStudio = () => {
             <p className="text-gray-400 mt-2">Welcome back! Here's how your channel is performing.</p>
           </div>
           <div className="flex gap-3">
-            <Button className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80 btn-modern">
+            <Button 
+              onClick={() => setShowUploadModal(true)}
+              className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80 btn-modern"
+            >
               <Upload className="h-4 w-4 mr-2" />
               Upload Video
             </Button>
@@ -127,7 +139,11 @@ const CreatorStudio = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Button variant="outline" className="h-20 flex flex-col gap-2 border-gray-700 text-gray-300 hover:text-[#FDBD34] hover:border-[#FDBD34] btn-modern">
+              <Button 
+                onClick={() => setShowUploadModal(true)}
+                variant="outline" 
+                className="h-20 flex flex-col gap-2 border-gray-700 text-gray-300 hover:text-[#FDBD34] hover:border-[#FDBD34] btn-modern"
+              >
                 <Upload className="h-6 w-6" />
                 <span>Upload Video</span>
               </Button>
@@ -146,6 +162,14 @@ const CreatorStudio = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Upload Modal */}
+        {showUploadModal && (
+          <VideoUpload
+            onClose={() => setShowUploadModal(false)}
+            onSuccess={handleUploadSuccess}
+          />
+        )}
       </div>
     </CreatorStudioLayout>
   );
