@@ -4,7 +4,6 @@ import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
 import VideoWatchPage from '@/components/VideoWatchPage';
-import YipYipLogo from '@/components/brand/YipYipLogo';
 import DoveIcon from '@/components/brand/DoveIcon';
 import BrandedButton from '@/components/brand/BrandedButton';
 import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X, Maximize, Minimize } from 'lucide-react';
@@ -54,7 +53,6 @@ const Home = () => {
               <div className="flex items-center gap-4 mb-8">
                 <DoveIcon size="lg" animate className="text-[#FDBD34]" />
                 <h2 className="text-3xl font-bold text-white">Explore by Category</h2>
-                <YipYipLogo size="sm" variant="gradient" />
               </div>
               <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
                 {quickLinks.map((link) => (
@@ -82,9 +80,6 @@ const Home = () => {
             <section>
               <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
                 <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute top-4 right-4">
-                  <YipYipLogo size="lg" variant="outline" className="opacity-20" />
-                </div>
                 <div className="relative flex items-center justify-between">
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
@@ -145,7 +140,6 @@ const Home = () => {
                 <Crown className="h-8 w-8 text-[#FDBD34]" />
                 <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
                 <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
-                <YipYipLogo size="sm" variant="text" />
               </div>
               <div className="netflix-grid">
                 {featuredVideos.slice(0, 6).map((video, index) => (
@@ -162,7 +156,6 @@ const Home = () => {
             <section className="text-center py-16">
               <div className="max-w-4xl mx-auto space-y-6">
                 <DoveIcon size="xl" animate className="mx-auto" />
-                <YipYipLogo size="xl" variant="gradient" />
                 <p className="text-xl text-gray-300 leading-relaxed">
                   Spreading the Gospel through digital media, connecting believers worldwide in faith, worship, and spiritual growth.
                 </p>
