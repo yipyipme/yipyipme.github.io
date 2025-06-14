@@ -45,15 +45,15 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-full">
-        {/* Hero Carousel */}
+      <div className="w-full overflow-x-hidden">
+        {/* Hero Carousel - Full width */}
         <section className="w-full">
           <HeroCarousel />
         </section>
 
         {/* Quick Links */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             <div className="flex items-center gap-4 mb-8">
               <DoveIcon size="lg" animate className="text-[#FDBD34]" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
@@ -83,7 +83,7 @@ const Home = () => {
 
         {/* Live Services Banner */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
               <div className="absolute inset-0 bg-black/20" />
               <div className="relative flex items-center justify-between">
@@ -119,7 +119,7 @@ const Home = () => {
 
         {/* Trending Section */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-3">
                 <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
@@ -150,7 +150,7 @@ const Home = () => {
 
         {/* For You Section */}
         <section className="w-full px-4 md:px-6 py-8">
-          <div className="max-w-7xl mx-auto">
+          <div className="w-full">
             <div className="flex items-center gap-3 mb-8">
               <Crown className="h-8 w-8 text-[#FDBD34]" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>

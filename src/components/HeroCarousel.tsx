@@ -49,7 +49,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden shadow-2xl">
+    <div className="relative h-[80vh] w-screen overflow-hidden shadow-2xl -mx-4 md:-mx-6">
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
@@ -64,8 +64,8 @@ const HeroCarousel = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
-              <div className="max-w-3xl text-white space-y-6 animate-slide-in-blur">
+            <div className="w-full px-4 md:px-8">
+              <div className="max-w-3xl text-white space-y-6 animate-slide-in-blur ml-4 md:ml-8">
                 <div className="inline-block bg-[#FDBD34] text-black px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
                   {slide.category}
                 </div>
