@@ -53,6 +53,8 @@ const VideoUpload = ({ onClose, onSuccess }: VideoUploadProps) => {
       creator: "Pastor Mike Johnson", // In real app, get from auth
       thumbnail: formData.thumbnail || "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
       duration: "0:00", // Would be calculated from actual video
+      views: "0", // Initial views
+      timeAgo: "just now", // Initial time
       videoUrl: formData.videoUrl,
       description: formData.description,
       tags: formData.tags.split(',').map(tag => tag.trim()),
