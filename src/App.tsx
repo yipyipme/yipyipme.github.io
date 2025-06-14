@@ -1,9 +1,9 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import Home from "./pages/Index";
 import Explore from "./pages/Explore";
 import Live from "./pages/Live";
@@ -36,46 +36,48 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/trending" element={<Trending />} />
-          <Route path="/live" element={<Live />} />
-          <Route path="/subscriptions" element={<Subscriptions />} />
-          <Route path="/watch-later" element={<WatchLater />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/bible" element={<Bible />} />
-          <Route path="/kids" element={<Kids />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/creator-studio" element={<CreatorStudio />} />
-          <Route path="/creator-studio/content/videos" element={<Videos />} />
-          <Route path="/creator-studio/content/live" element={<LiveStreams />} />
-          <Route path="/creator-studio/content/playlists" element={<Playlists />} />
-          <Route path="/creator-studio/content/drafts" element={<Drafts />} />
-          <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
-          <Route path="/creator-studio/analytics/audience" element={<Analytics />} />
-          <Route path="/creator-studio/analytics/revenue" element={<Analytics />} />
-          <Route path="/creator-studio/community/comments" element={<Comments />} />
-          <Route path="/creator-studio/community/posts" element={<Posts />} />
-          <Route path="/creator-studio/community/prayers" element={<Prayers />} />
-          <Route path="/creator-studio/monetization/memberships" element={<Memberships />} />
-          <Route path="/creator-studio/monetization/gifts" element={<Memberships />} />
-          <Route path="/creator-studio/monetization/donations" element={<Memberships />} />
-          <Route path="/creator-studio/monetization/ads" element={<Memberships />} />
-          <Route path="/creator-studio/settings" element={<CreatorStudioSettings />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/trending" element={<Trending />} />
+            <Route path="/live" element={<Live />} />
+            <Route path="/subscriptions" element={<Subscriptions />} />
+            <Route path="/watch-later" element={<WatchLater />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/bible" element={<Bible />} />
+            <Route path="/kids" element={<Kids />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/creator-studio" element={<CreatorStudio />} />
+            <Route path="/creator-studio/content/videos" element={<Videos />} />
+            <Route path="/creator-studio/content/live" element={<LiveStreams />} />
+            <Route path="/creator-studio/content/playlists" element={<Playlists />} />
+            <Route path="/creator-studio/content/drafts" element={<Drafts />} />
+            <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
+            <Route path="/creator-studio/analytics/audience" element={<Analytics />} />
+            <Route path="/creator-studio/analytics/revenue" element={<Analytics />} />
+            <Route path="/creator-studio/community/comments" element={<Comments />} />
+            <Route path="/creator-studio/community/posts" element={<Posts />} />
+            <Route path="/creator-studio/community/prayers" element={<Prayers />} />
+            <Route path="/creator-studio/monetization/memberships" element={<Memberships />} />
+            <Route path="/creator-studio/monetization/gifts" element={<Memberships />} />
+            <Route path="/creator-studio/monetization/donations" element={<Memberships />} />
+            <Route path="/creator-studio/monetization/ads" element={<Memberships />} />
+            <Route path="/creator-studio/settings" element={<CreatorStudioSettings />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

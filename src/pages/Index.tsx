@@ -52,7 +52,7 @@ const Home = () => {
             <section>
               <div className="flex items-center gap-4 mb-8">
                 <DoveIcon size="lg" animate className="text-[#FDBD34]" />
-                <h2 className="text-3xl font-bold text-white">Explore by Category</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
               </div>
               <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
                 {quickLinks.map((link) => (
@@ -115,7 +115,7 @@ const Home = () => {
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
-                  <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Trending Now</h2>
                   <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
                   <DoveIcon size="md" animate />
                 </div>
@@ -138,7 +138,7 @@ const Home = () => {
             <section>
               <div className="flex items-center gap-3 mb-8">
                 <Crown className="h-8 w-8 text-[#FDBD34]" />
-                <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
                 <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
               </div>
               <div className="netflix-grid">
@@ -156,7 +156,7 @@ const Home = () => {
             <section className="text-center py-16">
               <div className="max-w-4xl mx-auto space-y-6">
                 <DoveIcon size="xl" animate className="mx-auto" />
-                <p className="text-xl text-gray-300 leading-relaxed">
+                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
                   Spreading the Gospel through digital media, connecting believers worldwide in faith, worship, and spiritual growth.
                 </p>
                 <div className="flex justify-center gap-4">

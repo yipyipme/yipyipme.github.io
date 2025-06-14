@@ -1,10 +1,10 @@
-
 import { useState } from 'react';
 import { Search, Bell, MessageSquare, Upload, User, Menu, Mic, Filter } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import DoveIcon from '@/components/brand/DoveIcon';
+import ThemeToggle from '@/components/ThemeToggle';
 
 interface HeaderProps {
   onSidebarToggle: () => void;
@@ -29,7 +29,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
   return (
     <>
       {/* Main Header */}
-      <header className="sticky top-0 z-50 w-full bg-black/95 backdrop-blur-xl border-b border-gray-800 shadow-2xl">
+      <header className="sticky top-0 z-50 w-full bg-white/95 dark:bg-black/95 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 shadow-2xl">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Left section - Logo */}
@@ -46,13 +46,13 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
             {/* Center section - Search (Desktop) */}
             <div className="hidden md:flex flex-1 max-w-2xl mx-8">
               <div className="relative w-full group">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5 group-focus-within:text-[#FDBD34] transition-colors" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-400 h-5 w-5 group-focus-within:text-[#FDBD34] transition-colors" />
                 <Input
                   type="text"
                   placeholder="Search sermons, worship, bible studies..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 pr-20 h-10 w-full bg-gray-900/50 border-gray-700 focus:bg-gray-900/80 focus:border-[#FDBD34] focus:ring-[#FDBD34] text-gray-100 placeholder-gray-400 rounded-xl glass-effect"
+                  className="pl-12 pr-20 h-10 w-full bg-gray-100/50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 focus:bg-gray-100/80 dark:focus:bg-gray-900/80 focus:border-[#FDBD34] focus:ring-[#FDBD34] text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-xl glass-effect"
                 />
                 <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
                   <Button 
@@ -80,15 +80,17 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 variant="ghost" 
                 size="icon" 
                 onClick={() => setShowMobileSearch(!showMobileSearch)}
-                className="md:hidden text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50 btn-modern h-9 w-9"
+                className="md:hidden text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50 btn-modern h-9 w-9"
               >
                 <Search className="h-4 w-4" />
               </Button>
               
+              <ThemeToggle />
+              
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hidden sm:flex text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50 btn-modern relative h-9 w-9"
+                className="hidden sm:flex text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50 btn-modern relative h-9 w-9"
               >
                 <Bell className="h-4 w-4" />
                 <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
@@ -96,7 +98,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="hidden sm:flex text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50 btn-modern h-9 w-9"
+                className="hidden sm:flex text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50 btn-modern h-9 w-9"
               >
                 <MessageSquare className="h-4 w-4" />
               </Button>
@@ -114,7 +116,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50 btn-modern h-9 w-9"
+                className="text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50 btn-modern h-9 w-9"
               >
                 <User className="h-4 w-4" />
               </Button>
@@ -124,7 +126,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
         
         {/* Mobile Search Bar */}
         {showMobileSearch && (
-          <div className="md:hidden border-t border-gray-800 p-4">
+          <div className="md:hidden border-t border-gray-200 dark:border-gray-800 p-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
@@ -132,7 +134,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 placeholder="Search content..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-16 bg-gray-900/50 border-gray-700 text-gray-100 placeholder-gray-400 rounded-lg"
+                className="pl-10 pr-16 bg-gray-100/50 dark:bg-gray-900/50 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 rounded-lg"
               />
               <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
                 <Button variant="ghost" size="icon" className="text-gray-400 hover:text-[#FDBD34] h-6 w-6">
@@ -148,7 +150,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
       </header>
 
       {/* Secondary Navigation Bar - Improved Mobile */}
-      <nav className="sticky top-16 z-40 w-full bg-gray-950/98 backdrop-blur-xl border-b border-gray-800/50">
+      <nav className="sticky top-16 z-40 w-full bg-white/98 dark:bg-gray-950/98 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50">
         <div className="container mx-auto px-4">
           <div className="flex items-center gap-1 py-2 overflow-x-auto scrollbar-hide">
             <Link 
@@ -156,7 +158,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
               className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap btn-modern ${
                 location.pathname === '/' 
                   ? 'bg-[#FDBD34] text-black' 
-                  : 'text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50'
               }`}
             >
               <DoveIcon size="sm" className="animate-float" />
@@ -169,7 +171,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap btn-modern ${
                   location.pathname === item.href || (item.href.includes('?') && location.pathname === item.href.split('?')[0])
                     ? 'bg-[#FDBD34] text-black' 
-                    : 'text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50'
+                    : 'text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50'
                 }`}
               >
                 <span className="text-base">{item.icon}</span>
@@ -181,7 +183,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
               className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap btn-modern ${
                 location.pathname === '/trending' 
                   ? 'bg-[#FDBD34] text-black' 
-                  : 'text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-[#FDBD34] hover:bg-gray-200/50 dark:hover:bg-gray-800/50'
               }`}
             >
               <span className="text-base">🔥</span>
