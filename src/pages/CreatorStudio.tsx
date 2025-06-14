@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import CreatorStudioLayout from '@/components/creator-studio/CreatorStudioLayout';
 import DashboardMetrics from '@/components/creator-studio/DashboardMetrics';
@@ -7,9 +7,15 @@ import QuickActions from '@/components/creator-studio/QuickActions';
 import RecentActivity from '@/components/creator-studio/RecentActivity';
 import PerformanceChart from '@/components/creator-studio/PerformanceChart';
 import CreatorApplicationReview from '@/components/admin/CreatorApplicationReview';
+import VideoUpload from '@/components/creator-studio/VideoUpload';
 
 const CreatorStudio = () => {
   const { profile } = useAuth();
+  const [showUpload, setShowUpload] = useState(false);
+
+  const handleUploadClick = () => {
+    setShowUpload(true);
+  };
 
   return (
     <CreatorStudioLayout>
@@ -46,10 +52,15 @@ const CreatorStudio = () => {
 
           {/* Sidebar */}
           <div className="space-y-8">
-            <QuickActions />
+            <QuickActions onUploadClick={handleUploadClick} />
           </div>
         </div>
       </div>
+
+      {/* Video Upload Modal */}
+      {showUpload && (
+        <VideoUpload onClose={() => setShowUpload(false)} />
+      )}
     </CreatorStudioLayout>
   );
 };

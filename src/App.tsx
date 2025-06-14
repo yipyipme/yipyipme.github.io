@@ -11,7 +11,7 @@ import Index from "./pages/Index";
 import "./App.css";
 
 // Lazy load pages for better performance
-const AuthPage = lazy(() => import("./pages/auth/AuthPage"));
+const AuthPage = lazy(() => import("./components/auth/AuthPage"));
 const ProfilePage = lazy(() => import("./components/auth/ProfilePage"));
 const VideoWatchPage = lazy(() => import("./components/VideoWatchPage"));
 const Explore = lazy(() => import("./pages/Explore"));
@@ -49,7 +49,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ThemeProvider storageKey="vite-ui-theme">
         <TooltipProvider>
           <AuthProvider>
             <BrowserRouter>
