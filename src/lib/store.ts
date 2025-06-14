@@ -1,402 +1,599 @@
-
-interface Video {
-  id: string;
-  title: string;
-  creator: string;
-  thumbnail: string;
-  duration: string;
-  views: string;
-  timeAgo: string;
-  videoUrl: string;
-  description?: string;
-  tags?: string[];
-  status: 'published' | 'draft' | 'scheduled';
-  publishDate?: Date;
-  category?: string;
-  monetization?: {
-    adsEnabled: boolean;
-    membershipRequired: boolean;
-  };
-}
-
-interface LiveStream {
-  id: string;
-  title: string;
-  status: 'live' | 'scheduled' | 'ended';
-  viewers: number;
-  scheduledTime?: Date;
-  streamKey?: string;
-  description?: string;
-  thumbnail?: string;
-}
-
-interface Analytics {
-  totalViews: number;
-  watchTime: number;
-  subscribers: number;
-  revenue: number;
-  liveViewers: number;
-  members: number;
-  engagement: number;
-  retention: number;
-}
-
-interface Comment {
-  id: string;
-  videoId: string;
-  author: string;
-  content: string;
-  timestamp: Date;
-  status: 'pending' | 'approved' | 'hidden';
-}
-
-interface Donation {
-  id: string;
-  amount: number;
-  donor: string;
-  message?: string;
-  timestamp: Date;
-}
-
-interface CommunityPost {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  timestamp: Date;
-  likes: number;
-  comments: number;
-  type: 'text' | 'image' | 'poll' | 'devotional';
-}
-
-interface MembershipTier {
-  id: string;
-  name: string;
-  price: number;
-  perks: string[];
-  memberCount: number;
-}
+import { Video } from "@/components/VideoCard";
+import { LiveStream } from "@/components/LiveStreamCard";
 
 class PlatformStore {
   private videos: Video[] = [
     {
-      id: '1',
-      title: "Sunday Service: Walking by Faith",
-      creator: "Pastor Mike Johnson",
-      thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      duration: "45:20",
-      views: "125K",
-      timeAgo: "2 days ago",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      status: 'published',
-      category: 'sermons',
-      description: "Join us for an inspiring message about walking by faith, not by sight.",
-      tags: ['faith', 'sermon', 'sunday-service'],
-      monetization: { adsEnabled: true, membershipRequired: false }
+      id: "1",
+      title: "Sunday Morning Worship - Power of Prayer",
+      thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "45:30",
+      views: 12500,
+      timeAgo: "2 hours ago",
+      channel: "Grace Community Church",
+      verified: true,
+	  status: "published",
+      category: "Worship",
+      description: "Join us for an inspiring Sunday morning service focusing on the transformative power of prayer."
     },
     {
-      id: '2',
-      title: "Worship Night: Amazing Grace",
-      creator: "Hillsong Worship",
-      thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      duration: "1:23:15",
-      views: "89K",
-      timeAgo: "1 week ago",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-      status: 'published',
-      category: 'worship',
-      description: "An evening of powerful worship and praise.",
-      tags: ['worship', 'music', 'praise'],
-      monetization: { adsEnabled: true, membershipRequired: false }
+      id: "2",
+      title: "Bible Study: The Book of Romans",
+      thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "30:15",
+      views: 8900,
+      timeAgo: "1 day ago",
+      channel: "Faithful Scholars",
+      verified: true,
+	  status: "published",
+      category: "Bible Study",
+      description: "Delve into the profound teachings of the Apostle Paul in our in-depth study of the Book of Romans."
     },
     {
-      id: '3',
-      title: "Bible Study: Romans Chapter 8",
-      creator: "Dr. Sarah Williams",
-      thumbnail: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
-      duration: "52:10",
-      views: "34K",
+      id: "3",
+      title: "Live Q&A with Pastor Emily - Faith and Modern Challenges",
+      thumbnail: "https://images.unsplash.com/photo-1556075798-4825df14b14c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "1:15:00",
+      views: 15600,
       timeAgo: "3 days ago",
-      videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      status: 'published',
-      category: 'bible-study',
-      description: "Deep dive into Romans 8 and the life in the Spirit.",
-      tags: ['bible-study', 'romans', 'scripture'],
-      monetization: { adsEnabled: false, membershipRequired: true }
+      channel: "Community of Believers",
+      verified: false,
+	  status: "published",
+      category: "Q&A",
+      description: "Join Pastor Emily as she answers your questions about navigating faith in today's complex world."
+    },
+    {
+      id: "4",
+      title: "Acoustic Worship Session - Heartfelt Praise",
+      thumbnail: "https://images.unsplash.com/photo-1503614472-8c8317004461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "22:45",
+      views: 6700,
+      timeAgo: "1 week ago",
+      channel: "Worship Central",
+      verified: true,
+	  status: "published",
+      category: "Worship",
+      description: "Experience a time of intimate worship with our acoustic session featuring heartfelt praise and adoration."
+    },
+    {
+      id: "5",
+      title: "Testimony Time - From Struggle to Strength",
+      thumbnail: "https://images.unsplash.com/photo-1519389950473-47a04ca0ecd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "18:20",
+      views: 4200,
+      timeAgo: "2 weeks ago",
+      channel: "Stories of Hope",
+      verified: false,
+	  status: "published",
+      category: "Testimonies",
+      description: "Be inspired by real-life stories of individuals who have overcome challenges through faith and resilience."
+    },
+    {
+      id: "6",
+      title: "Youth Group Fun - Games and Fellowship",
+      thumbnail: "https://images.unsplash.com/photo-1543076659-7b7869e20134?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "35:50",
+      views: 3100,
+      timeAgo: "3 weeks ago",
+      channel: "Youth Arise",
+      verified: true,
+	  status: "published",
+      category: "Youth",
+      description: "Join our youth group for a time of fun, games, and meaningful fellowship with friends."
+    },
+    {
+      id: "7",
+      title: "Kids' Church - Learning About Love",
+      thumbnail: "https://images.unsplash.com/photo-1547394765-185e51e1dcad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "25:00",
+      views: 2800,
+      timeAgo: "1 month ago",
+      channel: "Little Lights",
+      verified: true,
+	  status: "published",
+      category: "Kids",
+      description: "Engage your children with our interactive Kids' Church program, teaching them about love and kindness."
+    },
+    {
+      id: "8",
+      title: "Gospel Music Night - Uplifting Melodies",
+      thumbnail: "https://images.unsplash.com/photo-1510915228340-29c85a3a66ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      duration: "50:20",
+      views: 9400,
+      timeAgo: "6 months ago",
+      channel: "Harmony Voices",
+      verified: true,
+	  status: "published",
+      category: "Music",
+      description: "Enjoy an evening filled with uplifting gospel music, celebrating faith through song."
     }
   ];
-
   private liveStreams: LiveStream[] = [
     {
-      id: '1',
-      title: "Sunday Morning Service",
-      status: 'live',
-      viewers: 2300,
-      streamKey: 'sk_live_123456',
-      description: "Join us for our weekly Sunday service",
-      thumbnail: "https://images.unsplash.com/photo-1507692049790-de58290a4334?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      id: "1",
+      title: "Live: Evening Prayer Service",
+      creator: "Pastor Johnson",
+      viewers: 245,
+      thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Prayer",
+      status: "live"
     },
     {
-      id: '2',
-      title: "Evening Prayer Meeting",
-      status: 'scheduled',
+      id: "2",
+      title: "Live: Sunday Morning Sermon",
+      creator: "Reverend Sarah",
+      viewers: 567,
+      thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Sermon",
+      status: "live"
+    },
+    {
+      id: "3",
+      title: "Scheduled: Bible Study Group",
+      creator: "Elder Thomas",
       viewers: 0,
-      scheduledTime: new Date(Date.now() + 3 * 60 * 60 * 1000),
-      streamKey: 'sk_scheduled_789',
-      description: "Weekly prayer meeting",
-      thumbnail: "https://images.unsplash.com/photo-1438032005730-c779502df39b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+      thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: "Bible Study",
+      status: "scheduled",
+	  scheduledTime: new Date()
     }
   ];
 
-  private analytics: Analytics = {
-    totalViews: 125400,
-    watchTime: 2340,
-    subscribers: 8745,
-    revenue: 1234,
-    liveViewers: 245,
-    members: 432,
-    engagement: 87.5,
-    retention: 65.2
-  };
-
-  private comments: Comment[] = [
-    {
-      id: '1',
-      videoId: '1',
-      author: 'John Smith',
-      content: 'Amazing message! This really spoke to my heart.',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
-      status: 'approved'
-    },
-    {
-      id: '2',
-      videoId: '1',
-      author: 'Mary Johnson',
-      content: 'Thank you for this powerful sermon.',
-      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
-      status: 'pending'
-    }
-  ];
-
-  private donations: Donation[] = [
-    {
-      id: '1',
-      amount: 50,
-      donor: 'Anonymous',
-      message: 'God bless this ministry',
-      timestamp: new Date(Date.now() - 30 * 60 * 1000)
-    }
-  ];
-
-  private communityPosts: CommunityPost[] = [
-    {
-      id: '1',
-      title: 'Weekly Prayer Request',
-      content: 'Please pray for our community outreach program this weekend.',
-      author: 'Pastor Mike',
-      timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000),
-      likes: 45,
-      comments: 12,
-      type: 'text'
-    }
-  ];
-
-  private membershipTiers: MembershipTier[] = [
-    {
-      id: '1',
-      name: 'Supporter',
-      price: 4.99,
-      perks: ['Ad-free viewing', 'Early access to content'],
-      memberCount: 156
-    },
-    {
-      id: '2',
-      name: 'Partner',
-      price: 9.99,
-      perks: ['All Supporter benefits', 'Exclusive Bible studies', 'Prayer request priority'],
-      memberCount: 89
-    },
-    {
-      id: '3',
-      name: 'Elder',
-      price: 19.99,
-      perks: ['All Partner benefits', 'Monthly video call with pastor', 'Ministry updates'],
-      memberCount: 34
-    }
-  ];
-
-  // Video Management
-  getVideos() {
-    return [...this.videos];
+  // Legacy methods for compatibility with existing components
+  getVideos(): Video[] {
+    return this.videos;
   }
 
-  getPublishedVideos() {
+  getPublishedVideos(): Video[] {
     return this.videos.filter(video => video.status === 'published');
   }
 
-  getVideoById(id: string) {
-    return this.videos.find(video => video.id === id);
+  getLiveStreams(): LiveStream[] {
+    return this.liveStreams;
   }
 
-  addVideo(video: Omit<Video, 'id'>) {
-    const newVideo: Video = {
-      ...video,
-      id: Date.now().toString(),
-      views: '0',
-      timeAgo: 'just now'
-    };
-    this.videos.unshift(newVideo);
-    this.updateAnalytics({ totalViews: this.analytics.totalViews + 1 });
-    return newVideo;
+  deleteVideo(id: string): void {
+    this.videos = this.videos.filter(video => video.id !== id);
   }
 
-  updateVideo(id: string, updates: Partial<Video>) {
-    const index = this.videos.findIndex(v => v.id === id);
-    if (index !== -1) {
-      this.videos[index] = { ...this.videos[index], ...updates };
-      return this.videos[index];
+  // New methods to sync with database
+  async loadPublishedVideos(): Promise<Video[]> {
+    try {
+      const dbVideos = await VideoService.getPublishedVideos();
+      // Convert database format to legacy format for compatibility
+      this.videos = dbVideos.map(video => ({
+        id: video.id,
+        title: video.title,
+        thumbnail: video.thumbnail_url || 'https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        duration: this.formatDuration(video.duration || 0),
+        views: 0, // Will be populated from analytics
+        timeAgo: this.formatTimeAgo(video.created_at),
+        channel: 'Creator Channel', // Will be populated from creator profile
+        verified: true,
+        status: video.status as 'published' | 'draft' | 'scheduled',
+        category: video.category || 'General',
+        description: video.description || ''
+      }));
+      return this.videos;
+    } catch (error) {
+      console.error('Error loading published videos:', error);
+      return this.getFallbackVideos();
     }
-    return null;
   }
 
-  deleteVideo(id: string) {
-    this.videos = this.videos.filter(v => v.id !== id);
-  }
-
-  // Live Stream Management
-  getLiveStreams() {
-    return [...this.liveStreams];
-  }
-
-  addLiveStream(stream: Omit<LiveStream, 'id'>) {
-    const newStream: LiveStream = {
-      ...stream,
-      id: Date.now().toString()
-    };
-    this.liveStreams.push(newStream);
-    return newStream;
-  }
-
-  updateLiveStream(id: string, updates: Partial<LiveStream>) {
-    const index = this.liveStreams.findIndex(s => s.id === id);
-    if (index !== -1) {
-      this.liveStreams[index] = { ...this.liveStreams[index], ...updates };
-      return this.liveStreams[index];
+  async loadLiveStreams(): Promise<LiveStream[]> {
+    try {
+      const dbStreams = await StreamService.getLiveStreams();
+      this.liveStreams = dbStreams.map(stream => ({
+        id: stream.id,
+        title: stream.title,
+        creator: 'Creator Name', // Will be populated from creator profile
+        viewers: stream.current_viewers || 0,
+        thumbnail: stream.thumbnail_url || 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        category: stream.category || 'General',
+        status: stream.status as 'live' | 'scheduled' | 'ended',
+        scheduledTime: stream.scheduled_start ? new Date(stream.scheduled_start) : undefined
+      }));
+      return this.liveStreams;
+    } catch (error) {
+      console.error('Error loading live streams:', error);
+      return this.getFallbackStreams();
     }
-    return null;
   }
 
-  // Analytics
-  getAnalytics() {
-    return { ...this.analytics };
+  private formatDuration(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
-  updateAnalytics(updates: Partial<Analytics>) {
-    this.analytics = { ...this.analytics, ...updates };
-  }
-
-  // Comments
-  getComments(videoId?: string) {
-    if (videoId) {
-      return this.comments.filter(comment => comment.videoId === videoId);
-    }
-    return [...this.comments];
-  }
-
-  addComment(comment: Omit<Comment, 'id'>) {
-    const newComment: Comment = {
-      ...comment,
-      id: Date.now().toString()
-    };
-    this.comments.push(newComment);
-    return newComment;
-  }
-
-  updateComment(id: string, updates: Partial<Comment>) {
-    const index = this.comments.findIndex(c => c.id === id);
-    if (index !== -1) {
-      this.comments[index] = { ...this.comments[index], ...updates };
-      return this.comments[index];
-    }
-    return null;
-  }
-
-  // Donations
-  getDonations() {
-    return [...this.donations];
-  }
-
-  addDonation(donation: Omit<Donation, 'id'>) {
-    const newDonation: Donation = {
-      ...donation,
-      id: Date.now().toString()
-    };
-    this.donations.push(newDonation);
-    this.updateAnalytics({ revenue: this.analytics.revenue + donation.amount });
-    return newDonation;
-  }
-
-  // Community Posts
-  getCommunityPosts() {
-    return [...this.communityPosts];
-  }
-
-  addCommunityPost(post: Omit<CommunityPost, 'id'>) {
-    const newPost: CommunityPost = {
-      ...post,
-      id: Date.now().toString()
-    };
-    this.communityPosts.unshift(newPost);
-    return newPost;
-  }
-
-  // Membership Tiers
-  getMembershipTiers() {
-    return [...this.membershipTiers];
-  }
-
-  addMembershipTier(tier: Omit<MembershipTier, 'id'>) {
-    const newTier: MembershipTier = {
-      ...tier,
-      id: Date.now().toString()
-    };
-    this.membershipTiers.push(newTier);
-    return newTier;
-  }
-
-  updateMembershipTier(id: string, updates: Partial<MembershipTier>) {
-    const index = this.membershipTiers.findIndex(t => t.id === id);
-    if (index !== -1) {
-      this.membershipTiers[index] = { ...this.membershipTiers[index], ...updates };
-      return this.membershipTiers[index];
-    }
-    return null;
-  }
-
-  // Search functionality
-  searchContent(query: string) {
-    const lowerQuery = query.toLowerCase();
+  private formatTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
     
-    const videos = this.videos.filter(video => 
-      video.title.toLowerCase().includes(lowerQuery) ||
-      video.creator.toLowerCase().includes(lowerQuery) ||
-      video.description?.toLowerCase().includes(lowerQuery) ||
-      video.tags?.some(tag => tag.toLowerCase().includes(lowerQuery))
-    );
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays} days ago`;
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    return `${diffInWeeks} weeks ago`;
+  }
 
-    const streams = this.liveStreams.filter(stream =>
-      stream.title.toLowerCase().includes(lowerQuery) ||
-      stream.description?.toLowerCase().includes(lowerQuery)
-    );
+  // Fallback data for when database is not available
+  private getFallbackVideos(): Video[] {
+    return [
+      {
+        id: "1",
+        title: "Sunday Morning Worship - Power of Prayer",
+        thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "45:30",
+        views: 12500,
+        timeAgo: "2 hours ago",
+        channel: "Grace Community Church",
+        verified: true,
+        status: "published",
+        category: "Worship",
+        description: "Join us for an inspiring Sunday morning service focusing on the transformative power of prayer."
+      },
+      {
+        id: "2",
+        title: "Bible Study: The Book of Romans",
+        thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "30:15",
+        views: 8900,
+        timeAgo: "1 day ago",
+        channel: "Faithful Scholars",
+        verified: true,
+		status: "published",
+        category: "Bible Study",
+        description: "Delve into the profound teachings of the Apostle Paul in our in-depth study of the Book of Romans."
+      },
+      {
+        id: "3",
+        title: "Live Q&A with Pastor Emily - Faith and Modern Challenges",
+        thumbnail: "https://images.unsplash.com/photo-1556075798-4825df14b14c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "1:15:00",
+        views: 15600,
+        timeAgo: "3 days ago",
+        channel: "Community of Believers",
+        verified: false,
+		status: "published",
+        category: "Q&A",
+        description: "Join Pastor Emily as she answers your questions about navigating faith in today's complex world."
+      },
+      {
+        id: "4",
+        title: "Acoustic Worship Session - Heartfelt Praise",
+        thumbnail: "https://images.unsplash.com/photo-1503614472-8c8317004461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "22:45",
+        views: 6700,
+        timeAgo: "1 week ago",
+        channel: "Worship Central",
+        verified: true,
+		status: "published",
+        category: "Worship",
+        description: "Experience a time of intimate worship with our acoustic session featuring heartfelt praise and adoration."
+      },
+      {
+        id: "5",
+        title: "Testimony Time - From Struggle to Strength",
+        thumbnail: "https://images.unsplash.com/photo-1519389950473-47a04ca0ecd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "18:20",
+        views: 4200,
+        timeAgo: "2 weeks ago",
+        channel: "Stories of Hope",
+        verified: false,
+		status: "published",
+        category: "Testimonies",
+        description: "Be inspired by real-life stories of individuals who have overcome challenges through faith and resilience."
+      },
+      {
+        id: "6",
+        title: "Youth Group Fun - Games and Fellowship",
+        thumbnail: "https://images.unsplash.com/photo-1543076659-7b7869e20134?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "35:50",
+        views: 3100,
+        timeAgo: "3 weeks ago",
+        channel: "Youth Arise",
+        verified: true,
+		status: "published",
+        category: "Youth",
+        description: "Join our youth group for a time of fun, games, and meaningful fellowship with friends."
+      },
+      {
+        id: "7",
+        title: "Kids' Church - Learning About Love",
+        thumbnail: "https://images.unsplash.com/photo-1547394765-185e51e1dcad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "25:00",
+        views: 2800,
+        timeAgo: "1 month ago",
+        channel: "Little Lights",
+        verified: true,
+		status: "published",
+        category: "Kids",
+        description: "Engage your children with our interactive Kids' Church program, teaching them about love and kindness."
+      },
+      {
+        id: "8",
+        title: "Gospel Music Night - Uplifting Melodies",
+        thumbnail: "https://images.unsplash.com/photo-1510915228340-29c85a3a66ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "50:20",
+        views: 9400,
+        timeAgo: "6 months ago",
+        channel: "Harmony Voices",
+        verified: true,
+		status: "published",
+        category: "Music",
+        description: "Enjoy an evening filled with uplifting gospel music, celebrating faith through song."
+      }
+    ];
+  }
 
-    const posts = this.communityPosts.filter(post =>
-      post.title.toLowerCase().includes(lowerQuery) ||
-      post.content.toLowerCase().includes(lowerQuery)
-    );
+  private getFallbackStreams(): LiveStream[] {
+    return [
+      {
+        id: "1",
+        title: "Live: Evening Prayer Service",
+        creator: "Pastor Johnson",
+        viewers: 245,
+        thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Prayer",
+        status: "live"
+      },
+      {
+        id: "2",
+        title: "Live: Sunday Morning Sermon",
+        creator: "Reverend Sarah",
+        viewers: 567,
+        thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Sermon",
+        status: "live"
+      },
+      {
+        id: "3",
+        title: "Scheduled: Bible Study Group",
+        creator: "Elder Thomas",
+        viewers: 0,
+        thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Bible Study",
+        status: "scheduled",
+		scheduledTime: new Date()
+      }
+    ];
+  }
+}
 
-    return { videos, streams, posts };
+import { VideoService } from './services/videoService';
+import { StreamService } from './services/streamService';
+
+class PlatformStore {
+  private videos: Video[] = [];
+  private liveStreams: LiveStream[] = [];
+
+  // Legacy methods for compatibility with existing components
+  getVideos(): Video[] {
+    return this.videos;
+  }
+
+  getPublishedVideos(): Video[] {
+    return this.videos.filter(video => video.status === 'published');
+  }
+
+  getLiveStreams(): LiveStream[] {
+    return this.liveStreams;
+  }
+
+  deleteVideo(id: string): void {
+    this.videos = this.videos.filter(video => video.id !== id);
+  }
+
+  // New methods to sync with database
+  async loadPublishedVideos(): Promise<Video[]> {
+    try {
+      const dbVideos = await VideoService.getPublishedVideos();
+      // Convert database format to legacy format for compatibility
+      this.videos = dbVideos.map(video => ({
+        id: video.id,
+        title: video.title,
+        thumbnail: video.thumbnail_url || 'https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        duration: this.formatDuration(video.duration || 0),
+        views: 0, // Will be populated from analytics
+        timeAgo: this.formatTimeAgo(video.created_at),
+        channel: 'Creator Channel', // Will be populated from creator profile
+        verified: true,
+        status: video.status as 'published' | 'draft' | 'scheduled',
+        category: video.category || 'General',
+        description: video.description || ''
+      }));
+      return this.videos;
+    } catch (error) {
+      console.error('Error loading published videos:', error);
+      return this.getFallbackVideos();
+    }
+  }
+
+  async loadLiveStreams(): Promise<LiveStream[]> {
+    try {
+      const dbStreams = await StreamService.getLiveStreams();
+      this.liveStreams = dbStreams.map(stream => ({
+        id: stream.id,
+        title: stream.title,
+        creator: 'Creator Name', // Will be populated from creator profile
+        viewers: stream.current_viewers || 0,
+        thumbnail: stream.thumbnail_url || 'https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        category: stream.category || 'General',
+        status: stream.status as 'live' | 'scheduled' | 'ended',
+        scheduledTime: stream.scheduled_start ? new Date(stream.scheduled_start) : undefined
+      }));
+      return this.liveStreams;
+    } catch (error) {
+      console.error('Error loading live streams:', error);
+      return this.getFallbackStreams();
+    }
+  }
+
+  private formatDuration(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+  private formatTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays} days ago`;
+    const diffInWeeks = Math.floor(diffInDays / 7);
+    return `${diffInWeeks} weeks ago`;
+  }
+
+  // Fallback data for when database is not available
+  private getFallbackVideos(): Video[] {
+    return [
+      {
+        id: "1",
+        title: "Sunday Morning Worship - Power of Prayer",
+        thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "45:30",
+        views: 12500,
+        timeAgo: "2 hours ago",
+        channel: "Grace Community Church",
+        verified: true,
+        status: "published",
+        category: "Worship",
+        description: "Join us for an inspiring Sunday morning service focusing on the transformative power of prayer."
+      },
+      {
+        id: "2",
+        title: "Bible Study: The Book of Romans",
+        thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "30:15",
+        views: 8900,
+        timeAgo: "1 day ago",
+        channel: "Faithful Scholars",
+        verified: true,
+		status: "published",
+        category: "Bible Study",
+        description: "Delve into the profound teachings of the Apostle Paul in our in-depth study of the Book of Romans."
+      },
+      {
+        id: "3",
+        title: "Live Q&A with Pastor Emily - Faith and Modern Challenges",
+        thumbnail: "https://images.unsplash.com/photo-1556075798-4825df14b14c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "1:15:00",
+        views: 15600,
+        timeAgo: "3 days ago",
+        channel: "Community of Believers",
+        verified: false,
+		status: "published",
+        category: "Q&A",
+        description: "Join Pastor Emily as she answers your questions about navigating faith in today's complex world."
+      },
+      {
+        id: "4",
+        title: "Acoustic Worship Session - Heartfelt Praise",
+        thumbnail: "https://images.unsplash.com/photo-1503614472-8c8317004461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "22:45",
+        views: 6700,
+        timeAgo: "1 week ago",
+        channel: "Worship Central",
+        verified: true,
+		status: "published",
+        category: "Worship",
+        description: "Experience a time of intimate worship with our acoustic session featuring heartfelt praise and adoration."
+      },
+      {
+        id: "5",
+        title: "Testimony Time - From Struggle to Strength",
+        thumbnail: "https://images.unsplash.com/photo-1519389950473-47a04ca0ecd8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "18:20",
+        views: 4200,
+        timeAgo: "2 weeks ago",
+        channel: "Stories of Hope",
+        verified: false,
+		status: "published",
+        category: "Testimonies",
+        description: "Be inspired by real-life stories of individuals who have overcome challenges through faith and resilience."
+      },
+      {
+        id: "6",
+        title: "Youth Group Fun - Games and Fellowship",
+        thumbnail: "https://images.unsplash.com/photo-1543076659-7b7869e20134?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "35:50",
+        views: 3100,
+        timeAgo: "3 weeks ago",
+        channel: "Youth Arise",
+        verified: true,
+		status: "published",
+        category: "Youth",
+        description: "Join our youth group for a time of fun, games, and meaningful fellowship with friends."
+      },
+      {
+        id: "7",
+        title: "Kids' Church - Learning About Love",
+        thumbnail: "https://images.unsplash.com/photo-1547394765-185e51e1dcad?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "25:00",
+        views: 2800,
+        timeAgo: "1 month ago",
+        channel: "Little Lights",
+        verified: true,
+		status: "published",
+        category: "Kids",
+        description: "Engage your children with our interactive Kids' Church program, teaching them about love and kindness."
+      },
+      {
+        id: "8",
+        title: "Gospel Music Night - Uplifting Melodies",
+        thumbnail: "https://images.unsplash.com/photo-1510915228340-29c85a3a66ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        duration: "50:20",
+        views: 9400,
+        timeAgo: "6 months ago",
+        channel: "Harmony Voices",
+        verified: true,
+		status: "published",
+        category: "Music",
+        description: "Enjoy an evening filled with uplifting gospel music, celebrating faith through song."
+      }
+    ];
+  }
+
+  private getFallbackStreams(): LiveStream[] {
+    return [
+      {
+        id: "1",
+        title: "Live: Evening Prayer Service",
+        creator: "Pastor Johnson",
+        viewers: 245,
+        thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Prayer",
+        status: "live"
+      },
+      {
+        id: "2",
+        title: "Live: Sunday Morning Sermon",
+        creator: "Reverend Sarah",
+        viewers: 567,
+        thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Sermon",
+        status: "live"
+      },
+      {
+        id: "3",
+        title: "Scheduled: Bible Study Group",
+        creator: "Elder Thomas",
+        viewers: 0,
+        thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        category: "Bible Study",
+        status: "scheduled",
+		scheduledTime: new Date()
+      }
+    ];
   }
 }
 
 export const platformStore = new PlatformStore();
-export type { Video, LiveStream, Analytics, Comment, Donation, CommunityPost, MembershipTier };
