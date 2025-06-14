@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Search, Menu, X } from 'lucide-react';
@@ -17,7 +18,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   const isCreatorStudio = location.pathname.startsWith('/creator-studio');
 
   return (
-    <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 w-full">
+    <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 w-screen" style={{ marginLeft: 'calc(-50vw + 50%)', marginRight: 'calc(-50vw + 50%)' }}>
       <div className="w-full px-4">
         <div className="flex items-center justify-between h-16">
           {/* Left side - Logo and Menu */}
