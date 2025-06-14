@@ -19,7 +19,7 @@ const genres = [
 const trendingVideos = [
   {
     title: "How to Find Purpose in Difficult Times",
-    creator: "Pastor Mike Johnson",
+    channel: "Pastor Mike Johnson",
     thumbnail: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     duration: "45:20",
     views: "125K",
@@ -27,7 +27,7 @@ const trendingVideos = [
   },
   {
     title: "Worship Night: Amazing Grace Collection",
-    creator: "Hillsong Worship",
+    channel: "Hillsong Worship",
     thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     duration: "1:23:15",
     views: "89K",
@@ -35,7 +35,7 @@ const trendingVideos = [
   },
   {
     title: "Bible Study: The Book of Romans Chapter 8",
-    creator: "Dr. Sarah Williams",
+    channel: "Dr. Sarah Williams",
     thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     duration: "52:30",
     views: "67K",

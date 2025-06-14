@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 const trendingVideos = [
   {
     title: "Viral Worship Moment Goes Global",
-    creator: "Bethel Music",
+    channel: "Bethel Music",
     thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     duration: "12:45",
     views: "2.1M",
@@ -15,7 +15,7 @@ const trendingVideos = [
   },
   {
     title: "Breaking: Revival Sweeps College Campus",
-    creator: "Campus Ministry Network",
+    channel: "Campus Ministry Network",
     thumbnail: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
     duration: "25:30",
     views: "890K",
