@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Play, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -48,7 +49,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden rounded-3xl shadow-2xl mx-6">
+    <div className="relative h-[80vh] w-full overflow-hidden rounded-none shadow-2xl">
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
