@@ -44,9 +44,9 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-screen overflow-x-hidden">
+      <div className="w-full">
         {/* Hero Carousel - Full width */}
-        <section className="w-screen overflow-x-hidden">
+        <section className="w-full">
           <HeroCarousel />
         </section>
 
@@ -173,7 +173,7 @@ const Home = () => {
         </section>
 
         {/* Brand Statement Section */}
-        <section className="text-center py-16 px-4 md:px-6 w-screen">
+        <section className="text-center py-16 px-4 md:px-6 w-full">
           <div className="max-w-4xl mx-auto space-y-6">
             <DoveIcon size="xl" animate className="mx-auto" />
             <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
