@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -24,8 +25,12 @@ import LiveStreams from "./pages/creator-studio/LiveStreams";
 import Playlists from "./pages/creator-studio/Playlists";
 import Drafts from "./pages/creator-studio/Drafts";
 import Analytics from "./pages/creator-studio/Analytics";
-import NotFound from "./pages/NotFound";
 import Comments from "./pages/creator-studio/Comments";
+import Posts from "./pages/creator-studio/Posts";
+import Prayers from "./pages/creator-studio/Prayers";
+import Memberships from "./pages/creator-studio/Memberships";
+import CreatorStudioSettings from "./pages/creator-studio/CreatorStudioSettings";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +62,16 @@ const App = () => (
           <Route path="/creator-studio/content/playlists" element={<Playlists />} />
           <Route path="/creator-studio/content/drafts" element={<Drafts />} />
           <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
+          <Route path="/creator-studio/analytics/audience" element={<Analytics />} />
+          <Route path="/creator-studio/analytics/revenue" element={<Analytics />} />
           <Route path="/creator-studio/community/comments" element={<Comments />} />
+          <Route path="/creator-studio/community/posts" element={<Posts />} />
+          <Route path="/creator-studio/community/prayers" element={<Prayers />} />
+          <Route path="/creator-studio/monetization/memberships" element={<Memberships />} />
+          <Route path="/creator-studio/monetization/gifts" element={<Memberships />} />
+          <Route path="/creator-studio/monetization/donations" element={<Memberships />} />
+          <Route path="/creator-studio/monetization/ads" element={<Memberships />} />
+          <Route path="/creator-studio/settings" element={<CreatorStudioSettings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
