@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -45,14 +44,14 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="w-full m-0 p-0 space-y-16">
+      <div className="w-screen overflow-x-hidden space-y-16">
         {/* Hero Carousel */}
-        <section className="w-full m-0 p-0">
+        <section className="w-screen">
           <HeroCarousel />
         </section>
 
         {/* Quick Links */}
-        <section className="w-full px-6">
+        <section className="w-screen px-6">
           <div className="flex items-center gap-4 mb-8">
             <DoveIcon size="lg" animate className="text-[#FDBD34]" />
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
@@ -80,7 +79,7 @@ const Home = () => {
         </section>
 
         {/* Live Services Banner */}
-        <section className="w-full px-6">
+        <section className="w-screen px-6">
           <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
             <div className="absolute inset-0 bg-black/20" />
             <div className="relative flex items-center justify-between">
@@ -114,7 +113,7 @@ const Home = () => {
         </section>
 
         {/* Trending Section */}
-        <section className="w-full px-6">
+        <section className="w-screen px-6">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
@@ -138,7 +137,7 @@ const Home = () => {
         </section>
 
         {/* For You Section */}
-        <section className="w-full px-6">
+        <section className="w-screen px-6">
           <div className="flex items-center gap-3 mb-8">
             <Crown className="h-8 w-8 text-[#FDBD34]" />
             <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
