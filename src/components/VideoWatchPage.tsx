@@ -69,21 +69,6 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
     <div className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-950 overflow-y-auto">
       {/* Include the original header */}
       <Header onMenuToggle={() => {}} />
-      
-      {/* Video page header with close button */}
-      <div className="flex items-center justify-between p-4 bg-gray-100/50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-700">
-        <h1 className="text-gray-900 dark:text-white text-lg font-semibold truncate flex-1 mr-4">
-          {video.title}
-        </h1>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-white/20 shrink-0"
-        >
-          <X className="h-6 w-6" />
-        </Button>
-      </div>
 
       <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-7xl mx-auto">
         {/* Main Content */}
