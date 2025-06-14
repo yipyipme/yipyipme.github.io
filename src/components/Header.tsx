@@ -34,7 +34,8 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
             </Button>
             
             <YipYipLogo 
-              showText 
+              size="md"
+              variant="gradient"
               className="text-white hover:text-[#FDBD34] transition-colors cursor-pointer"
               onClick={() => window.location.href = '/'}
             />
