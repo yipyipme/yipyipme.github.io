@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
 import EnhancedVideoPlayer from '@/components/EnhancedVideoPlayer';
-import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X } from 'lucide-react';
+import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X, Maximize, Minimize } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { platformStore } from '@/lib/store';
 
@@ -20,14 +20,21 @@ const quickLinks = [
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
+  const [isFullscreenVideo, setIsFullscreenVideo] = useState(false);
   const featuredVideos = platformStore.getPublishedVideos();
 
   const handleVideoClick = (video: any) => {
     setSelectedVideo(video);
+    setIsFullscreenVideo(false); // Start in non-fullscreen mode
   };
 
   const closeVideoPlayer = () => {
     setSelectedVideo(null);
+    setIsFullscreenVideo(false);
+  };
+
+  const toggleVideoFullscreen = () => {
+    setIsFullscreenVideo(!isFullscreenVideo);
   };
 
   // Add keyboard shortcut to close video with Escape key
@@ -48,50 +55,217 @@ const Home = () => {
   }, [selectedVideo]);
 
   if (selectedVideo) {
-    return (
-      <div className="fixed inset-0 z-50 bg-black">
-        {/* Prominent close button overlay */}
-        <div className="absolute top-4 right-4 z-60">
-          <Button
-            onClick={closeVideoPlayer}
-            variant="ghost"
-            size="icon"
-            className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
-          >
-            <X className="h-6 w-6" />
-          </Button>
-        </div>
-        
-        {/* Click outside to close overlay */}
-        <div 
-          className="absolute inset-0 z-40"
-          onClick={closeVideoPlayer}
-        />
-        
-        {/* Video player container */}
-        <div className="relative z-50 h-full flex items-center justify-center p-4">
+    if (isFullscreenVideo) {
+      // Fullscreen mode
+      return (
+        <div className="fixed inset-0 z-50 bg-black">
+          {/* Prominent close button overlay */}
+          <div className="absolute top-4 right-4 z-60 flex gap-2">
+            <Button
+              onClick={toggleVideoFullscreen}
+              variant="ghost"
+              size="icon"
+              className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+            >
+              <Minimize className="h-6 w-6" />
+            </Button>
+            <Button
+              onClick={closeVideoPlayer}
+              variant="ghost"
+              size="icon"
+              className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
+          
+          {/* Click outside to close overlay */}
           <div 
-            className="w-full max-w-6xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <EnhancedVideoPlayer
-              videoUrl={selectedVideo.videoUrl}
-              title={selectedVideo.title}
-              onClose={closeVideoPlayer}
-            />
+            className="absolute inset-0 z-40"
+            onClick={closeVideoPlayer}
+          />
+          
+          {/* Video player container */}
+          <div className="relative z-50 h-full flex items-center justify-center p-4">
+            <div 
+              className="w-full max-w-6xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <EnhancedVideoPlayer
+                videoUrl={selectedVideo.videoUrl}
+                title={selectedVideo.title}
+                onClose={closeVideoPlayer}
+              />
+            </div>
+          </div>
+          
+          {/* Instruction text */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm z-60">
+            Press Esc or click outside to close
           </div>
         </div>
-        
-        {/* Instruction text */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm z-60">
-          Press Esc or click outside to close
-        </div>
-      </div>
-    );
+      );
+    } else {
+      // Non-fullscreen modal mode
+      return (
+        <Layout>
+          <div className="container mx-auto px-6 py-8 space-y-16">
+            
+        {/* Hero Carousel */}
+        <section>
+          <HeroCarousel />
+        </section>
+
+        {/* Quick Links */}
+        <section>
+          <h2 className="text-3xl font-bold text-white mb-8 gradient-text">Explore by Category</h2>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
+            {quickLinks.map((link) => (
+              <div
+                key={link.name}
+                className="group cursor-pointer"
+                onClick={() => window.location.href = link.href}
+              >
+                <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10`}>
+                  <div className="text-3xl mb-3 animate-float">{link.icon}</div>
+                  <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
+                    {link.name}
+                  </span>
+                  <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Live Services Banner */}
+        <section>
+          <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="relative flex items-center justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
+                  <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
+                </div>
+                <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
+                <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
+                <Button className="bg-black text-[#FDBD34] hover:bg-gray-900 btn-modern px-8 py-4 text-lg font-semibold">
+                  <Play className="mr-3 h-6 w-6" fill="currentColor" />
+                  Join Live Service
+                </Button>
+              </div>
+              <div className="hidden md:flex items-center gap-8 text-black">
+                <div className="text-center space-y-2">
+                  <Users className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">2.3K</div>
+                  <div className="text-sm font-medium">Watching</div>
+                </div>
+                <div className="text-center space-y-2">
+                  <Calendar className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">9:00</div>
+                  <div className="text-sm font-medium">AM EST</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Trending Section */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
+              <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+              <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
+            </div>
+            <Button variant="outline" className="border-[#FDBD34] text-[#FDBD34] hover:bg-[#FDBD34] hover:text-black btn-modern">
+              View All
+            </Button>
+          </div>
+          <div className="netflix-grid">
+            {featuredVideos.slice(0, 4).map((video, index) => (
+              <VideoCard 
+                key={video.id} 
+                {...video} 
+                onClick={() => handleVideoClick(video)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* For You Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <Crown className="h-8 w-8 text-[#FDBD34]" />
+            <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
+            <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
+          </div>
+          <div className="netflix-grid">
+            {featuredVideos.slice(0, 6).map((video, index) => (
+              <VideoCard 
+                key={video.id} 
+                {...video} 
+                onClick={() => handleVideoClick(video)}
+              />
+            ))}
+          </div>
+        </section>
+          </div>
+          
+          {/* Non-fullscreen video modal */}
+          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+            {/* Click outside to close overlay */}
+            <div 
+              className="absolute inset-0 z-40"
+              onClick={closeVideoPlayer}
+            />
+            
+            {/* Video modal container */}
+            <div 
+              className="relative z-50 w-full max-w-4xl bg-black rounded-lg overflow-hidden shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal header with controls */}
+              <div className="absolute top-4 right-4 z-60 flex gap-2">
+                <Button
+                  onClick={toggleVideoFullscreen}
+                  variant="ghost"
+                  size="icon"
+                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+                >
+                  <Maximize className="h-6 w-6" />
+                </Button>
+                <Button
+                  onClick={closeVideoPlayer}
+                  variant="ghost"
+                  size="icon"
+                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+                >
+                  <X className="h-6 w-6" />
+                </Button>
+              </div>
+              
+              <EnhancedVideoPlayer
+                videoUrl={selectedVideo.videoUrl}
+                title={selectedVideo.title}
+                onClose={closeVideoPlayer}
+              />
+            </div>
+            
+            {/* Instruction text */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm z-60">
+              Press Esc or click outside to close • Click maximize for fullscreen
+            </div>
+          </div>
+        </Layout>
+      );
+    }
   }
 
   return (
     <Layout>
+      
       <div className="container mx-auto px-6 py-8 space-y-16">
         {/* Hero Carousel */}
         <section>
