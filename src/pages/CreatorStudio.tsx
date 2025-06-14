@@ -17,6 +17,10 @@ const CreatorStudio = () => {
     setShowUpload(true);
   };
 
+  const handleUploadSuccess = () => {
+    setShowUpload(false);
+  };
+
   return (
     <CreatorStudioLayout>
       <div className="space-y-8">
@@ -59,7 +63,10 @@ const CreatorStudio = () => {
 
       {/* Video Upload Modal */}
       {showUpload && (
-        <VideoUpload onClose={() => setShowUpload(false)} />
+        <VideoUpload 
+          onClose={() => setShowUpload(false)}
+          onSuccess={handleUploadSuccess}
+        />
       )}
     </CreatorStudioLayout>
   );
