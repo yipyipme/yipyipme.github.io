@@ -49,7 +49,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative h-[80vh] w-full overflow-hidden rounded-none shadow-2xl">
+    <div className="relative h-[80vh] w-full overflow-hidden shadow-2xl">
       {heroSlides.map((slide, index) => (
         <div
           key={slide.id}
@@ -64,7 +64,7 @@ const HeroCarousel = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
           <div className="absolute inset-0 flex items-center">
-            <div className="container mx-auto px-8">
+            <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
               <div className="max-w-3xl text-white space-y-6 animate-slide-in-blur">
                 <div className="inline-block bg-[#FDBD34] text-black px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider">
                   {slide.category}
@@ -95,7 +95,7 @@ const HeroCarousel = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute left-8 top-1/2 transform -translate-y-1/2 bg-black/30 backdrop-blur-sm border border-white/20 text-white hover:bg-[#FDBD34] hover:text-black btn-modern h-14 w-14"
+        className="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 bg-black/30 backdrop-blur-sm border border-white/20 text-white hover:bg-[#FDBD34] hover:text-black btn-modern h-14 w-14"
         onClick={prevSlide}
       >
         <ChevronLeft className="h-8 w-8" />
@@ -103,7 +103,7 @@ const HeroCarousel = () => {
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-8 top-1/2 transform -translate-y-1/2 bg-black/30 backdrop-blur-sm border border-white/20 text-white hover:bg-[#FDBD34] hover:text-black btn-modern h-14 w-14"
+        className="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 bg-black/30 backdrop-blur-sm border border-white/20 text-white hover:bg-[#FDBD34] hover:text-black btn-modern h-14 w-14"
         onClick={nextSlide}
       >
         <ChevronRight className="h-8 w-8" />
