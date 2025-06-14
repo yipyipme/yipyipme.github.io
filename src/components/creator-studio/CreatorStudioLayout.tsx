@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -59,11 +58,11 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
 
       {/* Main Content */}
       <main className={cn(
-        "flex-1 flex flex-col min-h-screen w-full",
+        "flex-1 flex flex-col min-h-screen",
         isSidebarOpen ? "ml-0 md:ml-72" : "ml-0 md:ml-16"
       )}>
         {/* Top Header */}
-        <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800 px-4 py-4 w-full">
+        <header className="bg-gray-900/50 backdrop-blur-xl border-b border-gray-800 px-4 py-4 w-full shrink-0">
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-4">
               <Button
@@ -94,11 +93,9 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
           </div>
         </header>
 
-        {/* Main Content Container - Full Width */}
-        <div className="flex-1 w-full">
-          <div className="w-full h-full px-8 py-8">
-            {children}
-          </div>
+        {/* Main Content Container */}
+        <div className="flex-1 p-8 overflow-y-auto">
+          {children}
         </div>
       </main>
 
