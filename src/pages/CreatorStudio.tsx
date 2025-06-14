@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import CreatorStudioLayout from '@/components/creator-studio/CreatorStudioLayout';
@@ -23,9 +22,9 @@ const CreatorStudio = () => {
 
   return (
     <CreatorStudioLayout>
-      <div className="space-y-8 w-full">
+      <div className="space-y-8 w-full h-full">
         {/* Welcome Section */}
-        <div className="text-center">
+        <div className="text-center w-full">
           <h1 className="text-4xl font-bold text-white mb-4">
             Welcome to Creator Studio
           </h1>
@@ -46,21 +45,21 @@ const CreatorStudio = () => {
         )}
 
         {/* Dashboard Row: Metrics & QuickActions */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 w-full">
           {/* Metrics: 4/5 */}
-          <div className="lg:col-span-4 h-full">
+          <div className="lg:col-span-4 h-full min-w-0">
             <DashboardMetrics />
           </div>
           {/* Quick Actions: 1/5 */}
-          <div className="lg:col-span-1 h-full">
+          <div className="lg:col-span-1 h-full min-w-0">
             <QuickActions onUploadClick={handleUploadClick} />
           </div>
         </div>
 
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full mt-2 min-w-0">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-6 min-w-0">
             <PerformanceChart />
             <RecentActivity />
           </div>
@@ -82,4 +81,3 @@ const CreatorStudio = () => {
 };
 
 export default CreatorStudio;
-
