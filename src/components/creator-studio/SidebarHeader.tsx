@@ -1,6 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Menu, X, Upload, Radio } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarHeaderProps {
   isSidebarOpen: boolean;
@@ -9,6 +10,12 @@ interface SidebarHeaderProps {
 }
 
 const SidebarHeader = ({ isSidebarOpen, onToggleSidebar, onShowUpload }: SidebarHeaderProps) => {
+  const navigate = useNavigate();
+
+  const handleGoLive = () => {
+    navigate('/creator-studio/live');
+  };
+
   return (
     <>
       {/* Header */}
@@ -44,7 +51,11 @@ const SidebarHeader = ({ isSidebarOpen, onToggleSidebar, onShowUpload }: Sidebar
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </Button>
-            <Button variant="outline" className="border-gray-700 text-gray-300 hover:text-[#FDBD34] btn-modern">
+            <Button 
+              onClick={handleGoLive}
+              variant="outline" 
+              className="border-gray-700 text-gray-300 hover:text-[#FDBD34] btn-modern"
+            >
               <Radio className="h-4 w-4 mr-2" />
               Go Live
             </Button>

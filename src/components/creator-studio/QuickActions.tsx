@@ -9,12 +9,19 @@ import {
   BarChart3,
   BookOpen
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface QuickActionsProps {
   onUploadClick: () => void;
 }
 
 const QuickActions = ({ onUploadClick }: QuickActionsProps) => {
+  const navigate = useNavigate();
+
+  const handleScheduleStream = () => {
+    navigate('/creator-studio/live');
+  };
+
   const actions = [
     {
       title: 'Upload Video',
@@ -27,7 +34,8 @@ const QuickActions = ({ onUploadClick }: QuickActionsProps) => {
       title: 'Schedule Stream',
       description: 'Plan live service',
       icon: Radio,
-      color: 'border-red-500/50 text-red-400 hover:bg-red-500/10'
+      color: 'border-red-500/50 text-red-400 hover:bg-red-500/10',
+      onClick: handleScheduleStream
     },
     {
       title: 'Create Post',

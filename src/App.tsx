@@ -44,6 +44,9 @@ const Memberships = lazy(() => import("./pages/creator-studio/Memberships"));
 const Drafts = lazy(() => import("./pages/creator-studio/Drafts"));
 const CreatorStudioSettings = lazy(() => import("./pages/creator-studio/CreatorStudioSettings"));
 
+// Live streaming components
+const LiveStreamViewer = lazy(() => import("./components/live/LiveStreamViewer"));
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -61,6 +64,7 @@ function App() {
                     <Route path="/apply-creator" element={<CreatorApplication />} />
                     <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
                     <Route path="/watch/:id" element={<VideoWatchPageWrapper />} />
+                    <Route path="/live/:streamId" element={<LiveStreamViewer />} />
                     <Route path="/explore" element={<Explore />} />
                     <Route path="/trending" element={<Trending />} />
                     <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />

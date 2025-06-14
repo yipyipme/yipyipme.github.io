@@ -1,12 +1,17 @@
 
 import { useState } from 'react';
 import { Search, Bell, Upload, Radio, User, HelpCircle, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const CreatorStudioHeader = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleGoLive = () => {
+    navigate('/creator-studio/live');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-black/95 backdrop-blur-xl border-b border-gray-800 shadow-2xl">
@@ -50,6 +55,7 @@ const CreatorStudioHeader = () => {
               Upload
             </Button>
             <Button 
+              onClick={handleGoLive}
               variant="outline" 
               size="sm" 
               className="border-gray-700 text-gray-300 hover:text-[#FDBD34] btn-modern px-4 py-2 h-9"
