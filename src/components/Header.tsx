@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Search, Bell, MessageSquare, Upload, User, Menu, Mic, Filter } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -34,17 +33,16 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
             {/* Left section - Logo */}
-            <div className="flex items-center gap-6">
-              <Link to="/" className="flex items-center gap-3 group">
+            <div className="flex items-center gap-4">
+              <Link to="/" className="flex items-center gap-2 group">
                 <img 
                   src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
                   alt="YipYip" 
-                  className="h-8 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
-                  style={{ width: 'auto', height: '32px', minWidth: '80px' }}
+                  className="h-10 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
                 />
                 <YipYipLogo 
-                  size="sm" 
-                  className="hidden sm:block group-hover:animate-pulse transition-all duration-300" 
+                  size="md" 
+                  className="hidden lg:block group-hover:animate-pulse transition-all duration-300" 
                 />
               </Link>
             </div>
