@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
-import EnhancedVideoPlayer from '@/components/EnhancedVideoPlayer';
+import VideoWatchPage from '@/components/VideoWatchPage';
 import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X, Maximize, Minimize } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { platformStore } from '@/lib/store';
@@ -21,318 +20,130 @@ const quickLinks = [
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
-  const [isFullscreenVideo, setIsFullscreenVideo] = useState(false);
-  const [isTheaterMode, setIsTheaterMode] = useState(false);
   const featuredVideos = platformStore.getPublishedVideos();
 
   const handleVideoClick = (video: any) => {
     setSelectedVideo(video);
-    setIsFullscreenVideo(false);
-    setIsTheaterMode(false);
   };
 
   const closeVideoPlayer = () => {
     setSelectedVideo(null);
-    setIsFullscreenVideo(false);
-    setIsTheaterMode(false);
   };
-
-  const toggleVideoFullscreen = () => {
-    setIsFullscreenVideo(!isFullscreenVideo);
-    setIsTheaterMode(false);
-  };
-
-  const toggleTheaterMode = () => {
-    setIsTheaterMode(!isTheaterMode);
-    setIsFullscreenVideo(false);
-  };
-
-  // Add keyboard shortcut to close video with Escape key
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && selectedVideo) {
-        closeVideoPlayer();
-      }
-    };
-
-    if (selectedVideo) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedVideo]);
 
   return (
-    <Layout>
-      <div className="container mx-auto px-6 py-8 space-y-16">
-        {/* Hero Carousel */}
-        <section>
-          <HeroCarousel />
-        </section>
+    <>
+      {selectedVideo ? (
+        <VideoWatchPage 
+          video={selectedVideo} 
+          onClose={closeVideoPlayer}
+        />
+      ) : (
+        <Layout>
+          <div className="container mx-auto px-6 py-8 space-y-16">
+            {/* Hero Carousel */}
+            <section>
+              <HeroCarousel />
+            </section>
 
-        {/* Quick Links */}
-        <section>
-          <h2 className="text-3xl font-bold text-white mb-8 gradient-text">Explore by Category</h2>
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
-            {quickLinks.map((link) => (
-              <div
-                key={link.name}
-                className="group cursor-pointer"
-                onClick={() => window.location.href = link.href}
-              >
-                <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10`}>
-                  <div className="text-3xl mb-3 animate-float">{link.icon}</div>
-                  <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
-                    {link.name}
-                  </span>
-                  <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
+            {/* Quick Links */}
+            <section>
+              <h2 className="text-3xl font-bold text-white mb-8 gradient-text">Explore by Category</h2>
+              <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
+                {quickLinks.map((link) => (
+                  <div
+                    key={link.name}
+                    className="group cursor-pointer"
+                    onClick={() => window.location.href = link.href}
+                  >
+                    <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10`}>
+                      <div className="text-3xl mb-3 animate-float">{link.icon}</div>
+                      <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
+                        {link.name}
+                      </span>
+                      <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Live Services Banner */}
+            <section>
+              <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
+                <div className="absolute inset-0 bg-black/20" />
+                <div className="relative flex items-center justify-between">
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
+                      <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
+                    </div>
+                    <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
+                    <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
+                    <Button className="bg-black text-[#FDBD34] hover:bg-gray-900 btn-modern px-8 py-4 text-lg font-semibold">
+                      <Play className="mr-3 h-6 w-6" fill="currentColor" />
+                      Join Live Service
+                    </Button>
+                  </div>
+                  <div className="hidden md:flex items-center gap-8 text-black">
+                    <div className="text-center space-y-2">
+                      <Users className="h-12 w-12 mx-auto" />
+                      <div className="text-3xl font-bold">2.3K</div>
+                      <div className="text-sm font-medium">Watching</div>
+                    </div>
+                    <div className="text-center space-y-2">
+                      <Calendar className="h-12 w-12 mx-auto" />
+                      <div className="text-3xl font-bold">9:00</div>
+                      <div className="text-sm font-medium">AM EST</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+            </section>
 
-        {/* Live Services Banner */}
-        <section>
-          <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="relative flex items-center justify-between">
-              <div className="space-y-4">
+            {/* Trending Section */}
+            <section>
+              <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
-                  <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
+                  <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
+                  <h2 className="text-3xl font-bold text-white">Trending Now</h2>
+                  <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
                 </div>
-                <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
-                <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
-                <Button className="bg-black text-[#FDBD34] hover:bg-gray-900 btn-modern px-8 py-4 text-lg font-semibold">
-                  <Play className="mr-3 h-6 w-6" fill="currentColor" />
-                  Join Live Service
+                <Button variant="outline" className="border-[#FDBD34] text-[#FDBD34] hover:bg-[#FDBD34] hover:text-black btn-modern">
+                  View All
                 </Button>
               </div>
-              <div className="hidden md:flex items-center gap-8 text-black">
-                <div className="text-center space-y-2">
-                  <Users className="h-12 w-12 mx-auto" />
-                  <div className="text-3xl font-bold">2.3K</div>
-                  <div className="text-sm font-medium">Watching</div>
-                </div>
-                <div className="text-center space-y-2">
-                  <Calendar className="h-12 w-12 mx-auto" />
-                  <div className="text-3xl font-bold">9:00</div>
-                  <div className="text-sm font-medium">AM EST</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Trending Section */}
-        <section>
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
-              <h2 className="text-3xl font-bold text-white">Trending Now</h2>
-              <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
-            </div>
-            <Button variant="outline" className="border-[#FDBD34] text-[#FDBD34] hover:bg-[#FDBD34] hover:text-black btn-modern">
-              View All
-            </Button>
-          </div>
-          <div className="netflix-grid">
-            {featuredVideos.slice(0, 4).map((video, index) => (
-              <VideoCard 
-                key={video.id} 
-                {...video} 
-                onClick={() => handleVideoClick(video)}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* For You Section */}
-        <section>
-          <div className="flex items-center gap-3 mb-8">
-            <Crown className="h-8 w-8 text-[#FDBD34]" />
-            <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
-            <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
-          </div>
-          <div className="netflix-grid">
-            {featuredVideos.slice(0, 6).map((video, index) => (
-              <VideoCard 
-                key={video.id} 
-                {...video} 
-                onClick={() => handleVideoClick(video)}
-              />
-            ))}
-          </div>
-        </section>
-      </div>
-
-      {/* YouTube-accurate Video Modal System */}
-      {selectedVideo && (
-        <>
-          {isFullscreenVideo ? (
-            // True fullscreen mode - full viewport
-            <div className="fixed inset-0 z-[9999] bg-black">
-              <div className="absolute top-4 right-4 z-[10000] flex gap-2">
-                <Button
-                  onClick={toggleVideoFullscreen}
-                  variant="ghost"
-                  size="icon"
-                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-10 w-10"
-                >
-                  <Minimize className="h-5 w-5" />
-                </Button>
-                <Button
-                  onClick={closeVideoPlayer}
-                  variant="ghost"
-                  size="icon"
-                  className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-10 w-10"
-                >
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              
-              <div 
-                className="absolute inset-0 z-[9998]"
-                onClick={closeVideoPlayer}
-              />
-              
-              <div className="relative z-[9999] h-full flex items-center justify-center">
-                <div 
-                  className="w-full h-full"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <EnhancedVideoPlayer
-                    videoUrl={selectedVideo.videoUrl}
-                    title={selectedVideo.title}
-                    onClose={closeVideoPlayer}
+              <div className="netflix-grid">
+                {featuredVideos.slice(0, 4).map((video, index) => (
+                  <VideoCard 
+                    key={video.id} 
+                    {...video} 
+                    onClick={() => handleVideoClick(video)}
                   />
-                </div>
+                ))}
               </div>
-            </div>
-          ) : isTheaterMode ? (
-            // Theater mode - expanded width within page
-            <div className="fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md">
-              <div 
-                className="absolute inset-0"
-                onClick={closeVideoPlayer}
-              />
-              
-              <div className="relative z-[9999] flex items-center justify-center min-h-screen p-4">
-                <div 
-                  className="w-full max-w-7xl bg-black rounded-xl shadow-2xl overflow-hidden"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* Theater mode header */}
-                  <div className="absolute top-3 right-3 z-[10000] flex gap-2">
-                    <Button
-                      onClick={toggleTheaterMode}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                    >
-                      <Minimize className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      onClick={toggleVideoFullscreen}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                    >
-                      <Maximize className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      onClick={closeVideoPlayer}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  
-                  <EnhancedVideoPlayer
-                    videoUrl={selectedVideo.videoUrl}
-                    title={selectedVideo.title}
-                    onClose={closeVideoPlayer}
+            </section>
+
+            {/* For You Section */}
+            <section>
+              <div className="flex items-center gap-3 mb-8">
+                <Crown className="h-8 w-8 text-[#FDBD34]" />
+                <h2 className="text-3xl font-bold text-white">Recommended for You</h2>
+                <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
+              </div>
+              <div className="netflix-grid">
+                {featuredVideos.slice(0, 6).map((video, index) => (
+                  <VideoCard 
+                    key={video.id} 
+                    {...video} 
+                    onClick={() => handleVideoClick(video)}
                   />
-                </div>
+                ))}
               </div>
-            </div>
-          ) : (
-            // YouTube-style modal - exact dimensions and positioning
-            <div className="fixed inset-0 z-[9998] bg-black/75 backdrop-blur-sm">
-              <div 
-                className="absolute inset-0"
-                onClick={closeVideoPlayer}
-              />
-              
-              {/* YouTube-accurate modal positioning */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[9999]">
-                <div 
-                  className="bg-black rounded-xl shadow-2xl overflow-hidden animate-scale-in"
-                  style={{
-                    width: 'min(854px, 90vw)',
-                    height: 'min(480px, 50.625vw)', // 16:9 aspect ratio
-                    maxWidth: '90vw',
-                    maxHeight: '90vh'
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {/* YouTube-style modal header */}
-                  <div className="absolute top-3 right-3 z-[10000] flex gap-2">
-                    <Button
-                      onClick={toggleTheaterMode}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                      title="Theater mode"
-                    >
-                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 6H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H5V8h14v8z"/>
-                      </svg>
-                    </Button>
-                    <Button
-                      onClick={toggleVideoFullscreen}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                      title="Fullscreen"
-                    >
-                      <Maximize className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      onClick={closeVideoPlayer}
-                      variant="ghost"
-                      size="icon"
-                      className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm h-8 w-8"
-                      title="Close"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  
-                  <EnhancedVideoPlayer
-                    videoUrl={selectedVideo.videoUrl}
-                    title={selectedVideo.title}
-                    onClose={closeVideoPlayer}
-                  />
-                </div>
-              </div>
-              
-              {/* YouTube-style help text */}
-              <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-white/70 text-sm text-center z-[9999]">
-                <div className="bg-black/50 backdrop-blur-sm rounded-lg px-4 py-2">
-                  Press Esc to close • Click theater for expanded view • Click fullscreen for full screen
-                </div>
-              </div>
-            </div>
-          )}
-        </>
+            </section>
+          </div>
+        </Layout>
       )}
-    </Layout>
+    </>
   );
 };
 
