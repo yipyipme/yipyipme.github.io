@@ -145,11 +145,11 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
             <div className="flex items-center gap-4">
               <Avatar className="h-12 w-12">
                 <AvatarImage src={`https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face`} />
-                <AvatarFallback>{video.creator[0]}</AvatarFallback>
+                <AvatarFallback>{video.channel[0]}</AvatarFallback>
               </Avatar>
               
               <div className="space-y-1">
-                <h3 className="text-white font-semibold">{video.creator}</h3>
+                <h3 className="text-white font-semibold">{video.channel}</h3>
                 <p className="text-gray-400 text-sm">27,000 followers</p>
               </div>
             </div>
@@ -300,7 +300,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
                       <h4 className="text-white text-sm font-medium line-clamp-2 mb-1">
                         {episode.title}
                       </h4>
-                      <p className="text-gray-400 text-xs">{episode.creator}</p>
+                      <p className="text-gray-400 text-xs">{episode.channel}</p>
                       <p className="text-gray-400 text-xs">{episode.views} views</p>
                     </div>
                   </div>
@@ -330,7 +330,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
                     <h4 className="text-white text-sm font-medium line-clamp-2 mb-1">
                       {suggestedVideo.title}
                     </h4>
-                    <p className="text-gray-400 text-xs mb-1">{suggestedVideo.creator}</p>
+                    <p className="text-gray-400 text-xs mb-1">{suggestedVideo.channel}</p>
                     <p className="text-gray-400 text-xs">{suggestedVideo.views} views</p>
                   </div>
                 </div>

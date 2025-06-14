@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 
 interface VideoCardProps {
   title: string;
-  creator: string;
+  channel: string; // Changed from creator to channel to match Video interface
   thumbnail: string;
   duration: string;
   views: string;
@@ -13,7 +13,7 @@ interface VideoCardProps {
   onClick?: () => void;
 }
 
-const VideoCard = ({ title, creator, thumbnail, duration, views, timeAgo, onClick }: VideoCardProps) => {
+const VideoCard = ({ title, channel, thumbnail, duration, views, timeAgo, onClick }: VideoCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -84,7 +84,7 @@ const VideoCard = ({ title, creator, thumbnail, duration, views, timeAgo, onClic
         </h3>
         <div className="flex items-center gap-2 text-sm text-gray-400">
           <User className="h-4 w-4" />
-          <span className="hover:text-[#FDBD34] transition-colors cursor-pointer">{creator}</span>
+          <span className="hover:text-[#FDBD34] transition-colors cursor-pointer">{channel}</span>
         </div>
         <div className="flex items-center gap-3 text-xs text-gray-500">
           <span>{views} views</span>

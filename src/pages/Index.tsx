@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -129,7 +130,12 @@ const Home = () => {
             {featuredVideos.slice(0, 4).map((video, index) => (
               <VideoCard 
                 key={video.id} 
-                {...video} 
+                title={video.title}
+                channel={video.channel}
+                thumbnail={video.thumbnail}
+                duration={video.duration}
+                views={video.views.toString()}
+                timeAgo={video.timeAgo}
                 onClick={() => handleVideoClick(video)}
               />
             ))}
@@ -147,7 +153,12 @@ const Home = () => {
             {featuredVideos.slice(0, 6).map((video, index) => (
               <VideoCard 
                 key={video.id} 
-                {...video} 
+                title={video.title}
+                channel={video.channel}
+                thumbnail={video.thumbnail}
+                duration={video.duration}
+                views={video.views.toString()}
+                timeAgo={video.timeAgo}
                 onClick={() => handleVideoClick(video)}
               />
             ))}
