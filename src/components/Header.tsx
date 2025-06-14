@@ -6,7 +6,6 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import ThemeToggle from './ThemeToggle';
 import UserMenu from './auth/UserMenu';
-import YipYipLogo from './brand/YipYipLogo';
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -37,10 +36,10 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
               className="cursor-pointer"
               onClick={() => window.location.href = '/'}
             >
-              <YipYipLogo 
-                size="md"
-                variant="gradient"
-                className="text-white hover:text-[#FDBD34] transition-colors"
+              <img 
+                src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
+                alt="YipYip" 
+                className="h-10 w-auto hover:opacity-80 transition-opacity"
               />
             </div>
           </div>
