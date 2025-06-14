@@ -9,6 +9,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import VideoPlayerOverlay from './VideoPlayerOverlay';
+import VideoSkipIndicator from './VideoSkipIndicator';
+import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
 
 interface Comment {
   id: string;
@@ -28,12 +31,16 @@ interface VideoPlayerProps {
 const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const titleTimeoutRef = useRef<NodeJS.Timeout>();
+  const controlsTimeoutRef = useRef<NodeJS.Timeout>();
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState([75]);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(true);
+  const [showTitle, setShowTitle] = useState(true);
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [selectedColor, setSelectedColor] = useState('#ffffff');
@@ -48,6 +55,10 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
   const [loop, setLoop] = useState(false);
   const [autoPlay, setAutoPlay] = useState(false);
   const [subtitlesEnabled, setSubtitlesEnabled] = useState(false);
+  const [showSkipIndicator, setShowSkipIndicator] = useState(false);
+  const [skipDirection, setSkipDirection] = useState<'forward' | 'backward'>('forward');
+  const [skipAmount, setSkipAmount] = useState(5);
+  const [showShortcuts, setShowShortcuts] = useState(false);
 
   const commentColors = [
     '#ffffff', '#ff6b6b', '#4ecdc4', '#45b7d1', 
@@ -56,6 +67,31 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
 
   const qualities = ['360p', '480p', '720p', '1080p', '1440p', '4K'];
   const speeds = ['0.25', '0.5', '0.75', '1', '1.25', '1.5', '1.75', '2'];
+
+  // Auto-hide title and controls
+  const resetTitleTimeout = useCallback(() => {
+    if (titleTimeoutRef.current) {
+      clearTimeout(titleTimeoutRef.current);
+    }
+    setShowTitle(true);
+    titleTimeoutRef.current = setTimeout(() => {
+      if (isPlaying) {
+        setShowTitle(false);
+      }
+    }, 3000);
+  }, [isPlaying]);
+
+  const resetControlsTimeout = useCallback(() => {
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    setShowControls(true);
+    controlsTimeoutRef.current = setTimeout(() => {
+      if (isPlaying) {
+        setShowControls(false);
+      }
+    }, 3000);
+  }, [isPlaying]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -80,7 +116,7 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     };
   }, [autoPlay]);
 
-  // Keyboard shortcuts
+  // Enhanced keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement) return;
@@ -104,44 +140,64 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
           break;
         case 'd':
           e.preventDefault();
-          if (e.shiftKey) {
-            // Show danmaku info
-            console.log('Danmaku info');
-          } else {
-            setCommentsEnabled(!commentsEnabled);
-          }
+          setCommentsEnabled(!commentsEnabled);
+          break;
+        case 'arrowleft':
+          e.preventDefault();
+          skipTime(-5);
+          showSkipFeedback('backward', 5);
+          break;
+        case 'arrowright':
+          e.preventDefault();
+          skipTime(5);
+          showSkipFeedback('forward', 5);
           break;
         case 'j':
           e.preventDefault();
-          skipTime(e.shiftKey ? -10 : -5);
+          skipTime(-10);
+          showSkipFeedback('backward', 10);
           break;
         case 'l':
           e.preventDefault();
-          skipTime(e.shiftKey ? 10 : 5);
+          skipTime(10);
+          showSkipFeedback('forward', 10);
           break;
         case 'm':
           e.preventDefault();
           toggleMute();
+          break;
+        case '?':
+          e.preventDefault();
+          setShowShortcuts(!showShortcuts);
+          break;
+        case 'escape':
+          e.preventDefault();
+          if (isFullscreen) {
+            toggleFullscreen();
+          } else if (isTheaterMode) {
+            setIsTheaterMode(false);
+          } else if (showShortcuts) {
+            setShowShortcuts(false);
+          }
           break;
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isWideScreen, isTheaterMode, commentsEnabled]);
+  }, [isWideScreen, isTheaterMode, commentsEnabled, isFullscreen, showShortcuts]);
 
-  // Auto-hide controls
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    
-    if (isPlaying && showControls) {
-      timeout = setTimeout(() => {
-        setShowControls(false);
-      }, 3000);
-    }
+  const showSkipFeedback = (direction: 'forward' | 'backward', amount: number) => {
+    setSkipDirection(direction);
+    setSkipAmount(amount);
+    setShowSkipIndicator(true);
+    setTimeout(() => setShowSkipIndicator(false), 1000);
+  };
 
-    return () => clearTimeout(timeout);
-  }, [isPlaying, showControls]);
+  const handleMouseMove = () => {
+    resetTitleTimeout();
+    resetControlsTimeout();
+  };
 
   const togglePlay = useCallback(() => {
     const video = videoRef.current;
@@ -286,7 +342,8 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     if (isFullscreen) {
       classes += " h-screen";
     } else {
-      classes += " rounded-lg overflow-hidden shadow-2xl";
+      // Enhanced height - slightly taller than standard 16:9
+      classes += " rounded-lg overflow-hidden shadow-2xl" + " aspect-[16/9.5]";
     }
     
     return classes;
@@ -310,10 +367,10 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
       <div className={getContainerClasses()}>
         <div 
           ref={containerRef}
-          className="relative aspect-video bg-black cursor-pointer group"
-          onMouseEnter={() => setShowControls(true)}
+          className="relative w-full h-full bg-black cursor-pointer group"
+          onMouseEnter={handleMouseMove}
           onMouseLeave={() => !isPlaying && setShowControls(true)}
-          onMouseMove={() => setShowControls(true)}
+          onMouseMove={handleMouseMove}
           onClick={togglePlay}
         >
           <video
@@ -324,27 +381,17 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
             poster="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=450&fit=crop"
           />
           
-          {/* Title overlay */}
-          <div className="absolute top-4 left-4 text-white">
-            <h2 className="text-xl font-bold drop-shadow-lg">{title}</h2>
-          </div>
+          <VideoPlayerOverlay 
+            title={title}
+            showTitle={showTitle}
+            onClose={onClose}
+          />
 
-          {/* Close button for theater mode */}
-          {onClose && (
-            <div className="absolute top-4 right-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onClose();
-                }}
-                className="text-white hover:bg-white/20"
-              >
-                ✕
-              </Button>
-            </div>
-          )}
+          <VideoSkipIndicator 
+            skipAmount={skipAmount}
+            direction={skipDirection}
+            show={showSkipIndicator}
+          />
           
           {/* Danmaku Comments Overlay */}
           {commentsEnabled && (
@@ -405,6 +452,7 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
                     onClick={(e) => {
                       e.stopPropagation();
                       skipTime(-10);
+                      showSkipFeedback('backward', 10);
                     }}
                     className="text-white hover:bg-white/20 p-2"
                   >
@@ -417,6 +465,7 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
                     onClick={(e) => {
                       e.stopPropagation();
                       skipTime(10);
+                      showSkipFeedback('forward', 10);
                     }}
                     className="text-white hover:bg-white/20 p-2"
                   >
@@ -638,12 +687,17 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
             <div className="text-gray-400 text-sm space-y-1">
               <p>Comments will scroll across the video. Press D to toggle display.</p>
               <p className="text-xs">
-                Shortcuts: Space (play/pause), F (fullscreen), T (theater), W (wide), J/L (skip), M (mute)
+                Shortcuts: Space (play/pause), ← → (skip 5s), J/L (skip 10s), F (fullscreen), ? (help)
               </p>
             </div>
           </div>
         )}
       </div>
+
+      <KeyboardShortcutsHelp 
+        isOpen={showShortcuts}
+        onClose={() => setShowShortcuts(false)}
+      />
     </div>
   );
 };

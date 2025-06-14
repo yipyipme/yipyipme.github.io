@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import Header from './Header';
 import EnhancedVideoPlayer from './EnhancedVideoPlayer';
 import VideoCard from './VideoCard';
+import VideoChapters from './VideoChapters';
 import { platformStore } from '@/lib/store';
 
 interface VideoWatchPageProps {
@@ -22,9 +23,19 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
   const [hasDisliked, setHasDisliked] = useState(false);
   const [showDescription, setShowDescription] = useState(false);
   const [comment, setComment] = useState('');
+  const [currentTime, setCurrentTime] = useState(0);
   
   const suggestedVideos = platformStore.getPublishedVideos().slice(0, 8);
   const relatedEpisodes = platformStore.getPublishedVideos().slice(0, 3);
+
+  // Sample chapters data
+  const chapters = [
+    { id: '1', title: 'Opening Prayer', timestamp: 0, duration: 120 },
+    { id: '2', title: 'Scripture Reading', timestamp: 120, duration: 180 },
+    { id: '3', title: 'Main Message', timestamp: 300, duration: 900 },
+    { id: '4', title: 'Community Prayer', timestamp: 1200, duration: 300 },
+    { id: '5', title: 'Closing Blessing', timestamp: 1500, duration: 120 },
+  ];
 
   const handleLike = () => {
     if (hasLiked) {
@@ -53,6 +64,12 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
     setIsSubscribed(!isSubscribed);
   };
 
+  const handleChapterClick = (timestamp: number) => {
+    // This would be implemented to seek to the timestamp
+    setCurrentTime(timestamp);
+    console.log(`Seeking to ${timestamp} seconds`);
+  };
+
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -78,6 +95,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
             <EnhancedVideoPlayer
               videoUrl={video.videoUrl}
               title={video.title}
+              onClose={onClose}
             />
           </div>
 
@@ -202,6 +220,15 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Chapters Section */}
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+            <VideoChapters 
+              chapters={chapters}
+              currentTime={currentTime}
+              onChapterClick={handleChapterClick}
+            />
           </div>
 
           {/* Comments Section */}
