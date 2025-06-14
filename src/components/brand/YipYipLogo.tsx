@@ -35,7 +35,7 @@ const YipYipLogo = ({
         sizeClasses[size],
         variantClasses[variant],
         animate && 'animate-pulse',
-        'select-none tracking-wider font-black uppercase',
+        'select-none tracking-wider font-black',
         className
       )}
     >
