@@ -33,146 +33,147 @@ const Home = () => {
     setSelectedVideo(null);
   };
 
+  // Only render VideoWatchPage if we have a selected video
+  if (selectedVideo) {
+    return (
+      <VideoWatchPage 
+        video={selectedVideo} 
+        onClose={closeVideoPlayer}
+      />
+    );
+  }
+
   return (
-    <>
-      {selectedVideo ? (
-        <VideoWatchPage 
-          video={selectedVideo} 
-          onClose={closeVideoPlayer}
-        />
-      ) : (
-        <Layout>
-          <div className="container mx-auto px-6 py-8 space-y-16">
-            {/* Hero Carousel */}
-            <section>
-              <HeroCarousel />
-            </section>
+    <Layout>
+      <div className="container mx-auto px-6 py-8 space-y-16">
+        {/* Hero Carousel */}
+        <section>
+          <HeroCarousel />
+        </section>
 
-            {/* Quick Links */}
-            <section>
-              <div className="flex items-center gap-4 mb-8">
-                <DoveIcon size="lg" animate className="text-[#FDBD34]" />
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
-              </div>
-              <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
-                {quickLinks.map((link) => (
-                  <div
-                    key={link.name}
-                    className="group cursor-pointer"
-                    onClick={() => window.location.href = link.href}
-                  >
-                    <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10 relative overflow-hidden`}>
-                      <div className="absolute top-2 right-2">
-                        <DoveIcon size="sm" className="text-white/30" />
-                      </div>
-                      <div className="text-3xl mb-3 animate-float">{link.icon}</div>
-                      <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
-                        {link.name}
-                      </span>
-                      <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
-                    </div>
+        {/* Quick Links */}
+        <section>
+          <div className="flex items-center gap-4 mb-8">
+            <DoveIcon size="lg" animate className="text-[#FDBD34]" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Explore by Category</h2>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-6">
+            {quickLinks.map((link) => (
+              <div
+                key={link.name}
+                className="group cursor-pointer"
+                onClick={() => window.location.href = link.href}
+              >
+                <div className={`bg-gradient-to-br ${link.gradient} rounded-2xl p-6 card-hover glass-effect border border-white/10 relative overflow-hidden`}>
+                  <div className="absolute top-2 right-2">
+                    <DoveIcon size="sm" className="text-white/30" />
                   </div>
-                ))}
-              </div>
-            </section>
-
-            {/* Live Services Banner */}
-            <section>
-              <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 bg-black/20" />
-                <div className="relative flex items-center justify-between">
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
-                      <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
-                      <DoveIcon size="sm" className="text-black animate-float" />
-                    </div>
-                    <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
-                    <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
-                    <BrandedButton showIcon>
-                      <Play className="mr-3 h-6 w-6" fill="currentColor" />
-                      Join Live Service
-                    </BrandedButton>
-                  </div>
-                  <div className="hidden md:flex items-center gap-8 text-black">
-                    <div className="text-center space-y-2">
-                      <Users className="h-12 w-12 mx-auto" />
-                      <div className="text-3xl font-bold">2.3K</div>
-                      <div className="text-sm font-medium">Watching</div>
-                    </div>
-                    <div className="text-center space-y-2">
-                      <Calendar className="h-12 w-12 mx-auto" />
-                      <div className="text-3xl font-bold">9:00</div>
-                      <div className="text-sm font-medium">AM EST</div>
-                    </div>
-                  </div>
+                  <div className="text-3xl mb-3 animate-float">{link.icon}</div>
+                  <span className="text-sm font-semibold text-white group-hover:text-yellow-300 transition-colors text-center block">
+                    {link.name}
+                  </span>
+                  <span className="text-xs text-white/80 mt-2 block">{link.count}</span>
                 </div>
               </div>
-            </section>
+            ))}
+          </div>
+        </section>
 
-            {/* Trending Section */}
-            <section>
-              <div className="flex items-center justify-between mb-8">
+        {/* Live Services Banner */}
+        <section>
+          <div className="relative gradient-bg rounded-3xl p-8 overflow-hidden shadow-2xl">
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="relative flex items-center justify-between">
+              <div className="space-y-4">
                 <div className="flex items-center gap-3">
-                  <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Trending Now</h2>
-                  <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
-                  <DoveIcon size="md" animate />
+                  <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
+                  <span className="text-black font-bold text-lg uppercase tracking-wider">LIVE NOW</span>
+                  <DoveIcon size="sm" className="text-black animate-float" />
                 </div>
-                <BrandedButton variant="outline">
-                  View All
+                <h3 className="text-4xl font-bold text-black">Sunday Morning Service</h3>
+                <p className="text-black/80 text-xl">Join 2.3K viewers watching live</p>
+                <BrandedButton showIcon>
+                  <Play className="mr-3 h-6 w-6" fill="currentColor" />
+                  Join Live Service
                 </BrandedButton>
               </div>
-              <div className="netflix-grid">
-                {featuredVideos.slice(0, 4).map((video, index) => (
-                  <VideoCard 
-                    key={video.id} 
-                    {...video} 
-                    onClick={() => handleVideoClick(video)}
-                  />
-                ))}
-              </div>
-            </section>
-
-            {/* For You Section */}
-            <section>
-              <div className="flex items-center gap-3 mb-8">
-                <Crown className="h-8 w-8 text-[#FDBD34]" />
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
-                <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
-              </div>
-              <div className="netflix-grid">
-                {featuredVideos.slice(0, 6).map((video, index) => (
-                  <VideoCard 
-                    key={video.id} 
-                    {...video} 
-                    onClick={() => handleVideoClick(video)}
-                  />
-                ))}
-              </div>
-            </section>
-
-            {/* Brand Statement Section */}
-            <section className="text-center py-16">
-              <div className="max-w-4xl mx-auto space-y-6">
-                <DoveIcon size="xl" animate className="mx-auto" />
-                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Spreading the Gospel through digital media, connecting believers worldwide in faith, worship, and spiritual growth.
-                </p>
-                <div className="flex justify-center gap-4">
-                  <BrandedButton variant="primary" showIcon>
-                    Start Your Journey
-                  </BrandedButton>
-                  <BrandedButton variant="outline">
-                    Learn More
-                  </BrandedButton>
+              <div className="hidden md:flex items-center gap-8 text-black">
+                <div className="text-center space-y-2">
+                  <Users className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">2.3K</div>
+                  <div className="text-sm font-medium">Watching</div>
+                </div>
+                <div className="text-center space-y-2">
+                  <Calendar className="h-12 w-12 mx-auto" />
+                  <div className="text-3xl font-bold">9:00</div>
+                  <div className="text-sm font-medium">AM EST</div>
                 </div>
               </div>
-            </section>
+            </div>
           </div>
-        </Layout>
-      )}
-    </>
+        </section>
+
+        {/* Trending Section */}
+        <section>
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <TrendingUp className="h-8 w-8 text-[#FDBD34]" />
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Trending Now</h2>
+              <Zap className="h-6 w-6 text-yellow-400 animate-pulse" />
+              <DoveIcon size="md" animate />
+            </div>
+            <BrandedButton variant="outline">
+              View All
+            </BrandedButton>
+          </div>
+          <div className="netflix-grid">
+            {featuredVideos.slice(0, 4).map((video, index) => (
+              <VideoCard 
+                key={video.id} 
+                {...video} 
+                onClick={() => handleVideoClick(video)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* For You Section */}
+        <section>
+          <div className="flex items-center gap-3 mb-8">
+            <Crown className="h-8 w-8 text-[#FDBD34]" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
+            <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
+          </div>
+          <div className="netflix-grid">
+            {featuredVideos.slice(0, 6).map((video, index) => (
+              <VideoCard 
+                key={video.id} 
+                {...video} 
+                onClick={() => handleVideoClick(video)}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Brand Statement Section */}
+        <section className="text-center py-16">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <DoveIcon size="xl" animate className="mx-auto" />
+            <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+              Spreading the Gospel through digital media, connecting believers worldwide in faith, worship, and spiritual growth.
+            </p>
+            <div className="flex justify-center gap-4">
+              <BrandedButton variant="primary" showIcon>
+                Start Your Journey
+              </BrandedButton>
+              <BrandedButton variant="outline">
+                Learn More
+              </BrandedButton>
+            </div>
+          </div>
+        </section>
+      </div>
+    </Layout>
   );
 };
 
