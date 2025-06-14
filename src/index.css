@@ -253,3 +253,29 @@
 .toggle-switch.active .toggle-circle {
   transform: translateX(24px);
 }
+
+/* Brand-specific animations */
+.neon-glow {
+  filter: drop-shadow(0 0 8px rgba(253, 189, 52, 0.3));
+}
+
+.brand-pulse {
+  animation: brandPulse 2s ease-in-out infinite;
+}
+
+@keyframes brandPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 8px rgba(253, 189, 52, 0.3));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 16px rgba(253, 189, 52, 0.5));
+  }
+}
+
+.brand-hover:hover {
+  color: #FDBD34;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(253, 189, 52, 0.4));
+}

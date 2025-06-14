@@ -4,6 +4,8 @@ import { Search, Bell, MessageSquare, Upload, User, Menu, Mic, Filter } from 'lu
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import YipYipLogo from '@/components/brand/YipYipLogo';
+import DoveIcon from '@/components/brand/DoveIcon';
 
 interface HeaderProps {
   onSidebarToggle: () => void;
@@ -39,6 +41,10 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                   alt="YipYip" 
                   className="h-8 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
                   style={{ width: 'auto', height: '32px', minWidth: '80px' }}
+                />
+                <YipYipLogo 
+                  size="sm" 
+                  className="hidden sm:block group-hover:animate-pulse transition-all duration-300" 
                 />
               </Link>
             </div>
@@ -108,6 +114,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 >
                   <Upload className="h-3 w-3 mr-2" />
                   Create
+                  <DoveIcon size="sm" className="ml-2 animate-float" />
                 </Button>
               </Link>
               <Button 
@@ -158,7 +165,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                   : 'text-gray-300 hover:text-[#FDBD34] hover:bg-gray-800/50'
               }`}
             >
-              <span className="text-base">🏠</span>
+              <DoveIcon size="sm" className="animate-float" />
               <span className="hidden sm:inline">Home</span>
             </Link>
             {topNavItems.map((item) => (

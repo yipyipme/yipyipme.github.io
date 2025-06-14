@@ -1,6 +1,8 @@
 
 import { Link } from 'react-router-dom';
 import Header from './Header';
+import YipYipLogo from '@/components/brand/YipYipLogo';
+import DoveIcon from '@/components/brand/DoveIcon';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -19,19 +21,29 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="container mx-auto px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <img 
-                src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
-                alt="YipYip" 
-                className="h-8 w-auto"
-                style={{ width: 'auto', height: '32px', minWidth: '80px' }}
-              />
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
+                  alt="YipYip" 
+                  className="h-8 w-auto"
+                  style={{ width: 'auto', height: '32px', minWidth: '80px' }}
+                />
+                <YipYipLogo size="sm" variant="text" />
+              </div>
               <p className="text-gray-400 text-sm">
                 Your premier destination for Christian content, worship, and spiritual growth.
               </p>
+              <div className="flex items-center gap-2 text-[#FDBD34]">
+                <DoveIcon size="sm" animate />
+                <span className="text-sm font-semibold">Spreading the Gospel through digital media</span>
+              </div>
             </div>
             
             <div className="space-y-4">
-              <h3 className="text-white font-semibold">Content</h3>
+              <h3 className="text-white font-semibold flex items-center gap-2">
+                <DoveIcon size="sm" />
+                Content
+              </h3>
               <div className="space-y-2 text-sm">
                 <Link to="/explore?category=sermons" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">Sermons</Link>
                 <Link to="/explore?category=worship" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">Worship Music</Link>
@@ -41,7 +53,10 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
             
             <div className="space-y-4">
-              <h3 className="text-white font-semibold">Community</h3>
+              <h3 className="text-white font-semibold flex items-center gap-2">
+                <DoveIcon size="sm" />
+                Community
+              </h3>
               <div className="space-y-2 text-sm">
                 <Link to="/live" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">Live Services</Link>
                 <Link to="/community" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">Forums</Link>
@@ -51,7 +66,10 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
             
             <div className="space-y-4">
-              <h3 className="text-white font-semibold">Support</h3>
+              <h3 className="text-white font-semibold flex items-center gap-2">
+                <DoveIcon size="sm" />
+                Support
+              </h3>
               <div className="space-y-2 text-sm">
                 <Link to="/help" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">Help Center</Link>
                 <Link to="/about" className="block text-gray-400 hover:text-[#FDBD34] transition-colors">About Us</Link>
@@ -62,8 +80,10 @@ const Layout = ({ children }: LayoutProps) => {
           </div>
           
           <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center">
-            <div className="text-sm text-gray-500">
-              © 2024 YipYip. All rights reserved. Spreading the Gospel through digital media.
+            <div className="text-sm text-gray-500 flex items-center gap-2">
+              <span>© 2024</span>
+              <YipYipLogo size="sm" variant="text" className="text-[#FDBD34]" />
+              <span>All rights reserved. Spreading the Gospel through digital media.</span>
             </div>
             <div className="flex gap-4 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-[#FDBD34] transition-colors">Facebook</a>
