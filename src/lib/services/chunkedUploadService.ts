@@ -53,7 +53,7 @@ export class ChunkedUploadService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as UploadSession;
   }
 
   static async uploadFileInChunks(
@@ -190,7 +190,7 @@ export class ChunkedUploadService {
       .single();
 
     if (error) return null;
-    return data;
+    return data as UploadSession;
   }
 
   static async cancelUploadSession(sessionId: string): Promise<void> {

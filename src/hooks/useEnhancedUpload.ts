@@ -4,6 +4,7 @@ import { ChunkedUploadService, ChunkUploadProgress, UploadSession } from '@/lib/
 import { VideoService } from '@/lib/services/videoService';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface UploadState {
   isUploading: boolean;

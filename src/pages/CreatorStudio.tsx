@@ -7,7 +7,7 @@ import QuickActions from '@/components/creator-studio/QuickActions';
 import RecentActivity from '@/components/creator-studio/RecentActivity';
 import PerformanceChart from '@/components/creator-studio/PerformanceChart';
 import CreatorApplicationReview from '@/components/admin/CreatorApplicationReview';
-import VideoUpload from '@/components/creator-studio/VideoUpload';
+import SimpleVideoUpload from '@/components/creator-studio/upload/SimpleVideoUpload';
 
 const CreatorStudio = () => {
   const { profile } = useAuth();
@@ -71,7 +71,7 @@ const CreatorStudio = () => {
 
       {/* Video Upload Modal */}
       {showUpload && (
-        <VideoUpload 
+        <SimpleVideoUpload 
           onClose={() => setShowUpload(false)}
           onSuccess={handleUploadSuccess}
         />

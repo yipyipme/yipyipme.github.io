@@ -1,8 +1,8 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Home, 
-  Upload,
   Bell,
   Search,
   Menu,
@@ -11,15 +11,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import VideoUpload from './VideoUpload';
+import SimpleVideoUpload from './upload/SimpleVideoUpload';
 import SidebarHeader from './SidebarHeader';
 import SidebarNavigation from './SidebarNavigation';
 
 interface CreatorStudioLayoutProps {
   children: React.ReactNode;
 }
-
-const SIDEBAR_WIDTH = 288; // 72 * 4 (rem to px)
 
 const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -101,7 +99,7 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
 
       {/* Upload Modal */}
       {showUploadModal && (
-        <VideoUpload
+        <SimpleVideoUpload
           onClose={() => setShowUploadModal(false)}
           onSuccess={handleUploadSuccess}
         />
