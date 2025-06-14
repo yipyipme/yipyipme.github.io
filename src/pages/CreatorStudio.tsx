@@ -45,28 +45,27 @@ const CreatorStudio = () => {
           </div>
         )}
 
-        {/* Dashboard Row: Metrics & QuickActions */}
-        <div className="grid grid-cols-1 xl:grid-cols-5 gap-8 w-full">
-          {/* Metrics: 4/5 on XL screens, full width on smaller */}
-          <div className="xl:col-span-4 w-full">
-            <DashboardMetrics />
-          </div>
-          {/* Quick Actions: 1/5 on XL screens, full width on smaller */}
-          <div className="xl:col-span-1 w-full">
-            <QuickActions onUploadClick={handleUploadClick} />
-          </div>
+        {/* Dashboard Metrics - Full Width */}
+        <div className="w-full">
+          <DashboardMetrics />
+        </div>
+
+        {/* Quick Actions - Separate Row */}
+        <div className="w-full">
+          <QuickActions onUploadClick={handleUploadClick} />
         </div>
 
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 w-full">
-          {/* Main Content */}
-          <div className="xl:col-span-2 space-y-6 w-full">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full">
+          {/* Performance Chart */}
+          <div className="w-full">
             <PerformanceChart />
+          </div>
+          
+          {/* Recent Activity */}
+          <div className="w-full">
             <RecentActivity />
           </div>
-
-          {/* Sidebar (empty to balance grid if needed) */}
-          <div className="hidden xl:block" />
         </div>
       </div>
 

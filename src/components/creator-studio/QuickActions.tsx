@@ -64,26 +64,26 @@ const QuickActions = ({ onUploadClick }: QuickActionsProps) => {
   ];
 
   return (
-    <Card className="bg-gray-900/50 border-gray-800 h-full w-full">
-      <CardHeader>
-        <CardTitle className="text-white">Quick Actions</CardTitle>
+    <Card className="bg-gray-900/50 border-gray-800 w-full">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-white text-xl">Quick Actions</CardTitle>
       </CardHeader>
-      <CardContent className="p-4">
-        <div className="grid grid-cols-2 gap-3 w-full">
+      <CardContent className="p-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
           {actions.map((action, index) => (
             <Button
               key={index}
               variant={action.title === 'Upload Video' ? 'default' : 'outline'}
               onClick={action.onClick}
-              className={`flex flex-col items-center justify-center h-24 btn-modern text-xs px-2 py-2 w-full ${
+              className={`flex flex-col items-center justify-center h-20 btn-modern text-xs px-3 py-3 w-full ${
                 action.title === 'Upload Video' 
                   ? action.color 
                   : `border-gray-700 ${action.color}`
               }`}
             >
-              <action.icon className="h-4 w-4 mb-1 flex-shrink-0" />
-              <span className="font-medium text-center leading-tight text-[10px]">{action.title}</span>
-              <span className="text-[9px] opacity-75 text-center leading-tight">{action.description}</span>
+              <action.icon className="h-5 w-5 mb-2 flex-shrink-0" />
+              <span className="font-medium text-center leading-tight text-xs">{action.title}</span>
+              <span className="text-[10px] opacity-75 text-center leading-tight mt-1">{action.description}</span>
             </Button>
           ))}
         </div>
