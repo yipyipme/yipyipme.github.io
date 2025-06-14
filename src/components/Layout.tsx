@@ -8,15 +8,15 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-screen overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full">
       <Header onMenuToggle={() => {}} />
-      <main className="w-screen">
+      <main className="w-full">
         {children}
       </main>
       
       {/* Footer */}
-      <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-screen">
-        <div className="w-screen px-6 py-12">
+      <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-full">
+        <div className="w-full px-6 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
