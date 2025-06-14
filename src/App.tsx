@@ -13,7 +13,7 @@ import "./App.css";
 // Lazy load pages for better performance
 const AuthPage = lazy(() => import("./components/auth/AuthPage"));
 const ProfilePage = lazy(() => import("./components/auth/ProfilePage"));
-const VideoWatchPage = lazy(() => import("./components/VideoWatchPage"));
+const VideoWatchPageWrapper = lazy(() => import("./components/VideoWatchPageWrapper"));
 const Explore = lazy(() => import("./pages/Explore"));
 const Trending = lazy(() => import("./pages/Trending"));
 const Subscriptions = lazy(() => import("./pages/Subscriptions"));
@@ -60,7 +60,7 @@ function App() {
                     <Route path="/auth" element={<AuthPage />} />
                     <Route path="/apply-creator" element={<CreatorApplication />} />
                     <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                    <Route path="/watch/:id" element={<VideoWatchPage />} />
+                    <Route path="/watch/:id" element={<VideoWatchPageWrapper />} />
                     <Route path="/explore" element={<Explore />} />
                     <Route path="/trending" element={<Trending />} />
                     <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
