@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { ChunkedUploadService, ChunkUploadProgress, UploadSession } from '@/lib/services/chunkedUploadService';
 import { VideoService } from '@/lib/services/videoService';
@@ -42,27 +41,43 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
 
   const [currentUploadController, setCurrentUploadController] = useState<AbortController | null>(null);
 
+  const isVideoFile = useCallback((file: File): boolean => {
+    // Check file extension as fallback
+    const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.mkv', '.flv', '.wmv', '.m4v', '.3gp'];
+    const fileName = file.name.toLowerCase();
+    const hasVideoExtension = videoExtensions.some(ext => fileName.endsWith(ext));
+    
+    // Check MIME type, but allow application/octet-stream if it has video extension
+    const videoMimeTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/quicktime', 'video/x-msvideo'];
+    const hasVideoMimeType = videoMimeTypes.includes(file.type);
+    
+    // Accept if either MIME type is correct OR it's octet-stream with video extension
+    return hasVideoMimeType || (file.type === 'application/octet-stream' && hasVideoExtension);
+  }, []);
+
   const validateFile = useCallback((file: File, type: 'video' | 'image'): string | null => {
     const maxSizes = {
       video: 2 * 1024 * 1024 * 1024, // 2GB
       image: 10 * 1024 * 1024 // 10MB
     };
 
-    const allowedTypes = {
-      video: ['video/mp4', 'video/mov', 'video/avi', 'video/webm', 'video/quicktime'],
-      image: ['image/jpeg', 'image/png', 'image/webp']
-    };
-
     if (file.size > maxSizes[type]) {
       return `File size must be less than ${type === 'video' ? '2GB' : '10MB'}`;
     }
 
-    if (!allowedTypes[type].includes(file.type)) {
-      return `Invalid file type. Allowed types: ${allowedTypes[type].join(', ')}`;
+    if (type === 'video') {
+      if (!isVideoFile(file)) {
+        return 'Invalid video file. Please upload MP4, MOV, AVI, WebM, or other supported video formats.';
+      }
+    } else {
+      const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowedImageTypes.includes(file.type)) {
+        return `Invalid file type. Allowed types: ${allowedImageTypes.join(', ')}`;
+      }
     }
 
     return null;
-  }, []);
+  }, [isVideoFile]);
 
   const updateProgress = useCallback((progress: ChunkUploadProgress) => {
     setUploadState(prev => ({

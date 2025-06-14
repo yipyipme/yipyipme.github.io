@@ -33,7 +33,7 @@ const VideoFileUploader = ({
         <div className="border-2 border-dashed border-gray-700 rounded-lg p-6 text-center hover:border-[#FDBD34] transition-colors">
           <input
             type="file"
-            accept="video/*"
+            accept="video/*,.mp4,.mov,.avi,.webm,.mkv,.flv,.wmv,.m4v,.3gp"
             onChange={onVideoFileChange}
             className="hidden"
             id="video-upload"
@@ -51,7 +51,7 @@ const VideoFileUploader = ({
               )}
             </p>
             <p className="text-sm text-gray-500">
-              MP4, MOV, AVI, WebM up to 2GB
+              MP4, MOV, AVI, WebM, MKV and other video formats up to 2GB
             </p>
           </label>
         </div>
