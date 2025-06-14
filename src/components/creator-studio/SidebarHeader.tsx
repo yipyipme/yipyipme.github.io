@@ -13,6 +13,7 @@ const SidebarHeader = ({ isSidebarOpen, onToggleSidebar, onShowUpload }: Sidebar
   const navigate = useNavigate();
 
   const handleGoLive = () => {
+    console.log('Go Live button clicked, navigating to /creator-studio/live');
     navigate('/creator-studio/live');
   };
 
