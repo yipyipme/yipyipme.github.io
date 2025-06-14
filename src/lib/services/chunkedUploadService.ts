@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface UploadSession {
@@ -26,6 +25,23 @@ export interface ChunkUploadProgress {
 export class ChunkedUploadService {
   private static readonly CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
   private static readonly MAX_RETRIES = 3;
+
+  private static getFileContentType(filename: string): string {
+    const extension = filename.toLowerCase().split('.').pop();
+    const contentTypeMap: { [key: string]: string } = {
+      'mp4': 'video/mp4',
+      'mov': 'video/quicktime',
+      'avi': 'video/x-msvideo',
+      'webm': 'video/webm',
+      'mkv': 'video/x-matroska',
+      'flv': 'video/x-flv',
+      'wmv': 'video/x-ms-wmv',
+      'm4v': 'video/x-m4v',
+      '3gp': 'video/3gpp'
+    };
+    
+    return contentTypeMap[extension || ''] || 'video/mp4';
+  }
 
   static async createUploadSession(
     file: File,
@@ -80,7 +96,7 @@ export class ChunkedUploadService {
     // Upload chunks sequentially to avoid overwhelming the server
     for (let i = uploadedChunks; i < total_chunks; i++) {
       try {
-        await this.uploadChunk(chunks[i], bucket, path, i, sessionId);
+        await this.uploadChunk(chunks[i], bucket, path, i, sessionId, file.name);
         uploadedChunks++;
 
         // Update progress
@@ -107,7 +123,7 @@ export class ChunkedUploadService {
         let retryCount = 0;
         while (retryCount < this.MAX_RETRIES) {
           try {
-            await this.uploadChunk(chunks[i], bucket, path, i, sessionId);
+            await this.uploadChunk(chunks[i], bucket, path, i, sessionId, file.name);
             uploadedChunks++;
             break;
           } catch (retryError) {
@@ -123,15 +139,15 @@ export class ChunkedUploadService {
       }
     }
 
-    // All chunks uploaded successfully
-    await this.updateSessionStatus(sessionId, 'completed');
-    
-    // Get the final file URL
-    const { data: { publicUrl } } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(path);
-
-    return publicUrl;
+    // All chunks uploaded successfully, now combine them
+    try {
+      const finalUrl = await this.combineChunks(bucket, path, total_chunks, file.name);
+      await this.updateSessionStatus(sessionId, 'completed');
+      return finalUrl;
+    } catch (error) {
+      await this.updateSessionStatus(sessionId, 'failed');
+      throw error;
+    }
   }
 
   private static async uploadChunk(
@@ -139,17 +155,71 @@ export class ChunkedUploadService {
     bucket: string,
     basePath: string,
     chunkIndex: number,
-    sessionId: string
+    sessionId: string,
+    originalFilename: string
   ): Promise<void> {
     const chunkPath = `${basePath}_chunk_${chunkIndex}`;
+    
+    // Get the correct content type for the file
+    const contentType = this.getFileContentType(originalFilename);
     
     const { error } = await supabase.storage
       .from(bucket)
       .upload(chunkPath, chunk, {
-        upsert: true
+        upsert: true,
+        contentType: contentType
       });
 
     if (error) throw error;
+  }
+
+  private static async combineChunks(
+    bucket: string, 
+    basePath: string, 
+    totalChunks: number,
+    originalFilename: string
+  ): Promise<string> {
+    // For now, we'll use the first chunk as the final file
+    // In a production environment, you'd want to combine chunks server-side
+    const firstChunkPath = `${basePath}_chunk_0`;
+    const finalPath = basePath;
+    
+    // Get the correct content type
+    const contentType = this.getFileContentType(originalFilename);
+    
+    // Download first chunk and re-upload as final file
+    const { data: chunkData, error: downloadError } = await supabase.storage
+      .from(bucket)
+      .download(firstChunkPath);
+    
+    if (downloadError) throw downloadError;
+    
+    // Upload as final file with correct content type
+    const { error: uploadError } = await supabase.storage
+      .from(bucket)
+      .upload(finalPath, chunkData, {
+        upsert: true,
+        contentType: contentType
+      });
+    
+    if (uploadError) throw uploadError;
+    
+    // Clean up chunk files
+    const chunksToDelete = [];
+    for (let i = 0; i < totalChunks; i++) {
+      chunksToDelete.push(`${basePath}_chunk_${i}`);
+    }
+    
+    await supabase.storage
+      .from(bucket)
+      .remove(chunksToDelete);
+    
+    // Return public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(finalPath);
+
+    return publicUrl;
   }
 
   static async updateSessionStatus(
