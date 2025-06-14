@@ -1,10 +1,9 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
 import EnhancedVideoPlayer from '@/components/EnhancedVideoPlayer';
-import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star } from 'lucide-react';
+import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { platformStore } from '@/lib/store';
 
@@ -31,14 +30,62 @@ const Home = () => {
     setSelectedVideo(null);
   };
 
+  // Add keyboard shortcut to close video with Escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && selectedVideo) {
+        closeVideoPlayer();
+      }
+    };
+
+    if (selectedVideo) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedVideo]);
+
   if (selectedVideo) {
     return (
       <div className="fixed inset-0 z-50 bg-black">
-        <EnhancedVideoPlayer
-          videoUrl={selectedVideo.videoUrl}
-          title={selectedVideo.title}
-          onClose={closeVideoPlayer}
+        {/* Prominent close button overlay */}
+        <div className="absolute top-4 right-4 z-60">
+          <Button
+            onClick={closeVideoPlayer}
+            variant="ghost"
+            size="icon"
+            className="bg-black/50 hover:bg-black/70 text-white border border-white/20 backdrop-blur-sm"
+          >
+            <X className="h-6 w-6" />
+          </Button>
+        </div>
+        
+        {/* Click outside to close overlay */}
+        <div 
+          className="absolute inset-0 z-40"
+          onClick={closeVideoPlayer}
         />
+        
+        {/* Video player container */}
+        <div className="relative z-50 h-full flex items-center justify-center p-4">
+          <div 
+            className="w-full max-w-6xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <EnhancedVideoPlayer
+              videoUrl={selectedVideo.videoUrl}
+              title={selectedVideo.title}
+              onClose={closeVideoPlayer}
+            />
+          </div>
+        </div>
+        
+        {/* Instruction text */}
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/70 text-sm z-60">
+          Press Esc or click outside to close
+        </div>
       </div>
     );
   }
