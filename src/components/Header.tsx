@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Search, Bell, MessageSquare, Upload, User, Menu, Mic, Filter } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -38,7 +37,7 @@ const Header = ({ onSidebarToggle }: HeaderProps) => {
                 <img 
                   src="/lovable-uploads/30159a4f-685f-4d6b-a3c6-a2650c1d9bbc.png" 
                   alt="YipYip" 
-                  className="h-16 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
+                  className="h-20 w-auto drop-shadow-2xl group-hover:scale-105 transition-transform duration-300 neon-glow"
                 />
               </Link>
             </div>
