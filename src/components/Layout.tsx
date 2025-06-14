@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full overflow-x-hidden">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 w-full">
       <Header onMenuToggle={() => {}} />
       <main className="w-full">
         {children}
@@ -17,8 +17,8 @@ const Layout = ({ children }: LayoutProps) => {
       
       {/* Footer */}
       <footer className="bg-gray-100/50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-800 w-full">
-        <div className="w-full px-4 md:px-6 py-12 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="w-full px-4 md:px-6 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-7xl mx-auto">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <img 
@@ -76,7 +76,7 @@ const Layout = ({ children }: LayoutProps) => {
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center">
+          <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto">
             <div className="text-sm text-gray-500 dark:text-gray-500 flex items-center gap-2">
               <span>© 2024 YipYip. All rights reserved. Spreading the Gospel through digital media.</span>
             </div>
