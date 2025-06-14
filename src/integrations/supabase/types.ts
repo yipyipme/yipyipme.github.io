@@ -372,6 +372,51 @@ export type Database = {
           },
         ]
       }
+      upload_sessions: {
+        Row: {
+          chunk_size: number
+          created_at: string | null
+          expires_at: string | null
+          filename: string
+          id: string
+          metadata: Json | null
+          status: string | null
+          total_chunks: number
+          total_size: number
+          updated_at: string | null
+          uploaded_chunks: number | null
+          user_id: string
+        }
+        Insert: {
+          chunk_size?: number
+          created_at?: string | null
+          expires_at?: string | null
+          filename: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+          total_chunks: number
+          total_size: number
+          updated_at?: string | null
+          uploaded_chunks?: number | null
+          user_id: string
+        }
+        Update: {
+          chunk_size?: number
+          created_at?: string | null
+          expires_at?: string | null
+          filename?: string
+          id?: string
+          metadata?: Json | null
+          status?: string | null
+          total_chunks?: number
+          total_size?: number
+          updated_at?: string | null
+          uploaded_chunks?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       video_analytics: {
         Row: {
           average_watch_time: number | null
@@ -718,6 +763,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_expired_upload_sessions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       generate_stream_key: {
         Args: Record<PropertyKey, never>
         Returns: string

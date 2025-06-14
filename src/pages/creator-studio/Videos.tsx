@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import CreatorStudioLayout from '@/components/creator-studio/CreatorStudioLayout';
-import VideoUpload from '@/components/creator-studio/VideoUpload';
+import EnhancedVideoUpload from '@/components/creator-studio/EnhancedVideoUpload';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -252,9 +251,9 @@ const Videos = () => {
         )}
       </div>
 
-      {/* Upload Modal */}
+      {/* Enhanced Upload Modal */}
       {showUpload && (
-        <VideoUpload 
+        <EnhancedVideoUpload 
           onClose={() => setShowUpload(false)}
           onSuccess={handleUploadSuccess}
         />
