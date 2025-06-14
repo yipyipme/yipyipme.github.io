@@ -23,6 +23,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
+  cleanupAuthState: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -35,6 +36,31 @@ export const useAuth = () => {
   return context;
 };
 
+// Utility function to clean up auth state
+const cleanupAuthState = () => {
+  console.log('Cleaning up auth state...');
+  
+  // Remove all Supabase auth keys from localStorage
+  Object.keys(localStorage).forEach((key) => {
+    if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+      localStorage.removeItem(key);
+      console.log('Removed key:', key);
+    }
+  });
+  
+  // Remove from sessionStorage if present
+  try {
+    Object.keys(sessionStorage || {}).forEach((key) => {
+      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+        sessionStorage.removeItem(key);
+        console.log('Removed session key:', key);
+      }
+    });
+  } catch (error) {
+    console.log('SessionStorage cleanup skipped:', error);
+  }
+};
+
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -43,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchProfile = async (userId: string) => {
     try {
+      console.log('Fetching profile for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -54,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         return null;
       }
 
+      console.log('Profile fetched successfully:', data);
       return data;
     } catch (error) {
       console.error('Error in fetchProfile:', error);
@@ -62,22 +90,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
+    console.log('Setting up auth state listener...');
+    
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
+        
         setSession(session);
         setUser(session?.user ?? null);
 
-        if (session?.user) {
+        if (event === 'SIGNED_IN' && session?.user) {
+          console.log('User signed in, fetching profile...');
           // Defer profile fetching to prevent deadlocks
           setTimeout(async () => {
-            const profileData = await fetchProfile(session.user.id);
-            setProfile(profileData);
-            setLoading(false);
+            try {
+              const profileData = await fetchProfile(session.user.id);
+              setProfile(profileData);
+              setLoading(false);
+            } catch (error) {
+              console.error('Error fetching profile after sign in:', error);
+              setLoading(false);
+            }
           }, 0);
-        } else {
+        } else if (event === 'SIGNED_OUT') {
+          console.log('User signed out, clearing state...');
           setProfile(null);
+          setLoading(false);
+        } else if (event === 'TOKEN_REFRESHED') {
+          console.log('Token refreshed for user:', session?.user?.id);
+          setLoading(false);
+        } else {
           setLoading(false);
         }
       }
@@ -91,21 +134,42 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (session?.user) {
         setTimeout(async () => {
-          const profileData = await fetchProfile(session.user.id);
-          setProfile(profileData);
-          setLoading(false);
+          try {
+            const profileData = await fetchProfile(session.user.id);
+            setProfile(profileData);
+            setLoading(false);
+          } catch (error) {
+            console.error('Error fetching profile on initial load:', error);
+            setLoading(false);
+          }
         }, 0);
       } else {
         setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      console.log('Cleaning up auth subscription...');
+      subscription.unsubscribe();
+    };
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string) => {
     try {
+      console.log('Starting sign up process...');
+      
+      // Clean up before attempting signup
+      cleanupAuthState();
+      
+      // Attempt global sign out first
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        console.log('Sign out before signup failed (continuing):', err);
+      }
+
       const redirectUrl = `${window.location.origin}/`;
+      console.log('Sign up redirect URL:', redirectUrl);
       
       const { error } = await supabase.auth.signUp({
         email,
@@ -118,6 +182,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       });
 
+      if (error) {
+        console.error('Sign up error:', error);
+      } else {
+        console.log('Sign up successful, check email for confirmation');
+      }
+
       return { error };
     } catch (error) {
       console.error('Sign up error:', error);
@@ -127,16 +197,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
+      console.log('Starting sign in process...');
+      
+      // Clean up before attempting signin
+      cleanupAuthState();
+      
+      // Attempt global sign out first
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        console.log('Sign out before signin failed (continuing):', err);
+      }
+
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (!error) {
+        console.log('Sign in successful, redirecting...');
         // Force page reload for clean state
         setTimeout(() => {
           window.location.href = '/';
         }, 100);
+      } else {
+        console.error('Sign in error:', error);
       }
 
       return { error };
@@ -148,10 +233,23 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut({ scope: 'global' });
+      console.log('Starting sign out process...');
+      
+      // Clean up auth state first
+      cleanupAuthState();
+      
+      // Attempt global sign out
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        console.log('Global sign out failed (continuing):', err);
+      }
+      
+      // Clear local state
       setUser(null);
       setSession(null);
       setProfile(null);
+      
       // Force page reload for clean state
       window.location.href = '/';
     } catch (error) {
@@ -188,6 +286,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signOut,
     updateProfile,
+    cleanupAuthState,
   };
 
   return (

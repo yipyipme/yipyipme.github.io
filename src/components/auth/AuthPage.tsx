@@ -17,7 +17,7 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, cleanupAuthState } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -38,6 +38,19 @@ const AuthPage = () => {
     setError('');
 
     try {
+      console.log('Starting OAuth sign in...');
+      
+      // Clean up auth state before OAuth
+      cleanupAuthState();
+      
+      // Attempt global sign out first
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+        console.log('Global sign out completed before OAuth');
+      } catch (err) {
+        console.log('Sign out before OAuth failed (continuing):', err);
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -46,11 +59,14 @@ const AuthPage = () => {
       });
 
       if (error) {
+        console.error('OAuth error:', error);
         setError(error.message);
+      } else {
+        console.log('OAuth initiated successfully');
       }
     } catch (error) {
-      setError('An unexpected error occurred. Please try again.');
       console.error('OAuth sign in error:', error);
+      setError('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
