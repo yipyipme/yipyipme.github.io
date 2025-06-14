@@ -20,7 +20,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   return (
     <header className="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 w-full">
       <div className="w-full px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-16 w-full">
           {/* Left side - Logo and Menu */}
           <div className="flex items-center gap-4">
             <Button
