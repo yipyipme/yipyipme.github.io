@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +25,7 @@ import Playlists from "./pages/creator-studio/Playlists";
 import Drafts from "./pages/creator-studio/Drafts";
 import Analytics from "./pages/creator-studio/Analytics";
 import NotFound from "./pages/NotFound";
+import Comments from "./pages/creator-studio/Comments";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +57,7 @@ const App = () => (
           <Route path="/creator-studio/content/playlists" element={<Playlists />} />
           <Route path="/creator-studio/content/drafts" element={<Drafts />} />
           <Route path="/creator-studio/analytics/performance" element={<Analytics />} />
+          <Route path="/creator-studio/community/comments" element={<Comments />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
