@@ -23,7 +23,7 @@ const CreatorStudio = () => {
 
   return (
     <CreatorStudioLayout>
-      <div className="space-y-8">
+      <div className="space-y-6 w-full">
         {/* Welcome Section */}
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">
@@ -37,25 +37,25 @@ const CreatorStudio = () => {
 
         {/* Admin Section - Creator Application Review */}
         {profile?.role === 'admin' && (
-          <div className="space-y-6">
+          <div className="space-y-6 w-full">
             <CreatorApplicationReview />
-            <div className="border-t border-gray-800 pt-8">
+            <div className="border-t border-gray-800 pt-6">
               <h2 className="text-2xl font-bold text-white mb-6">Dashboard Overview</h2>
             </div>
           </div>
         )}
 
         {/* Dashboard Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6">
             <DashboardMetrics />
             <PerformanceChart />
             <RecentActivity />
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             <QuickActions onUploadClick={handleUploadClick} />
           </div>
         </div>
