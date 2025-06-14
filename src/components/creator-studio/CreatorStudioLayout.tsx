@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -94,9 +93,11 @@ const CreatorStudioLayout = ({ children }: CreatorStudioLayoutProps) => {
           </div>
         </header>
 
-        {/* Content Area */}
-        <div className="flex-1 p-4 w-full overflow-x-auto">
-          {children}
+        {/* Main Responsive Container */}
+        <div className="flex-1 flex flex-col">
+          <div className="w-full max-w-7xl mx-auto px-4 py-4 flex-1">
+            {children}
+          </div>
         </div>
       </main>
 
