@@ -53,8 +53,8 @@ function App() {
         <TooltipProvider>
           <AuthProvider>
             <BrowserRouter>
-              <div className="min-h-screen bg-background font-sans antialiased">
-                <Suspense fallback={<div className="min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-center"><div className="h-8 w-8 animate-spin border-4 border-[#FDBD34] border-t-transparent rounded-full mx-auto mb-4"></div><p className="text-gray-400">Loading...</p></div></div>}>
+              <div className="min-h-screen bg-background font-sans antialiased w-full">
+                <Suspense fallback={<div className="w-full min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-center"><div className="h-8 w-8 animate-spin border-4 border-[#FDBD34] border-t-transparent rounded-full mx-auto mb-4"></div><p className="text-gray-400">Loading...</p></div></div>}>
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/auth" element={<AuthPage />} />
