@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -103,18 +102,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
   };
 
   return (
-    <section className="space-y-2">
-      <div className="flex items-center gap-4">
-        <h3 className="text-gray-900 dark:text-white font-semibold text-lg">
-          YipYip Comments
-        </h3>
-        <span className="text-gray-500 dark:text-gray-400" title="Danmaku/Bullet">
-          (fly over video)
-        </span>
-        <span className="text-gray-600 dark:text-gray-400">
-          {comments.length} sent
-        </span>
-      </div>
+    <div className="space-y-2">
       <div className="flex gap-3">
         <Avatar className="h-8 w-8">
           {profile?.avatar_url ? (
@@ -147,7 +135,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
             }
             disabled={!user || mutation.isPending}
             maxLength={140}
-            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 w-full px-3 py-2 rounded"
+            className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 w-full px-3 py-2 rounded-lg shadow-sm"
           />
         </div>
         <Button
@@ -186,7 +174,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
           ))
         )}
       </div>
-    </section>
+    </div>
   );
 };
 

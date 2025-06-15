@@ -38,6 +38,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
       {/* Header */}
       <Header onMenuToggle={() => {}} />
       <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-7xl mx-auto">
+        {/* Main video column */}
         <VideoWatchMain
           video={video}
           chapters={chapters}
@@ -46,6 +47,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
           onClose={onClose}
           relatedEpisodes={relatedEpisodes}
         />
+        {/* Sidebar (unchanged) */}
         <VideoWatchSidebar
           suggestedVideos={suggestedVideos}
           relatedEpisodes={relatedEpisodes}
