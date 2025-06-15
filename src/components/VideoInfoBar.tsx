@@ -1,8 +1,8 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ThumbsUp, ThumbsDown, Share, Download, MoreHorizontal } from "lucide-react";
-import { toast } from "@/components/ui/use-toast";
+import { Share, ThumbsDown, ThumbsUp, Download, MoreHorizontal } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 interface VideoInfoBarProps {
   title: string;
@@ -13,12 +13,14 @@ interface VideoInfoBarProps {
   hasDisliked: boolean;
   onLike: () => void;
   onDislike: () => void;
+  videoId: string; // ADDED this prop
 }
 
-const getVideoShareUrl = () => {
-  return typeof window !== "undefined"
-    ? window.location.href
-    : "";
+const getVideoShareUrl = (videoId: string) => {
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/watch/${videoId}`;
+  }
+  return '';
 };
 
 const VideoInfoBar: React.FC<VideoInfoBarProps> = ({
@@ -30,16 +32,17 @@ const VideoInfoBar: React.FC<VideoInfoBarProps> = ({
   hasDisliked,
   onLike,
   onDislike,
+  videoId,
 }) => {
   const [copied, setCopied] = useState(false);
 
   const handleShare = async () => {
-    const shareUrl = getVideoShareUrl();
+    const shareUrl = getVideoShareUrl(videoId);
     const shareData = {
       title,
       url: shareUrl,
     };
-    // Try using Web Share API
+    // Modern Web Share API, if available
     // @ts-ignore
     if (navigator.share) {
       try {
@@ -47,7 +50,7 @@ const VideoInfoBar: React.FC<VideoInfoBarProps> = ({
         await navigator.share(shareData);
         return;
       } catch (e) {
-        // Fall back to copy
+        // fallback
       }
     }
     // Fallback: copy to clipboard

@@ -73,6 +73,7 @@ const VideoWatchMain = ({
         hasDisliked={hasDisliked}
         onLike={handleLike}
         onDislike={handleDislike}
+        videoId={video.id || video.video_id}
       />
       {/* Creator Info Strip */}
       <CreatorInfoStrip 

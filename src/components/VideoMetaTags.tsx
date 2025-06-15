@@ -11,29 +11,25 @@ interface VideoMetaTagsProps {
   imageUrl?: string;
 }
 
-const getAbsoluteVideoUrl = (id: string) => {
-  if (typeof window === "undefined") return "";
-  return `${window.location.origin}/watch/${id}`;
-};
-
 /**
- * Sets up SEO and social sharing meta tags for a video.
- * Uses the provided imageUrl as shared image (defaults to /lovable-uploads/dove-share.png).
+ * Always use yellow dove share image unless specified.
+ * Social platforms will use this image on share. 
+ * Change imageUrl only if you want to override the yellow dove preview!
  */
 const VideoMetaTags: React.FC<VideoMetaTagsProps> = ({
   video,
-  imageUrl = "/lovable-uploads/dove-share.png",
+  imageUrl = "/lovable-uploads/dove-share.png", // <-- This is your yellow dove!
 }) => {
   const url = typeof window !== "undefined"
     ? `${window.location.origin}/watch/${video.id}`
-    : ""; // Will be SSR-safe
+    : "";
 
   return (
     <Helmet>
       <title>{video.title} | YipYip</title>
       <meta name="description" content={video.description || "Watch this video on YipYip!"} />
 
-      {/* Open Graph Meta */}
+      {/* Open Graph Meta for social previews */}
       <meta property="og:type" content="video.other" />
       <meta property="og:url" content={url} />
       <meta property="og:title" content={video.title} />
