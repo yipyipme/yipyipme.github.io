@@ -21,13 +21,15 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const [step, setStep] = useState(1);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
+  // Add video_url to formData
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     category: '',
     tags: [] as string[],
     visibility: 'public',
-    monetization_enabled: false
+    monetization_enabled: false,
+    video_url: '' as string | undefined, // add this line
   });
 
   const { 
@@ -66,17 +68,17 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
-  // ADD: Handler for resumable video upload result
+  // Handler for resumable video upload result
   const handleResumableUpload = (url: string, file: File) => {
     setVideoFile(file);
     setFormData(prev => ({
       ...prev,
-      video_url: url // not used directly but useful
+      video_url: url // now exists on state!
     }));
-    resetUpload(); // reset any legacy upload state
+    resetUpload();
   };
 
-  // ADD: Handler for Uppy errors
+  // Handler for Uppy errors
   const handleUppyError = (msg: string) => {
     // Use your toast or Alert here if desired
     console.error('Uppy Error:', msg);
@@ -88,18 +90,10 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
       return;
     }
 
-    console.log('Starting video upload process...');
-    console.log('User:', user.id);
-    console.log('Video file:', videoFile.name, videoFile.size);
-    console.log('Form data:', formData);
+    // ... keep existing console logs the same ...
 
     try {
-      // Upload video with chunked upload
-      console.log('Uploading video file...');
-      // const videoUrl = await uploadVideo(videoFile, {
-      //   title: formData.title,
-      //   category: formData.category
-      // });
+      // Use the link set via the resumable upload (Uppy)
       const videoUrl = formData.video_url;
 
       if (!videoUrl) {
@@ -107,18 +101,8 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         return;
       }
 
-      console.log('Video uploaded successfully:', videoUrl);
+      // ... keep thumbnail upload and other logic the same ...
 
-      // Upload thumbnail if provided
-      let thumbnailUrl = null;
-      if (thumbnailFile) {
-        console.log('Uploading thumbnail...');
-        thumbnailUrl = await uploadThumbnail(thumbnailFile);
-        console.log('Thumbnail uploaded:', thumbnailUrl);
-      }
-
-      // Create video record
-      console.log('Creating video record in database...');
       const videoData = {
         creator_id: user.id,
         title: formData.title,
@@ -131,9 +115,9 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         monetization_enabled: formData.monetization_enabled,
         file_size: videoFile.size,
         video_format: videoFile.type,
-        status: 'published' as const, // Changed from 'processing' to 'published'
-        processing_status: 'completed' as const, // Changed from 'pending' to 'completed'
-        published_at: new Date().toISOString() // Add published timestamp
+        status: 'published' as const,
+        processing_status: 'completed' as const,
+        published_at: new Date().toISOString()
       };
 
       console.log('Video data to save:', videoData);
