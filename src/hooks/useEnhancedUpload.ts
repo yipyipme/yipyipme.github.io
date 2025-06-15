@@ -79,10 +79,10 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
     return null;
   }, [isVideoFile]);
 
-  const updateProgress = useCallback((progress: ChunkUploadProgress) => {
+  const updateProgress = useCallback((progress: number) => {
     setUploadState(prev => ({
       ...prev,
-      progress: progress.percentage,
+      progress,
       error: null
     }));
   }, []);
@@ -93,7 +93,7 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
     setUploadState(prev => ({
       ...prev,
       error: error.message,
-      canResume: !!chunkIndex // Can resume if it was a chunk error
+      canResume: false // Standard upload can't resume
     }));
 
     toast({
@@ -103,6 +103,10 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
     });
   }, [toast]);
 
+  /**
+   * Uploads the entire video file in a single request.
+   * Swaps out previous chunked upload for a direct storage upload.
+   */
   const uploadVideo = useCallback(async (file: File, metadata: any = {}): Promise<string | null> => {
     if (!user) {
       toast({
@@ -134,35 +138,15 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
         isPaused: false
       }));
 
-      // Create upload session
-      const session = await ChunkedUploadService.createUploadSession(
-        file,
-        user.id,
-        metadata
-      );
-
-      setUploadState(prev => ({ ...prev, session }));
-
-      // Generate unique path for the video
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-
-      // Start chunked upload
-      const videoUrl = await ChunkedUploadService.uploadFileInChunks(
-        file,
-        session,
-        'videos',
-        fileName,
-        updateProgress,
-        handleError
-      );
-
+      // Upload directly to storage (single-file upload)
+      const { url } = await VideoService.uploadVideo(file, user.id);
+      
       setUploadState(prev => ({
         ...prev,
         isUploading: false,
         progress: 100,
         currentFile: null,
-        session: null
+        session: null // Not using chunked session
       }));
 
       toast({
@@ -170,7 +154,7 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
         description: "Your video has been uploaded successfully",
       });
 
-      return videoUrl;
+      return url;
 
     } catch (error: any) {
       handleError(error);
@@ -181,7 +165,7 @@ export const useEnhancedUpload = (): UseEnhancedUploadReturn => {
       }));
       return null;
     }
-  }, [user, validateFile, updateProgress, handleError, toast]);
+  }, [user, validateFile, handleError, toast]);
 
   const uploadThumbnail = useCallback(async (file: File): Promise<string | null> => {
     if (!user) return null;
