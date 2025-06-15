@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -47,10 +46,6 @@ const YipYipDanmakuBar: React.FC<YipYipDanmakuBarProps> = ({ videoId }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["bullet-comments", videoId] });
       setComment("");
-      toast({
-        title: "YipYip sent!",
-        description: "Your YipYip will appear instantly on the video.",
-      });
       inputRef.current?.focus();
       // Broadcast to overlay for instant show
       const ev = new CustomEvent("new-bullet-danmaku", {
@@ -139,4 +134,3 @@ const YipYipDanmakuBar: React.FC<YipYipDanmakuBarProps> = ({ videoId }) => {
 };
 
 export default YipYipDanmakuBar;
-
