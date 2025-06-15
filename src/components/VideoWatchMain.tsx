@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import EnhancedVideoPlayer from './EnhancedVideoPlayer';
-import VideoChapters from './VideoChapters';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -175,6 +174,7 @@ const VideoWatchMain = ({
         )}
       </div>
       {/* Chapters */}
+      {/*
       <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
         <VideoChapters
           chapters={chapters}
@@ -182,6 +182,7 @@ const VideoWatchMain = ({
           onChapterClick={handleChapterClick}
         />
       </div>
+      */}
       {/* Comments */}
       <div className="space-y-4">
         <div className="flex items-center gap-4">

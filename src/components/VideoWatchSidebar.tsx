@@ -11,13 +11,7 @@ interface VideoWatchSidebarProps {
 
 const VideoWatchSidebar = ({ suggestedVideos, relatedEpisodes }: VideoWatchSidebarProps) => (
   <div className="w-full lg:w-96 space-y-6">
-    {/* Auto-play toggle */}
-    <div className="flex items-center justify-between p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
-      <span className="text-gray-900 dark:text-white">Automatic streaming</span>
-      <div className="w-12 h-6 bg-blue-600 rounded-full relative cursor-pointer">
-        <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5 transition-transform"></div>
-      </div>
-    </div>
+    {/* Removed Automatic streaming toggle */}
     {/* Current Episode Info */}
     <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
@@ -85,3 +79,4 @@ const VideoWatchSidebar = ({ suggestedVideos, relatedEpisodes }: VideoWatchSideb
 );
 
 export default VideoWatchSidebar;
+
