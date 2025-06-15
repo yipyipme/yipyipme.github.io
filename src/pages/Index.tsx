@@ -14,6 +14,9 @@ import BrandStatementSection from '@/components/home/BrandStatementSection';
 
 type Video = Database['public']['Tables']['videos']['Row'];
 
+const yellowBirdDefault =
+  "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
   const [featuredVideos, setFeaturedVideos] = useState<Video[]>([]);
@@ -63,7 +66,7 @@ const Home = () => {
     id: video.id,
     title: video.title,
     channel: 'Creator Channel', // We'll need to get creator info later
-    thumbnail: video.thumbnail_url || '/placeholder.svg',
+    thumbnail: video.thumbnail_url || yellowBirdDefault,
     duration: video.duration
       ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}`
       : '0:00',
