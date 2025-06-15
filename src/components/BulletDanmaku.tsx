@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -87,6 +86,22 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
     },
   });
 
+  // Broadcast new bullet to parent (if EnhancedVideoPlayer wants it immediately)
+  // We'll use a custom event for simple communication
+  const sendBulletToOverlay = (text: string, color?: string) => {
+    const ev = new CustomEvent("new-bullet-danmaku", {
+      detail: { text, color, user, ts: Date.now() }
+    });
+    window.dispatchEvent(ev);
+  };
+
+  const handleSend = () => {
+    if (!user || !comment.trim() || mutation.isPending) return;
+    // Optionally, you can allow choosing color
+    mutation.mutate();
+    sendBulletToOverlay(comment.trim());
+  };
+
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-4">
@@ -119,7 +134,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
                 !mutation.isPending &&
                 user
               ) {
-                mutation.mutate();
+                handleSend();
               }
             }}
             placeholder={
@@ -134,7 +149,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
         </div>
         <Button
           disabled={!user || !comment.trim() || mutation.isPending}
-          onClick={() => mutation.mutate()}
+          onClick={handleSend}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           Send

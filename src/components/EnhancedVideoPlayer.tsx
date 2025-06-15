@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import VideoPlayerOverlay from './VideoPlayerOverlay';
 import VideoSkipIndicator from './VideoSkipIndicator';
 import KeyboardShortcutsHelp from './KeyboardShortcutsHelp';
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Comment {
   id: string;
@@ -60,6 +62,7 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
   const [showShortcuts, setShowShortcuts] = useState(false);
 
   const [videoError, setVideoError] = useState<string | null>(null);
+  const [flyingBullets, setFlyingBullets] = useState<any[]>([]);
 
   const commentColors = [
     '#ffffff', '#ff6b6b', '#4ecdc4', '#45b7d1', 
@@ -359,6 +362,78 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     console.log("[EnhancedVideoPlayer] videoUrl:", videoUrl);
   }, [videoUrl]);
 
+  // Listen for realtime danmaku for the current video
+  React.useEffect(() => {
+    // Remove any prior subscription
+    let channel: any;
+    let isUnmounted = false;
+    let currentVideoId = undefined;
+
+    // Get videoId from URL if possible
+    try {
+      // URL: /watch/:id or similar, or pass via prop in future
+      const urlParams = new URLSearchParams(window.location.search);
+      currentVideoId = urlParams.get("id");
+    } catch {}
+
+    // Fallback - try to read from videoUrl or window context if needed
+    if (!currentVideoId && videoUrl?.length > 24) {
+      currentVideoId = videoUrl.split("/").pop()?.split(".")[0];
+    }
+
+    if (!currentVideoId) return; // Not robust, but better than nothing!
+
+    // Function to add bullet to fly
+    const addBullet = (b: { text: string; color?: string }) => {
+      setFlyingBullets((bullets) => [
+        ...bullets,
+        {
+          ...b,
+          id: Math.random().toString(36).slice(2),
+          position: Math.floor(Math.random() * 80) + 10,
+          speed: 3 + Math.random() * 2,
+        },
+      ]);
+    };
+
+    // Listen for new bullets (custom event from BulletDanmaku)
+    const handleNewBulletDomEvent = (e: CustomEvent) => {
+      addBullet(e.detail);
+    };
+    window.addEventListener("new-bullet-danmaku", handleNewBulletDomEvent as any);
+
+    // Listen to Supabase realtime additions for this video's bullets
+    channel = supabase
+      .channel('danmaku-bullets-' + currentVideoId)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'video_bullet_comments',
+          filter: `video_id=eq.${currentVideoId}`
+        },
+        payload => {
+          if (!isUnmounted) {
+            addBullet({
+              text: payload.new.text,
+              color: payload.new.color,
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      isUnmounted = true;
+      window.removeEventListener("new-bullet-danmaku", handleNewBulletDomEvent as any);
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
+    };
+    // eslint-disable-next-line
+  }, [videoUrl]);
+
   return (
     <div className={`${isTheaterMode ? 'fixed inset-0 z-50 bg-black' : ''}`}>
       {isTheaterMode && (
@@ -414,24 +489,26 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
           />
           
           {/* Danmaku Comments Overlay */}
-          {commentsEnabled && (
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              {comments.map((comment) => (
-                <div
-                  key={comment.id}
-                  className="absolute whitespace-nowrap text-lg font-bold animate-[slide-across_8s_linear_infinite] drop-shadow-lg"
-                  style={{
-                    color: comment.color,
-                    top: `${comment.position}%`,
-                    animationDuration: `${comment.speed}s`,
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                  }}
-                >
-                  {comment.text}
-                </div>
-              ))}
-            </div>
-          )}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden z-20 select-none">
+            {flyingBullets.map((bullet) => (
+              <div
+                key={bullet.id}
+                className="absolute whitespace-nowrap text-lg font-bold animate-[slide-across_8s_linear] drop-shadow-lg"
+                style={{
+                  color: bullet.color || '#fff',
+                  top: `${bullet.position}%`,
+                  animationDuration: `${bullet.speed}s`,
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                  pointerEvents: "none"
+                }}
+                onAnimationEnd={() =>
+                  setFlyingBullets((bullets) => bullets.filter((b) => b.id !== bullet.id))
+                }
+              >
+                {bullet.text}
+              </div>
+            ))}
+          </div>
 
           {/* Video Controls Overlay */}
           <div 
