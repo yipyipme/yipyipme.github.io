@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, Maximize, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -46,6 +45,11 @@ const VideoPlayer = () => {
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('loadedmetadata', updateDuration);
     video.addEventListener('ended', () => setIsPlaying(false));
+
+    // Autoplay video on mount
+    video.play().catch(() => {
+      // Autoplay might be blocked by user settings/browser
+    });
 
     return () => {
       video.removeEventListener('timeupdate', updateTime);
@@ -146,7 +150,7 @@ const VideoPlayer = () => {
           ref={videoRef}
           src={videoUrl}
           className="w-full h-full object-cover"
-          poster="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=450&fit=crop"
+          autoPlay
         />
         
         {/* Danmaku Comments Overlay */}

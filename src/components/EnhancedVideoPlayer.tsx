@@ -434,6 +434,17 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     // eslint-disable-next-line
   }, [videoUrl]);
 
+  // Start video automatically when available
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      // Attempt to play immediately
+      video.play().catch(() => {
+        // Autoplay might be blocked by browser
+      });
+    }
+  }, [videoUrl]);
+
   return (
     <div className={`${isTheaterMode ? 'fixed inset-0 z-50 bg-black' : ''}`}>
       {isTheaterMode && (
@@ -463,7 +474,7 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
             src={videoUrl}
             className="w-full h-full object-cover"
             loop={loop}
-            poster="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=450&fit=crop"
+            autoPlay
             onError={() => setVideoError("Failed to load video. Check if the URL is accessible and valid.")}
           />
           {/* Error overlay if video fails */}
