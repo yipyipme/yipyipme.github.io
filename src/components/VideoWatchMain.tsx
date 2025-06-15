@@ -1,11 +1,10 @@
-
 import React, { useState } from 'react';
 import EnhancedVideoPlayer from './EnhancedVideoPlayer';
 import VideoInfoBar from './VideoInfoBar';
 import CreatorInfoStrip from './CreatorInfoStrip';
-import YipYipDanmakuTrigger from './YipYipDanmakuTrigger';
-import VideoComments from './VideoComments';
 import { Badge } from "@/components/ui/badge";
+import YipYipDanmakuBar from './YipYipDanmakuBar';
+import VideoComments from './VideoComments';
 
 interface VideoWatchMainProps {
   video: any;
@@ -62,8 +61,8 @@ const VideoWatchMain = ({
           onClose={onClose}
         />
       </div>
-      {/* YipYip Danmaku Send Button */}
-      <YipYipDanmakuTrigger videoId={video.id || video.video_id} />
+      {/* Inline YipYip Danmaku Bar, always visible */}
+      <YipYipDanmakuBar videoId={video.id || video.video_id} />
       {/* Action Bar */}
       <VideoInfoBar 
         title={video.title}
