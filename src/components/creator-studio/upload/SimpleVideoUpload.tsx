@@ -48,6 +48,7 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      console.log('Video file selected:', file.name, file.size, file.type);
       setVideoFile(file);
       resetUpload();
     }
@@ -56,6 +57,7 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      console.log('Thumbnail file selected:', file.name, file.size, file.type);
       setThumbnailFile(file);
     }
   };
@@ -65,24 +67,41 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   };
 
   const handleSubmit = async () => {
-    if (!user || !videoFile) return;
+    if (!user || !videoFile) {
+      console.error('Missing user or video file');
+      return;
+    }
+
+    console.log('Starting video upload process...');
+    console.log('User:', user.id);
+    console.log('Video file:', videoFile.name, videoFile.size);
+    console.log('Form data:', formData);
 
     try {
       // Upload video with chunked upload
+      console.log('Uploading video file...');
       const videoUrl = await uploadVideo(videoFile, {
         title: formData.title,
         category: formData.category
       });
 
-      if (!videoUrl) return;
+      if (!videoUrl) {
+        console.error('Video upload failed - no URL returned');
+        return;
+      }
+
+      console.log('Video uploaded successfully:', videoUrl);
 
       // Upload thumbnail if provided
       let thumbnailUrl = null;
       if (thumbnailFile) {
+        console.log('Uploading thumbnail...');
         thumbnailUrl = await uploadThumbnail(thumbnailFile);
+        console.log('Thumbnail uploaded:', thumbnailUrl);
       }
 
       // Create video record
+      console.log('Creating video record in database...');
       const videoData = {
         creator_id: user.id,
         title: formData.title,
@@ -95,11 +114,15 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         monetization_enabled: formData.monetization_enabled,
         file_size: videoFile.size,
         video_format: videoFile.type,
-        status: 'processing' as const,
-        processing_status: 'pending' as const
+        status: 'published' as const, // Changed from 'processing' to 'published'
+        processing_status: 'completed' as const, // Changed from 'pending' to 'completed'
+        published_at: new Date().toISOString() // Add published timestamp
       };
 
-      await VideoService.createVideo(videoData);
+      console.log('Video data to save:', videoData);
+
+      const savedVideo = await VideoService.createVideo(videoData);
+      console.log('Video saved to database:', savedVideo);
 
       onSuccess();
       onClose();

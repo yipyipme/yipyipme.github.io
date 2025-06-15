@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoCard from '@/components/VideoCard';
@@ -7,7 +7,10 @@ import VideoWatchPage from '@/components/VideoWatchPage';
 import DoveIcon from '@/components/brand/DoveIcon';
 import BrandedButton from '@/components/brand/BrandedButton';
 import { Play, TrendingUp, Users, Calendar, BookOpen, Zap, Crown, Star } from 'lucide-react';
-import { platformStore } from '@/lib/store';
+import { VideoService } from '@/lib/services/videoService';
+import type { Database } from '@/integrations/supabase/types';
+
+type Video = Database['public']['Tables']['videos']['Row'];
 
 const quickLinks = [
   { name: 'Sermons', icon: '🎙️', count: '12.5K', gradient: 'from-blue-500 to-purple-600', href: '/explore?category=sermons' },
@@ -22,7 +25,25 @@ const quickLinks = [
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
-  const featuredVideos = platformStore.getPublishedVideos();
+  const [featuredVideos, setFeaturedVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadVideos = async () => {
+      try {
+        console.log('Loading published videos from database...');
+        const videos = await VideoService.getPublishedVideos();
+        console.log('Loaded videos:', videos);
+        setFeaturedVideos(videos);
+      } catch (error) {
+        console.error('Error loading videos:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadVideos();
+  }, []);
 
   const handleVideoClick = (video: any) => {
     setSelectedVideo(video);
@@ -31,6 +52,19 @@ const Home = () => {
   const closeVideoPlayer = () => {
     setSelectedVideo(null);
   };
+
+  // Convert database video to VideoCard format
+  const convertVideoForCard = (video: Video) => ({
+    id: video.id,
+    title: video.title,
+    channel: 'Creator Channel', // We'll need to get creator info later
+    thumbnail: video.thumbnail_url || '/placeholder.svg',
+    duration: video.duration ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}` : '0:00',
+    views: '0', // We'll get from analytics later
+    timeAgo: new Date(video.created_at).toLocaleDateString(),
+    // Include original video data for the watch page
+    ...video
+  });
 
   // Only render VideoWatchPage if we have a selected video
   if (selectedVideo) {
@@ -130,20 +164,29 @@ const Home = () => {
                 View All
               </BrandedButton>
             </div>
-            <div className="netflix-grid">
-              {featuredVideos.slice(0, 4).map((video) => (
-                <VideoCard 
-                  key={video.id} 
-                  title={video.title}
-                  channel={video.channel}
-                  thumbnail={video.thumbnail}
-                  duration={video.duration}
-                  views={video.views.toString()}
-                  timeAgo={video.timeAgo}
-                  onClick={() => handleVideoClick(video)}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center text-gray-400">Loading videos...</div>
+            ) : featuredVideos.length > 0 ? (
+              <div className="netflix-grid">
+                {featuredVideos.slice(0, 4).map((video) => {
+                  const cardData = convertVideoForCard(video);
+                  return (
+                    <VideoCard 
+                      key={video.id} 
+                      title={cardData.title}
+                      channel={cardData.channel}
+                      thumbnail={cardData.thumbnail}
+                      duration={cardData.duration}
+                      views={cardData.views}
+                      timeAgo={cardData.timeAgo}
+                      onClick={() => handleVideoClick(cardData)}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center text-gray-400">No videos uploaded yet</div>
+            )}
           </div>
         </section>
 
@@ -155,20 +198,29 @@ const Home = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Recommended for You</h2>
               <Star className="h-6 w-6 text-yellow-400 animate-pulse" />
             </div>
-            <div className="netflix-grid">
-              {featuredVideos.slice(0, 6).map((video) => (
-                <VideoCard 
-                  key={video.id} 
-                  title={video.title}
-                  channel={video.channel}
-                  thumbnail={video.thumbnail}
-                  duration={video.duration}
-                  views={video.views.toString()}
-                  timeAgo={video.timeAgo}
-                  onClick={() => handleVideoClick(video)}
-                />
-              ))}
-            </div>
+            {loading ? (
+              <div className="text-center text-gray-400">Loading videos...</div>
+            ) : featuredVideos.length > 0 ? (
+              <div className="netflix-grid">
+                {featuredVideos.slice(0, 6).map((video) => {
+                  const cardData = convertVideoForCard(video);
+                  return (
+                    <VideoCard 
+                      key={video.id} 
+                      title={cardData.title}
+                      channel={cardData.channel}
+                      thumbnail={cardData.thumbnail}
+                      duration={cardData.duration}
+                      views={cardData.views}
+                      timeAgo={cardData.timeAgo}
+                      onClick={() => handleVideoClick(cardData)}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center text-gray-400">No videos uploaded yet</div>
+            )}
           </div>
         </section>
 
