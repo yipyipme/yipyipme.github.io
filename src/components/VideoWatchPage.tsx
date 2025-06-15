@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, ThumbsUp, ThumbsDown, Share, Download, Flag, MoreHorizontal, User, Bell, BellRing } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -93,7 +92,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
           {/* Video Player */}
           <div className="w-full">
             <EnhancedVideoPlayer
-              videoUrl={video.videoUrl}
+              videoUrl={video.videoUrl || video.video_url}
               title={video.title}
               onClose={onClose}
             />
