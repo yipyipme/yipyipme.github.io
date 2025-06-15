@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ThumbsUp, ThumbsDown, Share, Download, MoreHorizontal, Bell, BellRing } from 'lucide-react';
+import BulletDanmaku from "./BulletDanmaku";
 
 interface VideoWatchMainProps {
   video: any;
@@ -184,31 +185,8 @@ const VideoWatchMain = ({
       </div>
       */}
       {/* Comments */}
-      <div className="space-y-4">
-        <div className="flex items-center gap-4">
-          <h3 className="text-gray-900 dark:text-white font-semibold text-lg">Comments</h3>
-          <span className="text-gray-600 dark:text-gray-400">150 bullet comments have been sent</span>
-        </div>
-        <div className="flex gap-3">
-          <Avatar className="h-8 w-8">
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <div className="flex-1">
-            <input
-              value={comment}
-              onChange={e => setComment(e.target.value)}
-              placeholder="Please log in ... Barrage Etiquette >"
-              className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 w-full px-3 py-2 rounded"
-            />
-          </div>
-          <Button disabled={!comment.trim()} className="bg-blue-600 hover:bg-blue-700 text-white">
-            Send
-          </Button>
-        </div>
-        <div className="text-gray-600 dark:text-gray-400 text-sm">
-          647 people are online, 150 bullet comments have been sent
-        </div>
-      </div>
+      <BulletDanmaku videoId={video.id || video.video_id} />
+      {/* (remove the old comments box UI) */}
     </div>
   );
 };

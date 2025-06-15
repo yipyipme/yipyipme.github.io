@@ -479,6 +479,33 @@ export type Database = {
           },
         ]
       }
+      video_bullet_comments: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          text: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          text: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          text?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: []
+      }
       video_comments: {
         Row: {
           content: string
