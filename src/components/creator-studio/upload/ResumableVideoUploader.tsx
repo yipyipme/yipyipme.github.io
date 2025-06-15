@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 // Type import for Uppy (handles missing declarations gracefully)
 let UppyCore: any = null, UppyDashboard: any = null, UppyTus: any = null;
@@ -10,7 +9,6 @@ try {
   // If the types don't exist yet, Uppy will be available soon after install
 }
 
-import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
 
 interface ResumableVideoUploaderProps {
