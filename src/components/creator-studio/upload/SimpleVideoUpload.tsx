@@ -20,7 +20,7 @@ interface SimpleVideoUploadProps {
 const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const { uploadState, uploadVideo, uploadThumbnail, cancelUpload } = useEnhancedUpload();
+  const { uploadState, uploadVideo, uploadThumbnail, cancelUpload, pauseUpload, resumeUpload } = useEnhancedUpload();
 
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
@@ -179,8 +179,9 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         <div className="p-6">
           {uploadState.isUploading ? (
             <UploadProgress
-              progress={uploadState.progress}
-              currentFile={uploadState.currentFile}
+              uploadState={uploadState}
+              onPause={pauseUpload}
+              onResume={resumeUpload}
               onCancel={cancelUpload}
             />
           ) : (

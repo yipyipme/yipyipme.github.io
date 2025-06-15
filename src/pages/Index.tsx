@@ -99,16 +99,18 @@ const Index = () => {
       title: 'Sunday Service - Live Worship',
       creator: 'Grace Community Church',
       thumbnail: 'https://images.unsplash.com/photo-1516339901601-2e1b62dc0c45?w=400&h=300&fit=crop',
-      viewers: '2.3K',
-      category: 'Worship'
+      viewers: 2300,
+      category: 'Worship',
+      status: 'live' as const
     },
     {
       id: '2', 
       title: 'Bible Study - Book of Romans',
       creator: 'Pastor James Miller',
       thumbnail: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-      viewers: '892',
-      category: 'Teaching'
+      viewers: 892,
+      category: 'Teaching',
+      status: 'live' as const
     }
   ];
 
@@ -117,7 +119,7 @@ const Index = () => {
       <Header onMenuToggle={handleMenuToggle} />
       
       <div className="flex">
-        <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         
         <main className={`flex-1 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-16'}`}>
           <div className="p-6 space-y-8">
@@ -129,7 +131,7 @@ const Index = () => {
               <h2 className="text-2xl font-bold text-white">Live Now</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {liveStreams.map((stream) => (
-                  <LiveStreamCard key={stream.id} {...stream} />
+                  <LiveStreamCard key={stream.id} stream={stream} />
                 ))}
               </div>
             </section>
