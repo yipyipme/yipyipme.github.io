@@ -176,7 +176,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={cardData.views}
+                      views={typeof cardData.views === 'string' ? cardData.views : (cardData.views ?? '0').toString()}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
@@ -210,7 +210,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={cardData.views}
+                      views={typeof cardData.views === 'string' ? cardData.views : (cardData.views ?? '0').toString()}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
