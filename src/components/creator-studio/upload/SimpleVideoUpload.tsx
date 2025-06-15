@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, Upload, AlertCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import VideoFileUploader from './VideoFileUploader';
 import VideoDetailsForm from './VideoDetailsForm';
 import UploadProgress from './UploadProgress';
+import ResumableVideoUploader from './ResumableVideoUploader';
 
 interface SimpleVideoUploadProps {
   onClose: () => void;
@@ -66,6 +66,22 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
+  // ADD: Handler for resumable video upload result
+  const handleResumableUpload = (url: string, file: File) => {
+    setVideoFile(file);
+    setFormData(prev => ({
+      ...prev,
+      video_url: url // not used directly but useful
+    }));
+    resetUpload(); // reset any legacy upload state
+  };
+
+  // ADD: Handler for Uppy errors
+  const handleUppyError = (msg: string) => {
+    // Use your toast or Alert here if desired
+    console.error('Uppy Error:', msg);
+  };
+
   const handleSubmit = async () => {
     if (!user || !videoFile) {
       console.error('Missing user or video file');
@@ -80,10 +96,11 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     try {
       // Upload video with chunked upload
       console.log('Uploading video file...');
-      const videoUrl = await uploadVideo(videoFile, {
-        title: formData.title,
-        category: formData.category
-      });
+      // const videoUrl = await uploadVideo(videoFile, {
+      //   title: formData.title,
+      //   category: formData.category
+      // });
+      const videoUrl = formData.video_url;
 
       if (!videoUrl) {
         console.error('Video upload failed - no URL returned');
@@ -174,30 +191,35 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
             onCancel={cancelUpload}
           />
 
-          {step === 1 && (
+          {step === 1 && user?.id && (
             <>
+              <h2 className="text-lg text-white font-semibold mb-2">
+                Video File *
+              </h2>
+              <ResumableVideoUploader
+                userId={user.id}
+                onUploadSuccess={handleResumableUpload}
+                onUploadError={handleUppyError}
+                onProgress={(percent) => {
+                  // Optionally hook into your upload state logic!
+                  // setUploadState(prev => ({ ...prev, isUploading: percent < 100, progress: percent }));
+                  // For now, can use the built-in Uppy display
+                }}
+                disabled={uploadState.isUploading}
+                maxFileSizeMB={51200} // 50 GB: adapt based on plan!
+              />
+              {/* Traditional thumbnail upload (keep old component) */}
               <VideoFileUploader
                 videoFile={videoFile}
                 thumbnailFile={thumbnailFile}
                 onVideoFileChange={handleVideoFileChange}
                 onThumbnailChange={handleThumbnailChange}
-                disabled={uploadState.isUploading}
+                disabled={true} // File input for main video is now handled by Uppy
               />
-
               <div className="flex justify-end gap-2">
-                {uploadState.canResume && (
-                  <Button
-                    variant="outline"
-                    onClick={resetUpload}
-                    className="border-gray-700 text-gray-300"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Start Over
-                  </Button>
-                )}
                 <Button
                   onClick={() => setStep(2)}
-                  disabled={!videoFile || uploadState.isUploading}
+                  disabled={!videoFile}
                   className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
                 >
                   Next: Video Details
@@ -205,7 +227,6 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
               </div>
             </>
           )}
-
           {step === 2 && (
             <>
               <VideoDetailsForm
