@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -17,17 +17,12 @@ interface BulletComment {
   text: string;
   color: string | null;
   created_at: string;
-  // User profile (full_name, avatar_url) if joined
-  profiles?: {
-    full_name?: string;
-    avatar_url?: string;
-  };
 }
 
 const fetchBulletComments = async (videoId: string): Promise<BulletComment[]> => {
   const { data, error } = await supabase
     .from("video_bullet_comments")
-    .select("id, user_id, text, color, created_at, profiles(full_name, avatar_url)")
+    .select("id, user_id, text, color, created_at")
     .eq("video_id", videoId)
     .order("created_at", { ascending: true })
     .limit(100);
@@ -64,7 +59,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
   const { data: comments = [], isLoading } = useQuery({
     queryKey: ["bullet-comments", videoId],
     queryFn: () => fetchBulletComments(videoId),
-    refetchInterval: 5000, // refetch every 5 seconds for fresh data
+    refetchInterval: 5000,
   });
 
   const mutation = useMutation({
@@ -81,7 +76,6 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
         title: "Bullet sent!",
         description: "Your message appears instantly for all viewers.",
       });
-      // Refocus for rapid-fire inputs
       inputRef.current?.focus();
     },
     onError: () => {
@@ -157,17 +151,13 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
           comments.map(comment => (
             <div key={comment.id} className="flex gap-2 items-center text-sm">
               <Avatar className="h-6 w-6">
-                {comment.profiles?.avatar_url ? (
-                  <AvatarImage src={comment.profiles.avatar_url} />
-                ) : (
-                  <AvatarFallback>
-                    {(comment.profiles?.full_name ?? "U")[0]}
-                  </AvatarFallback>
-                )}
+                <AvatarFallback>
+                  {comment.user_id ? comment.user_id[0] : "U"}
+                </AvatarFallback>
               </Avatar>
               <div>
                 <span className="font-medium text-gray-800 dark:text-gray-200">
-                  {comment.profiles?.full_name ?? "User"}
+                  User
                 </span>
                 <span className="ml-1 text-gray-500 dark:text-gray-400">
                   {new Date(comment.created_at).toLocaleTimeString()}
@@ -183,4 +173,3 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
 };
 
 export default BulletDanmaku;
-
