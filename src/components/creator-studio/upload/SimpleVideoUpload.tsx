@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { X, Upload, AlertCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +10,8 @@ import VideoFileUploader from './VideoFileUploader';
 import VideoDetailsForm from './VideoDetailsForm';
 import UploadProgress from './UploadProgress';
 import ResumableVideoUploader from './ResumableVideoUploader';
+import VideoUploadStep from './VideoUploadStep';
+import VideoDetailsStep from './VideoDetailsStep';
 
 interface SimpleVideoUploadProps {
   onClose: () => void;
@@ -22,7 +23,6 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const [step, setStep] = useState(1);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  // Add video_url to formData
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -30,7 +30,7 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     tags: [] as string[],
     visibility: 'public',
     monetization_enabled: false,
-    video_url: '' as string | undefined, // add this line
+    video_url: '' as string | undefined,
   });
 
   const { 
@@ -69,19 +69,16 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     setFormData(prev => ({ ...prev, ...updates }));
   };
 
-  // Handler for resumable video upload result
   const handleResumableUpload = (url: string, file: File) => {
     setVideoFile(file);
     setFormData(prev => ({
       ...prev,
-      video_url: url // now exists on state!
+      video_url: url
     }));
     resetUpload();
   };
 
-  // Handler for Uppy errors
   const handleUppyError = (msg: string) => {
-    // Use your toast or Alert here if desired
     console.error('Uppy Error:', msg);
   };
 
@@ -91,10 +88,7 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
       return;
     }
 
-    // ... keep existing console logs the same ...
-
     try {
-      // Use the link set via the resumable upload (Uppy)
       const videoUrl = formData.video_url;
 
       if (!videoUrl) {
@@ -102,10 +96,8 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         return;
       }
 
-      // FIX: Handle thumbnail upload & initialization
       let thumbnailUrl: string | undefined = undefined;
       if (thumbnailFile) {
-        // uploadThumbnail returns string|null
         thumbnailUrl = await uploadThumbnail(thumbnailFile) ?? undefined;
       }
 
@@ -154,7 +146,6 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
-        
         <CardContent className="space-y-6">
           {uploadState.error && (
             <Alert className="border-red-600 bg-red-950/50">
@@ -182,74 +173,32 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
           />
 
           {step === 1 && user?.id && (
-            <>
-              <h2 className="text-lg text-white font-semibold mb-2">
-                Video File *
-              </h2>
-              <ResumableVideoUploader
-                userId={user.id}
-                onUploadSuccess={handleResumableUpload}
-                onUploadError={handleUppyError}
-                onProgress={(percent) => {
-                  // Optionally hook into your upload state logic!
-                  // setUploadState(prev => ({ ...prev, isUploading: percent < 100, progress: percent }));
-                  // For now, can use the built-in Uppy display
-                }}
-                disabled={uploadState.isUploading}
-                maxFileSizeMB={51200} // 50 GB: adapt based on plan!
-              />
-              {/* Traditional thumbnail upload (keep old component) */}
-              <VideoFileUploader
-                videoFile={videoFile}
-                thumbnailFile={thumbnailFile}
-                onVideoFileChange={handleVideoFileChange}
-                onThumbnailChange={handleThumbnailChange}
-                disabled={true} // File input for main video is now handled by Uppy
-              />
-              <div className="flex justify-end gap-2">
-                <Button
-                  onClick={() => setStep(2)}
-                  disabled={!videoFile}
-                  className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
-                >
-                  Next: Video Details
-                </Button>
-              </div>
-            </>
+            <VideoUploadStep
+              userId={user.id}
+              videoFile={videoFile}
+              thumbnailFile={thumbnailFile}
+              onVideoFileChange={handleVideoFileChange}
+              onThumbnailChange={handleThumbnailChange}
+              onResumableUpload={handleResumableUpload}
+              onUppyError={handleUppyError}
+              onProgress={() => {}} // handled visually by Uppy
+              resetUpload={resetUpload}
+              disabled={uploadState.isUploading}
+              maxFileSizeMB={51200}
+              onNext={() => setStep(2)}
+            />
           )}
-          {step === 2 && (
-            <>
-              <VideoDetailsForm
-                formData={formData}
-                onFormDataChange={handleFormDataChange}
-                categories={categories}
-              />
 
-              <div className="flex justify-between">
-                <Button
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  className="border-gray-700 text-gray-300"
-                  disabled={uploadState.isUploading}
-                >
-                  Back
-                </Button>
-                <Button
-                  onClick={handleSubmit}
-                  disabled={!formData.title || uploadState.isUploading}
-                  className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
-                >
-                  {uploadState.isUploading ? (
-                    <>
-                      <Upload className="h-4 w-4 mr-2 animate-spin" />
-                      Uploading... ({uploadState.progress}%)
-                    </>
-                  ) : (
-                    'Upload Video'
-                  )}
-                </Button>
-              </div>
-            </>
+          {step === 2 && (
+            <VideoDetailsStep
+              formData={formData}
+              onFormDataChange={handleFormDataChange}
+              categories={categories}
+              onBack={() => setStep(1)}
+              onSubmit={handleSubmit}
+              isUploading={uploadState.isUploading}
+              uploadProgress={uploadState.progress}
+            />
           )}
         </CardContent>
       </Card>
