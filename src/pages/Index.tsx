@@ -19,7 +19,7 @@ const yellowBirdDefault =
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
-  const [featuredVideos, setFeaturedVideos] = useState<Video[]>([]);
+  const [featuredVideos, setFeaturedVideos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Home = () => {
         const dbVideos = videos || [];
         // Use the public fallback method for easy removal later:
         const placeholderVideos = platformStore['getFallbackVideos']?.();
-        // Be sure to not duplicate IDs (Demo: db first, then placeholders not already present)
+        // Merge without casting to Video[], allow all fields to exist side by side
         const merged =
           placeholderVideos && Array.isArray(placeholderVideos)
             ? [
@@ -40,11 +40,11 @@ const Home = () => {
                 ),
               ]
             : dbVideos;
-        setFeaturedVideos(merged as Video[]);
+        setFeaturedVideos(merged);
       } catch (error) {
         // fallback if DB completely fails
         const fallback = platformStore['getFallbackVideos']?.();
-        setFeaturedVideos((fallback || []) as Video[]);
+        setFeaturedVideos(fallback || []);
         console.error('Error loading videos:', error);
       } finally {
         setLoading(false);
@@ -63,17 +63,19 @@ const Home = () => {
   };
 
   // Convert database video to VideoCard format
-  const convertVideoForCard = (video: Video) => ({
+  const convertVideoForCard = (video: any) => ({
     id: video.id,
     title: video.title,
-    channel: 'Creator Channel', // We'll need to get creator info later
-    thumbnail: video.thumbnail_url || yellowBirdDefault,
+    channel: video.channel || 'Creator Channel', // We'll need to get creator info later
+    thumbnail: video.thumbnail_url || video.thumbnail || yellowBirdDefault,
     duration: video.duration
-      ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}`
+      ? typeof video.duration === 'number'
+        ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}`
+        : video.duration
       : '0:00',
-    views: "0", // Default since video.views does not exist
-    timeAgo: new Date(video.created_at).toLocaleDateString(),
-    videoUrl: video.video_url,  // <-- make sure this is included and used in VideoWatchPage!
+    views: video.views != null ? String(video.views) : "0",
+    timeAgo: video.timeAgo || (video.created_at ? new Date(video.created_at).toLocaleDateString() : ''),
+    videoUrl: video.video_url,
     ...video,
   });
 

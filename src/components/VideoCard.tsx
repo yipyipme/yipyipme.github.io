@@ -1,4 +1,3 @@
-
 import { Play, User, Clock, MoreVertical, Heart, Share } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -72,9 +71,6 @@ const VideoCard = ({ title, channel, thumbnail, duration, views, timeAgo, onClic
         </div>
 
         {/* Live indicator */}
-        <div className="absolute top-3 left-3 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-semibold animate-pulse">
-          LIVE
-        </div>
       </div>
 
       {/* Content */}
