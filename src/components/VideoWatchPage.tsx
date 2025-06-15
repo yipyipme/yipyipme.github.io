@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Header from "./Header";
 import VideoWatchMain from "./VideoWatchMain";
@@ -45,6 +44,7 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
           currentTime={currentTime}
           setCurrentTime={setCurrentTime}
           onClose={onClose}
+          relatedEpisodes={relatedEpisodes}
         />
         <VideoWatchSidebar
           suggestedVideos={suggestedVideos}
