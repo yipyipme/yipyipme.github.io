@@ -4,7 +4,7 @@ import HeroCarousel from '@/components/HeroCarousel';
 import VideoWatchPage from '@/components/VideoWatchPage';
 import { VideoService } from '@/lib/services/videoService';
 import type { Database } from '@/integrations/supabase/types';
-import { platformStore } from '@/lib/store'; // ADD THIS
+import { platformStore } from '@/lib/store';
 
 import QuickLinksSection from '@/components/home/QuickLinksSection';
 import LiveBannerSection from '@/components/home/LiveBannerSection';
@@ -15,7 +15,7 @@ import BrandStatementSection from '@/components/home/BrandStatementSection';
 type Video = Database['public']['Tables']['videos']['Row'];
 
 const yellowBirdDefault =
-  "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+  "/lovable-uploads/ce3ad5bb-20c1-491d-b826-d894cf9d1e7f.png";
 
 const Home = () => {
   const [selectedVideo, setSelectedVideo] = useState<any>(null);
@@ -28,7 +28,8 @@ const Home = () => {
         const videos = await VideoService.getPublishedVideos();
         // --- Combine DB videos with PLACEHOLDER videos (now in use everywhere) ---
         const dbVideos = videos || [];
-        const placeholderVideos = platformStore.getFallbackVideos && platformStore.getFallbackVideos();
+        // Use the public fallback method for easy removal later:
+        const placeholderVideos = platformStore['getFallbackVideos']?.();
         // Be sure to not duplicate IDs (Demo: db first, then placeholders not already present)
         const merged =
           placeholderVideos && Array.isArray(placeholderVideos)
@@ -39,11 +40,11 @@ const Home = () => {
                 ),
               ]
             : dbVideos;
-        setFeaturedVideos(merged);
+        setFeaturedVideos(merged as Video[]);
       } catch (error) {
         // fallback if DB completely fails
-        const fallback = platformStore.getFallbackVideos && platformStore.getFallbackVideos();
-        setFeaturedVideos(fallback || []);
+        const fallback = platformStore['getFallbackVideos']?.();
+        setFeaturedVideos((fallback || []) as Video[]);
         console.error('Error loading videos:', error);
       } finally {
         setLoading(false);
