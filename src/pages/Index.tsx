@@ -51,7 +51,7 @@ const Home = () => {
     duration: video.duration
       ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}`
       : '0:00',
-    views: video.views != null ? String(video.views) : "0",
+    views: "0", // Default since video.views does not exist
     timeAgo: new Date(video.created_at).toLocaleDateString(),
     ...video,
   });
