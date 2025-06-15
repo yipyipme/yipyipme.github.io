@@ -104,8 +104,14 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     const updateTime = () => setCurrentTime(video.currentTime);
     const updateDuration = () => setDuration(video.duration);
 
+    // NEW: keep isPlaying in sync with the actual player state
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+
     video.addEventListener('timeupdate', updateTime);
     video.addEventListener('loadedmetadata', updateDuration);
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('pause', handlePause);
     video.addEventListener('ended', () => {
       setIsPlaying(false);
       if (autoPlay) {
@@ -116,6 +122,8 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     return () => {
       video.removeEventListener('timeupdate', updateTime);
       video.removeEventListener('loadedmetadata', updateDuration);
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('pause', handlePause);
       video.removeEventListener('ended', () => setIsPlaying(false));
     };
   }, [autoPlay]);
@@ -207,13 +215,13 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     const video = videoRef.current;
     if (!video) return;
 
-    if (isPlaying) {
-      video.pause();
-    } else {
+    if (video.paused) {
       video.play();
+    } else {
+      video.pause();
     }
-    setIsPlaying(!isPlaying);
-  }, [isPlaying]);
+    // No need to manually toggle isPlaying!
+  }, []);
 
   const toggleMute = () => {
     const video = videoRef.current;
