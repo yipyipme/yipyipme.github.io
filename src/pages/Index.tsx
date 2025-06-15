@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
@@ -177,7 +176,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={cardData.views}
+                      views={typeof cardData.views === 'string' ? cardData.views : cardData.views?.toString() ?? '0'}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
@@ -211,7 +210,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={cardData.views}
+                      views={typeof cardData.views === 'string' ? cardData.views : cardData.views?.toString() ?? '0'}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
