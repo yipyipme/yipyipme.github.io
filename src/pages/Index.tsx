@@ -59,7 +59,7 @@ const Home = () => {
     channel: 'Creator Channel', // We'll need to get creator info later
     thumbnail: video.thumbnail_url || '/placeholder.svg',
     duration: video.duration ? `${Math.floor(video.duration / 60)}:${(video.duration % 60).toString().padStart(2, '0')}` : '0:00',
-    views: '0', // We'll get from analytics later
+    views: '0', // We'll get from analytics later, ensure it's a string
     timeAgo: new Date(video.created_at).toLocaleDateString(),
     // Include original video data for the watch page
     ...video
@@ -176,7 +176,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={typeof cardData.views === 'string' ? cardData.views : cardData.views?.toString() ?? '0'}
+                      views={cardData.views}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
@@ -210,7 +210,7 @@ const Home = () => {
                       channel={cardData.channel}
                       thumbnail={cardData.thumbnail}
                       duration={cardData.duration}
-                      views={typeof cardData.views === 'string' ? cardData.views : cardData.views?.toString() ?? '0'}
+                      views={cardData.views}
                       timeAgo={cardData.timeAgo}
                       onClick={() => handleVideoClick(cardData)}
                     />
