@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, MessageCircle, Settings, 
@@ -59,6 +58,8 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
   const [skipDirection, setSkipDirection] = useState<'forward' | 'backward'>('forward');
   const [skipAmount, setSkipAmount] = useState(5);
   const [showShortcuts, setShowShortcuts] = useState(false);
+
+  const [videoError, setVideoError] = useState<string | null>(null);
 
   const commentColors = [
     '#ffffff', '#ff6b6b', '#4ecdc4', '#45b7d1', 
@@ -349,6 +350,15 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
     return classes;
   };
 
+  useEffect(() => {
+    if (!videoUrl) {
+      setVideoError("No video source provided.");
+    } else {
+      setVideoError(null);
+    }
+    console.log("[EnhancedVideoPlayer] videoUrl:", videoUrl);
+  }, [videoUrl]);
+
   return (
     <div className={`${isTheaterMode ? 'fixed inset-0 z-50 bg-black' : ''}`}>
       {isTheaterMode && (
@@ -379,7 +389,17 @@ const EnhancedVideoPlayer = ({ videoUrl, title, onClose }: VideoPlayerProps) => 
             className="w-full h-full object-cover"
             loop={loop}
             poster="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=450&fit=crop"
+            onError={() => setVideoError("Failed to load video. Check if the URL is accessible and valid.")}
           />
+          {/* Error overlay if video fails */}
+          {videoError && (
+            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/70 text-white text-lg">
+              <div>
+                <span className="font-bold">Video Error:</span> {videoError}
+              </div>
+              <div className="mt-2 text-sm break-all">{videoUrl}</div>
+            </div>
+          )}
           
           <VideoPlayerOverlay 
             title={title}
