@@ -1,15 +1,14 @@
 
-import React, { useState } from 'react';
-import { X, Upload, CheckCircle, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { X, Upload, AlertCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useEnhancedUpload } from '@/hooks/useEnhancedUpload';
 import { VideoService } from '@/lib/services/videoService';
+import { useAuth } from '@/contexts/AuthContext';
 import VideoFileUploader from './VideoFileUploader';
+import VideoDetailsForm from './VideoDetailsForm';
 import UploadProgress from './UploadProgress';
 
 interface SimpleVideoUploadProps {
@@ -19,270 +18,207 @@ interface SimpleVideoUploadProps {
 
 const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const { uploadState, uploadVideo, uploadThumbnail, cancelUpload, pauseUpload, resumeUpload } = useEnhancedUpload();
-
+  const [step, setStep] = useState(1);
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  console.log('SimpleVideoUpload state:', {
-    videoFile: videoFile?.name,
-    title,
-    user: user?.id,
-    uploadState
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    category: '',
+    tags: [] as string[],
+    visibility: 'public',
+    monetization_enabled: false
   });
+
+  const { 
+    uploadState, 
+    uploadVideo, 
+    uploadThumbnail, 
+    pauseUpload, 
+    resumeUpload, 
+    cancelUpload, 
+    resetUpload 
+  } = useEnhancedUpload();
+
+  const categories = [
+    'Sermons', 'Bible Study', 'Worship', 'Testimonies', 'Youth', 'Kids',
+    'Music', 'Prayer', 'Devotionals', 'Teaching', 'Events', 'Other'
+  ];
 
   const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log('Video file selected:', {
-        name: file.name,
-        size: file.size,
-        type: file.type
-      });
       setVideoFile(file);
+      resetUpload();
     }
   };
 
   const handleThumbnailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      console.log('Thumbnail file selected:', {
-        name: file.name,
-        size: file.size,
-        type: file.type
-      });
       setThumbnailFile(file);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!user) {
-      toast({
-        title: "Authentication Required",
-        description: "Please log in to upload videos",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleFormDataChange = (updates: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...updates }));
+  };
 
-    if (!videoFile || !title.trim()) {
-      toast({
-        title: "Missing Information",
-        description: "Please select a video file and enter a title",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    console.log('Starting video upload process...');
-    setIsSubmitting(true);
+  const handleSubmit = async () => {
+    if (!user || !videoFile) return;
 
     try {
-      // Upload video file
-      console.log('Uploading video file...');
+      // Upload video with chunked upload
       const videoUrl = await uploadVideo(videoFile, {
-        title,
-        description,
-        category
+        title: formData.title,
+        category: formData.category
       });
 
-      if (!videoUrl) {
-        throw new Error('Failed to upload video file');
-      }
-
-      console.log('Video uploaded successfully:', videoUrl);
+      if (!videoUrl) return;
 
       // Upload thumbnail if provided
       let thumbnailUrl = null;
       if (thumbnailFile) {
-        console.log('Uploading thumbnail...');
         thumbnailUrl = await uploadThumbnail(thumbnailFile);
-        console.log('Thumbnail uploaded:', thumbnailUrl);
       }
 
-      // Create video record in database
-      console.log('Creating video record in database...');
+      // Create video record
       const videoData = {
         creator_id: user.id,
-        title: title.trim(),
-        description: description.trim() || null,
+        title: formData.title,
+        description: formData.description,
         video_url: videoUrl,
         thumbnail_url: thumbnailUrl,
-        category: category.trim() || null,
+        category: formData.category,
+        tags: formData.tags,
+        visibility: formData.visibility as 'public' | 'unlisted' | 'private',
+        monetization_enabled: formData.monetization_enabled,
         file_size: videoFile.size,
         video_format: videoFile.type,
-        status: 'published' as const,
-        visibility: 'public' as const,
-        processing_status: 'completed' as const,
-        processing_progress: 100
+        status: 'processing' as const,
+        processing_status: 'pending' as const
       };
 
-      console.log('Video data to save:', videoData);
-
-      const savedVideo = await VideoService.createVideo(videoData);
-      console.log('Video saved to database:', savedVideo);
-
-      toast({
-        title: "Upload Successful",
-        description: "Your video has been uploaded and is now live!",
-      });
+      await VideoService.createVideo(videoData);
 
       onSuccess();
       onClose();
-
-    } catch (error: any) {
-      console.error('Upload failed:', error);
-      toast({
-        title: "Upload Failed",
-        description: error.message || "An error occurred while uploading your video",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch (err: any) {
+      console.error('Upload failed:', err);
     }
   };
 
-  const handleCancel = () => {
+  const handleClose = () => {
     if (uploadState.isUploading) {
       cancelUpload();
     }
     onClose();
   };
 
-  const isUploading = uploadState.isUploading || isSubmitting;
-
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-800">
-          <h2 className="text-xl font-semibold text-white">Upload Video</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleCancel}
-            disabled={isUploading}
-            className="text-gray-400 hover:text-white"
-          >
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl bg-gray-900 border-gray-800 max-h-[90vh] overflow-y-auto">
+        <CardHeader className="flex flex-row items-center justify-between">
+          <CardTitle className="text-white">Upload Video</CardTitle>
+          <Button variant="ghost" size="icon" onClick={handleClose} className="text-gray-400 hover:text-white">
             <X className="h-5 w-5" />
           </Button>
-        </div>
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          {uploadState.error && (
+            <Alert className="border-red-600 bg-red-950/50">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription className="text-red-400">
+                {uploadState.error}
+                {uploadState.canResume && (
+                  <Button
+                    variant="link"
+                    className="text-red-400 p-0 ml-2"
+                    onClick={resumeUpload}
+                  >
+                    Try Resume
+                  </Button>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
 
-        {/* Content */}
-        <div className="p-6">
-          {uploadState.isUploading ? (
-            <UploadProgress
-              uploadState={uploadState}
-              onPause={pauseUpload}
-              onResume={resumeUpload}
-              onCancel={cancelUpload}
-            />
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* File Upload */}
+          <UploadProgress 
+            uploadState={uploadState}
+            onPause={pauseUpload}
+            onResume={resumeUpload}
+            onCancel={cancelUpload}
+          />
+
+          {step === 1 && (
+            <>
               <VideoFileUploader
                 videoFile={videoFile}
                 thumbnailFile={thumbnailFile}
                 onVideoFileChange={handleVideoFileChange}
                 onThumbnailChange={handleThumbnailChange}
-                disabled={isUploading}
+                disabled={uploadState.isUploading}
               />
 
-              {/* Video Details */}
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="title" className="text-gray-300">
-                    Title *
-                  </Label>
-                  <Input
-                    id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Enter video title"
-                    className="bg-gray-800 border-gray-700 text-white"
-                    disabled={isUploading}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="description" className="text-gray-300">
-                    Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Enter video description"
-                    className="bg-gray-800 border-gray-700 text-white"
-                    rows={4}
-                    disabled={isUploading}
-                  />
-                </div>
-
-                <div>
-                  <Label htmlFor="category" className="text-gray-300">
-                    Category
-                  </Label>
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    placeholder="Enter category (e.g., Sermon, Worship, Teaching)"
-                    className="bg-gray-800 border-gray-700 text-white"
-                    disabled={isUploading}
-                  />
-                </div>
-              </div>
-
-              {/* Upload Status */}
-              {uploadState.error && (
-                <div className="flex items-center gap-2 p-3 bg-red-900/20 border border-red-800 rounded-lg">
-                  <AlertCircle className="h-4 w-4 text-red-400" />
-                  <span className="text-red-400 text-sm">{uploadState.error}</span>
-                </div>
-              )}
-
-              {/* Actions */}
-              <div className="flex gap-3 pt-4">
+              <div className="flex justify-end gap-2">
+                {uploadState.canResume && (
+                  <Button
+                    variant="outline"
+                    onClick={resetUpload}
+                    className="border-gray-700 text-gray-300"
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Start Over
+                  </Button>
+                )}
                 <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleCancel}
-                  disabled={isUploading}
-                  className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                  onClick={() => setStep(2)}
+                  disabled={!videoFile || uploadState.isUploading}
+                  className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
                 >
-                  Cancel
+                  Next: Video Details
+                </Button>
+              </div>
+            </>
+          )}
+
+          {step === 2 && (
+            <>
+              <VideoDetailsForm
+                formData={formData}
+                onFormDataChange={handleFormDataChange}
+                categories={categories}
+              />
+
+              <div className="flex justify-between">
+                <Button
+                  variant="outline"
+                  onClick={() => setStep(1)}
+                  className="border-gray-700 text-gray-300"
+                  disabled={uploadState.isUploading}
+                >
+                  Back
                 </Button>
                 <Button
-                  type="submit"
-                  disabled={!videoFile || !title.trim() || isUploading}
-                  className="flex-1 bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
+                  onClick={handleSubmit}
+                  disabled={!formData.title || uploadState.isUploading}
+                  className="bg-[#FDBD34] text-black hover:bg-[#FDBD34]/80"
                 >
-                  {isSubmitting ? (
+                  {uploadState.isUploading ? (
                     <>
                       <Upload className="h-4 w-4 mr-2 animate-spin" />
-                      Publishing...
+                      Uploading... ({uploadState.progress}%)
                     </>
                   ) : (
-                    <>
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload Video
-                    </>
+                    'Upload Video'
                   )}
                 </Button>
               </div>
-            </form>
+            </>
           )}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
