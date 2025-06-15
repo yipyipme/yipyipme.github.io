@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { X, Upload, AlertCircle, RotateCcw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -101,7 +102,12 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
         return;
       }
 
-      // ... keep thumbnail upload and other logic the same ...
+      // FIX: Handle thumbnail upload & initialization
+      let thumbnailUrl: string | undefined = undefined;
+      if (thumbnailFile) {
+        // uploadThumbnail returns string|null
+        thumbnailUrl = await uploadThumbnail(thumbnailFile) ?? undefined;
+      }
 
       const videoData = {
         creator_id: user.id,
@@ -250,5 +256,4 @@ const SimpleVideoUpload = ({ onClose, onSuccess }: SimpleVideoUploadProps) => {
     </div>
   );
 };
-
 export default SimpleVideoUpload;
