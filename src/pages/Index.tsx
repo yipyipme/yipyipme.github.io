@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import HeroCarousel from '@/components/HeroCarousel';
 import VideoWatchPage from '@/components/VideoWatchPage';
 import { VideoService } from '@/lib/services/videoService';
 import type { Database } from '@/integrations/supabase/types';
+import { platformStore } from '@/lib/store'; // ADD THIS
 
 import QuickLinksSection from '@/components/home/QuickLinksSection';
 import LiveBannerSection from '@/components/home/LiveBannerSection';
@@ -23,8 +23,24 @@ const Home = () => {
     const loadVideos = async () => {
       try {
         const videos = await VideoService.getPublishedVideos();
-        setFeaturedVideos(videos);
+        // --- Combine DB videos with PLACEHOLDER videos (now in use everywhere) ---
+        const dbVideos = videos || [];
+        const placeholderVideos = platformStore.getFallbackVideos && platformStore.getFallbackVideos();
+        // Be sure to not duplicate IDs (Demo: db first, then placeholders not already present)
+        const merged =
+          placeholderVideos && Array.isArray(placeholderVideos)
+            ? [
+                ...dbVideos,
+                ...placeholderVideos.filter(
+                  (p) => !dbVideos.some((v: any) => v.id === p.id)
+                ),
+              ]
+            : dbVideos;
+        setFeaturedVideos(merged);
       } catch (error) {
+        // fallback if DB completely fails
+        const fallback = platformStore.getFallbackVideos && platformStore.getFallbackVideos();
+        setFeaturedVideos(fallback || []);
         console.error('Error loading videos:', error);
       } finally {
         setLoading(false);
