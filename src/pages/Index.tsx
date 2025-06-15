@@ -53,6 +53,7 @@ const Home = () => {
       : '0:00',
     views: "0", // Default since video.views does not exist
     timeAgo: new Date(video.created_at).toLocaleDateString(),
+    videoUrl: video.video_url,  // <-- make sure this is included and used in VideoWatchPage!
     ...video,
   });
 
