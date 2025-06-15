@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ThumbsUp, ThumbsDown, Share, Download, MoreHorizontal, Bell, BellRing } from 'lucide-react';
 import BulletDanmaku from "./BulletDanmaku";
+import VideoComments from "./VideoComments";
 
 interface VideoWatchMainProps {
   video: any;
@@ -65,6 +66,10 @@ const VideoWatchMain = ({
           onClose={onClose}
         />
       </div>
+      {/* YipYip (Bullet) Comments */}
+      <BulletDanmaku videoId={video.id || video.video_id} />
+      {/* Classic Comments */}
+      <VideoComments videoId={video.id || video.video_id} />
       {/* Video Info */}
       <div className="space-y-4">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{video.title}</h1>
@@ -185,7 +190,6 @@ const VideoWatchMain = ({
       </div>
       */}
       {/* Comments */}
-      <BulletDanmaku videoId={video.id || video.video_id} />
       {/* (remove the old comments box UI) */}
     </div>
   );

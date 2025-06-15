@@ -7,115 +7,97 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "@/components/ui/use-toast";
 
-interface BulletDanmakuProps {
+interface VideoCommentsProps {
   videoId: string;
 }
 
-interface BulletComment {
+interface VideoComment {
   id: string;
   user_id: string;
-  text: string;
-  color: string | null;
+  content: string;
   created_at: string;
 }
 
-const fetchBulletComments = async (videoId: string): Promise<BulletComment[]> => {
+const fetchComments = async (videoId: string): Promise<VideoComment[]> => {
   const { data, error } = await supabase
-    .from("video_bullet_comments")
-    .select("id, user_id, text, color, created_at")
+    .from("video_comments")
+    .select("id, user_id, content, created_at")
     .eq("video_id", videoId)
-    .order("created_at", { ascending: true })
-    .limit(100);
-
+    .eq("parent_comment_id", null)
+    .order("created_at", { ascending: false }) // newest first
+    .limit(40);
   if (error) throw error;
   return data || [];
 };
 
-const sendBulletComment = async ({
+const sendComment = async ({
   videoId,
   userId,
-  text,
+  content,
 }: {
   videoId: string;
   userId: string;
-  text: string;
+  content: string;
 }) => {
-  const { error } = await supabase.from("video_bullet_comments").insert([
+  const { error } = await supabase.from("video_comments").insert([
     {
       video_id: videoId,
       user_id: userId,
-      text,
+      content,
+      status: "published",
     },
   ]);
   if (error) throw error;
 };
 
-const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
+const VideoComments: React.FC<VideoCommentsProps> = ({ videoId }) => {
   const { user, profile } = useAuth();
   const queryClient = useQueryClient();
   const [comment, setComment] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { data: comments = [], isLoading } = useQuery({
-    queryKey: ["bullet-comments", videoId],
-    queryFn: () => fetchBulletComments(videoId),
-    refetchInterval: 5000,
+    queryKey: ["comments", videoId],
+    queryFn: () => fetchComments(videoId),
+    refetchInterval: 20000,
   });
 
   const mutation = useMutation({
     mutationFn: () =>
-      sendBulletComment({
+      sendComment({
         videoId,
         userId: user!.id,
-        text: comment.trim(),
+        content: comment.trim(),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["bullet-comments", videoId] });
+      queryClient.invalidateQueries({ queryKey: ["comments", videoId] });
       setComment("");
       toast({
-        title: "Bullet sent!",
-        description: "Your YipYip message appears instantly for all viewers.",
+        title: "Comment posted!",
+        description: "Thanks for sharing your thoughts.",
       });
       inputRef.current?.focus();
     },
     onError: () => {
       toast({
-        title: "Could not send YipYip bullet",
+        title: "Could not post comment",
         description: "Please try again or re-login.",
         variant: "destructive",
       });
     },
   });
 
-  // Broadcast new bullet to parent (if EnhancedVideoPlayer wants it immediately)
-  // We'll use a custom event for simple communication
-  const sendBulletToOverlay = (text: string, color?: string) => {
-    const ev = new CustomEvent("new-bullet-danmaku", {
-      detail: { text, color, user, ts: Date.now() }
-    });
-    window.dispatchEvent(ev);
-  };
-
   const handleSend = () => {
     if (!user || !comment.trim() || mutation.isPending) return;
     mutation.mutate();
-    sendBulletToOverlay(comment.trim());
   };
 
   return (
-    <section className="space-y-2">
-      <div className="flex items-center gap-4">
-        <h3 className="text-gray-900 dark:text-white font-semibold text-lg">
-          YipYip Comments
-        </h3>
-        <span className="text-gray-500 dark:text-gray-400" title="Danmaku/Bullet">
-          (fly over video)
-        </span>
-        <span className="text-gray-600 dark:text-gray-400">
-          {comments.length} sent
-        </span>
-      </div>
-      <div className="flex gap-3">
+    <section className="space-y-2 mt-8">
+      <h3 className="text-gray-900 dark:text-white font-semibold text-lg">
+        Comments
+      </h3>
+      <div className="flex gap-3 mb-2">
         <Avatar className="h-8 w-8">
           {profile?.avatar_url ? (
             <AvatarImage src={profile.avatar_url} />
@@ -142,11 +124,11 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
             }}
             placeholder={
               user
-                ? "Send a YipYip bullet (press Enter to send)"
-                : "Please log in to send YipYip comments"
+                ? "Add a public comment (press Enter to send)"
+                : "Please log in to comment"
             }
             disabled={!user || mutation.isPending}
-            maxLength={140}
+            maxLength={500}
             className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 w-full px-3 py-2 rounded"
           />
         </div>
@@ -155,19 +137,19 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
           onClick={handleSend}
           className="bg-blue-600 hover:bg-blue-700 text-white"
         >
-          Send
+          Post
         </Button>
       </div>
-      <div className="overflow-y-auto max-h-36 border-t border-gray-200 dark:border-gray-700 mt-2 pt-2 space-y-1">
+      <div className="space-y-2">
         {isLoading ? (
           <div className="text-gray-400 text-sm text-center">Loading...</div>
         ) : comments.length === 0 ? (
           <div className="text-gray-400 text-sm text-center">
-            No YipYip comments yet.
+            No comments yet.
           </div>
         ) : (
           comments.map(comment => (
-            <div key={comment.id} className="flex gap-2 items-center text-sm">
+            <div key={comment.id} className="flex gap-2 items-center text-sm py-1">
               <Avatar className="h-6 w-6">
                 <AvatarFallback>
                   {comment.user_id ? comment.user_id[0] : "U"}
@@ -180,7 +162,7 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
                 <span className="ml-1 text-gray-500 dark:text-gray-400">
                   {new Date(comment.created_at).toLocaleTimeString()}
                 </span>
-                <span className="ml-2">{comment.text}</span>
+                <span className="ml-2">{comment.content}</span>
               </div>
             </div>
           ))
@@ -190,4 +172,4 @@ const BulletDanmaku: React.FC<BulletDanmakuProps> = ({ videoId }) => {
   );
 };
 
-export default BulletDanmaku;
+export default VideoComments;
