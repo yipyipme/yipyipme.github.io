@@ -110,14 +110,7 @@ const YipYipDanmakuBar: React.FC<YipYipDanmakuBarProps> = ({ videoId }) => {
             disabled={mutation.isPending}
             className="flex-1 bg-transparent placeholder-gray-500 border-0 focus:ring-0 outline-none mr-2 text-base"
           />
-          <a
-            href="https://en.wikipedia.org/wiki/Danmaku_(video_gaming)"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-gray-400 text-xs px-2 mr-1 hover:underline hidden sm:inline"
-          >
-            Barrage Etiquette &#8594;
-          </a>
+          
           <Button
             size="sm"
             className="rounded px-4 bg-blue-600 text-white hover:bg-blue-700 font-semibold"
