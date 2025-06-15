@@ -1,7 +1,8 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ThumbsUp, ThumbsDown, Share, Download, MoreHorizontal } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 interface VideoInfoBarProps {
   title: string;
@@ -14,6 +15,12 @@ interface VideoInfoBarProps {
   onDislike: () => void;
 }
 
+const getVideoShareUrl = () => {
+  return typeof window !== "undefined"
+    ? window.location.href
+    : "";
+};
+
 const VideoInfoBar: React.FC<VideoInfoBarProps> = ({
   title,
   views,
@@ -23,43 +30,89 @@ const VideoInfoBar: React.FC<VideoInfoBarProps> = ({
   hasDisliked,
   onLike,
   onDislike,
-}) => (
-  <div className="flex flex-col gap-2 w-full">
-    <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">{title}</h1>
-    <div className="flex flex-col md:flex-row items-start md:items-center justify-between text-xs md:text-sm gap-1">
-      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
-        <span>{views} views</span>
-        <span>•</span>
-        <span>{timeAgo}</span>
-      </div>
-      <div className="flex items-center gap-1 flex-wrap">
-        <Button 
-          variant="ghost" 
-          size="sm"
-          onClick={onLike}
-          className={`hover:bg-gray-200 dark:hover:bg-white/20 ${hasLiked ? "text-blue-600 dark:text-blue-400" : "text-gray-900 dark:text-white"}`}>
-          <ThumbsUp className="h-4 w-4 mr-1" />
-          {likes}
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onDislike}
-          className={`hover:bg-gray-200 dark:hover:bg-white/20 ${hasDisliked ? "text-red-600 dark:text-red-400" : "text-gray-900 dark:text-white"}`}>
-          <ThumbsDown className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="sm" className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white">
-          <Share className="h-4 w-4 mr-1" />Share
-        </Button>
-        <Button variant="ghost" size="sm" className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white">
-          <Download className="h-4 w-4 mr-1" />Download
-        </Button>
-        <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
+}) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    const shareUrl = getVideoShareUrl();
+    const shareData = {
+      title,
+      url: shareUrl,
+    };
+    // Try using Web Share API
+    // @ts-ignore
+    if (navigator.share) {
+      try {
+        // @ts-ignore
+        await navigator.share(shareData);
+        return;
+      } catch (e) {
+        // Fall back to copy
+      }
+    }
+    // Fallback: copy to clipboard
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      toast({
+        title: "Link copied!",
+        description: "Video link copied to clipboard. Share it anywhere!",
+      });
+      setTimeout(() => setCopied(false), 1500);
+    } catch (e) {
+      toast({
+        title: "Failed to copy",
+        description: "Please copy the link manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <h1 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white truncate">{title}</h1>
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between text-xs md:text-sm gap-1">
+        <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
+          <span>{views} views</span>
+          <span>•</span>
+          <span>{timeAgo}</span>
+        </div>
+        <div className="flex items-center gap-1 flex-wrap">
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={onLike}
+            className={`hover:bg-gray-200 dark:hover:bg-white/20 ${hasLiked ? "text-blue-600 dark:text-blue-400" : "text-gray-900 dark:text-white"}`}>
+            <ThumbsUp className="h-4 w-4 mr-1" />
+            {likes}
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onDislike}
+            className={`hover:bg-gray-200 dark:hover:bg-white/20 ${hasDisliked ? "text-red-600 dark:text-red-400" : "text-gray-900 dark:text-white"}`}>
+            <ThumbsDown className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white"
+            onClick={handleShare}
+            aria-label="Share Video"
+          >
+            <Share className="h-4 w-4 mr-1" />
+            {copied ? "Copied!" : "Share"}
+          </Button>
+          <Button variant="ghost" size="sm" className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white">
+            <Download className="h-4 w-4 mr-1" />Download
+          </Button>
+          <Button variant="ghost" size="icon" className="hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default VideoInfoBar;

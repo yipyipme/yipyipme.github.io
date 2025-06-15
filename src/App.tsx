@@ -1,4 +1,3 @@
-
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import "./App.css";
+import { HelmetProvider } from "react-helmet-async";
 
 // Lazy load pages for better performance
 const AuthPage = lazy(() => import("./components/auth/AuthPage"));
@@ -52,56 +52,58 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <TooltipProvider>
-          <AuthProvider>
-            <BrowserRouter>
-              <div className="min-h-screen bg-background font-sans antialiased w-full">
-                <Suspense fallback={<div className="w-full min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-center"><div className="h-8 w-8 animate-spin border-4 border-[#FDBD34] border-t-transparent rounded-full mx-auto mb-4"></div><p className="text-gray-400">Loading...</p></div></div>}>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth" element={<AuthPage />} />
-                    <Route path="/apply-creator" element={<CreatorApplication />} />
-                    <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
-                    <Route path="/watch/:id" element={<VideoWatchPageWrapper />} />
-                    <Route path="/live/:streamId" element={<LiveStreamViewer />} />
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/trending" element={<Trending />} />
-                    <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
-                    <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-                    <Route path="/watch-later" element={<ProtectedRoute><WatchLater /></ProtectedRoute>} />
-                    <Route path="/live" element={<Live />} />
-                    <Route path="/kids" element={<Kids />} />
-                    <Route path="/bible" element={<Bible />} />
-                    <Route path="/community" element={<Community />} />
-                    <Route path="/help" element={<Help />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/terms" element={<Terms />} />
-                    <Route path="/privacy" element={<Privacy />} />
-                    <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <HelmetProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <AuthProvider>
+              <BrowserRouter>
+                <div className="min-h-screen bg-background font-sans antialiased w-full">
+                  <Suspense fallback={<div className="w-full min-h-screen bg-gray-900 flex items-center justify-center"><div className="text-center"><div className="h-8 w-8 animate-spin border-4 border-[#FDBD34] border-t-transparent rounded-full mx-auto mb-4"></div><p className="text-gray-400">Loading...</p></div></div>}>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/auth" element={<AuthPage />} />
+                      <Route path="/apply-creator" element={<CreatorApplication />} />
+                      <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+                      <Route path="/watch/:id" element={<VideoWatchPageWrapper />} />
+                      <Route path="/live/:streamId" element={<LiveStreamViewer />} />
+                      <Route path="/explore" element={<Explore />} />
+                      <Route path="/trending" element={<Trending />} />
+                      <Route path="/subscriptions" element={<ProtectedRoute><Subscriptions /></ProtectedRoute>} />
+                      <Route path="/history" element={<ProtectedRoute><History /></ProtectedRoute>} />
+                      <Route path="/watch-later" element={<ProtectedRoute><WatchLater /></ProtectedRoute>} />
+                      <Route path="/live" element={<Live />} />
+                      <Route path="/kids" element={<Kids />} />
+                      <Route path="/bible" element={<Bible />} />
+                      <Route path="/community" element={<Community />} />
+                      <Route path="/help" element={<Help />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/terms" element={<Terms />} />
+                      <Route path="/privacy" element={<Privacy />} />
+                      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
-                    {/* Creator Studio Routes */}
-                    <Route path="/creator-studio" element={<ProtectedRoute requireRole="creator"><CreatorStudio /></ProtectedRoute>} />
-                    <Route path="/creator-studio/videos" element={<ProtectedRoute requireRole="creator"><Videos /></ProtectedRoute>} />
-                    <Route path="/creator-studio/analytics" element={<ProtectedRoute requireRole="creator"><Analytics /></ProtectedRoute>} />
-                    <Route path="/creator-studio/comments" element={<ProtectedRoute requireRole="creator"><Comments /></ProtectedRoute>} />
-                    <Route path="/creator-studio/live" element={<ProtectedRoute requireRole="creator"><LiveStreams /></ProtectedRoute>} />
-                    <Route path="/creator-studio/playlists" element={<ProtectedRoute requireRole="creator"><Playlists /></ProtectedRoute>} />
-                    <Route path="/creator-studio/posts" element={<ProtectedRoute requireRole="creator"><Posts /></ProtectedRoute>} />
-                    <Route path="/creator-studio/prayers" element={<ProtectedRoute requireRole="creator"><Prayers /></ProtectedRoute>} />
-                    <Route path="/creator-studio/memberships" element={<ProtectedRoute requireRole="creator"><Memberships /></ProtectedRoute>} />
-                    <Route path="/creator-studio/drafts" element={<ProtectedRoute requireRole="creator"><Drafts /></ProtectedRoute>} />
-                    <Route path="/creator-studio/settings" element={<ProtectedRoute requireRole="creator"><CreatorStudioSettings /></ProtectedRoute>} />
+                      {/* Creator Studio Routes */}
+                      <Route path="/creator-studio" element={<ProtectedRoute requireRole="creator"><CreatorStudio /></ProtectedRoute>} />
+                      <Route path="/creator-studio/videos" element={<ProtectedRoute requireRole="creator"><Videos /></ProtectedRoute>} />
+                      <Route path="/creator-studio/analytics" element={<ProtectedRoute requireRole="creator"><Analytics /></ProtectedRoute>} />
+                      <Route path="/creator-studio/comments" element={<ProtectedRoute requireRole="creator"><Comments /></ProtectedRoute>} />
+                      <Route path="/creator-studio/live" element={<ProtectedRoute requireRole="creator"><LiveStreams /></ProtectedRoute>} />
+                      <Route path="/creator-studio/playlists" element={<ProtectedRoute requireRole="creator"><Playlists /></ProtectedRoute>} />
+                      <Route path="/creator-studio/posts" element={<ProtectedRoute requireRole="creator"><Posts /></ProtectedRoute>} />
+                      <Route path="/creator-studio/prayers" element={<ProtectedRoute requireRole="creator"><Prayers /></ProtectedRoute>} />
+                      <Route path="/creator-studio/memberships" element={<ProtectedRoute requireRole="creator"><Memberships /></ProtectedRoute>} />
+                      <Route path="/creator-studio/drafts" element={<ProtectedRoute requireRole="creator"><Drafts /></ProtectedRoute>} />
+                      <Route path="/creator-studio/settings" element={<ProtectedRoute requireRole="creator"><CreatorStudioSettings /></ProtectedRoute>} />
 
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-                <Toaster />
-              </div>
-            </BrowserRouter>
-          </AuthProvider>
-        </TooltipProvider>
-      </ThemeProvider>
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                  <Toaster />
+                </div>
+              </BrowserRouter>
+            </AuthProvider>
+          </TooltipProvider>
+        </ThemeProvider>
+      </HelmetProvider>
     </QueryClientProvider>
   );
 }

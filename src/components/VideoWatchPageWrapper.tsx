@@ -62,10 +62,13 @@ const VideoWatchPageWrapper = () => {
   }
 
   return (
-    <VideoWatchPage 
-      video={video} 
-      onClose={handleClose}
-    />
+    <>
+      {/* VideoWatchPage will handle meta tags */}
+      <VideoWatchPage 
+        video={video} 
+        onClose={handleClose}
+      />
+    </>
   );
 };
 

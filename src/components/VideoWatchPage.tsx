@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import Header from "./Header";
 import VideoWatchMain from "./VideoWatchMain";
 import VideoWatchSidebar from "./VideoWatchSidebar";
 import { platformStore } from "@/lib/store";
+import VideoMetaTags from "@/components/VideoMetaTags";
 
 interface VideoWatchPageProps {
   video: any;
@@ -45,6 +45,15 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-gray-50 dark:bg-gray-950 overflow-y-auto">
+      {/* SEO/social meta tags for this video */}
+      <VideoMetaTags
+        video={{
+          id: video.id,
+          title: video.title,
+          description: video.description,
+        }}
+        imageUrl="/lovable-uploads/dove-share.png"
+      />
       {/* Header */}
       <Header onMenuToggle={() => {}} />
       <div className="flex flex-col lg:flex-row gap-6 p-6 max-w-7xl mx-auto">
