@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Header from "./Header";
 import VideoWatchMain from "./VideoWatchMain";
@@ -24,6 +25,15 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
   const suggestedVideos = platformStore.getPublishedVideos().slice(0, 8);
   const relatedEpisodes = platformStore.getPublishedVideos().slice(0, 3);
 
+  // Merge and deduplicate videos for sidebar (by id)
+  const sidebarVideos = Array.from(
+    new Map(
+      [...relatedEpisodes, ...suggestedVideos]
+        .filter((v) => v.id !== video.id)
+        .map((v) => [v.id, v])
+    ).values()
+  );
+
   // Modal close on Escape
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -47,11 +57,8 @@ const VideoWatchPage = ({ video, onClose }: VideoWatchPageProps) => {
           onClose={onClose}
           relatedEpisodes={relatedEpisodes}
         />
-        {/* Sidebar (unchanged) */}
-        <VideoWatchSidebar
-          suggestedVideos={suggestedVideos}
-          relatedEpisodes={relatedEpisodes}
-        />
+        {/* Sidebar (merged/clean list) */}
+        <VideoWatchSidebar videos={sidebarVideos} />
       </div>
     </div>
   );
